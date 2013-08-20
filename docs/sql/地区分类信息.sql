@@ -1,0 +1,120 @@
+drop sequence general_sequence if exists;
+
+drop table unit_info if exists;
+drop table building_info if exists;
+drop table community_info if exists;
+drop table project_info if exists;
+drop table district_info if exists;
+drop table county_info if exists;
+
+create sequence general_sequence
+       maxvalue 9999999999
+       increment by 1
+       start with 1
+       nocycle
+       nocache
+       order;
+       
+       
+
+create table county_info (
+       ctyid number(10)
+       ,ctyname varchar2(20) not null
+       ,primary key (ctyid)
+);
+
+create or replace trigger county_trigger before insert 
+on county_info for each row
+begin
+select general_sequence.nextval into:new.ctyid from county_info
+end;
+       
+create table district_info (
+       dstid number(10)
+       ,dstname varchar2(40) not null
+       ,ctyid number(6) not null
+       ,desp varchar2(200)
+       ,primary key (dstid)
+       ,foreign key (ctyid) references county(ctyid)
+);
+
+create or replace trigger district_trigger before
+       insert on district_info for each row
+       begin
+         select general_sequence.nextval into:new.dstid from dual;
+       end;
+
+create table project_info (
+       pjtid number(10)
+       ,pjtname varchar2(40) not null
+       ,dstid number(8) not null
+       ,start_date date not null
+       ,desp varchar(200)
+       ,primary key (pjtid)
+       ,foreign key (dstid) references district_info(dstid)
+);
+
+create or replace trigger project_trigger before
+       insert on project_info for each row
+       begin
+         select general_sequence.nextval into:new.pjtid from dual;
+       end;
+
+/**
+GIS坐标和社区平面图没加
+**/
+create table community_info (
+       cmtid number(10)
+       ,pjtid number(8) not null
+       ,cmtname varchar2(20) not null
+       ,briefname varchar(10)
+       ,cmtaddress varchar2(200) not null
+       ,dstid number(8)
+       ,desp varchar2(200)
+       ,primary key (cmtid)
+       ,foreign key (pjtid) references project_info(pjtid)
+       ,foreign key (dstid) references district_info(dstid)
+);
+
+create or replace trigger community_trigger before
+       insert on community_info for each row
+       begin
+         select general_sequence.nextval into:new.cmtid from dual;
+       end;
+
+/**
+热源,GIS坐标，立面图待加
+**/
+create table building_info (
+       bldid number(10)
+       ,bldname varchar2(20) not null
+       ,bldaddress varchar2(200) not null
+       ,cmtid number(10) not null
+       ,heattype varchar2(10) not null
+       ,desp varchar2(200)
+       ,primary key (bldid)
+       ,foreign key (cmtid) references community_info(cmtid)
+);
+
+create or replace trigger building_trigger before
+       insert on building_info for each row
+       begin
+         select general_sequence.nextval into:new.bldid from dual;
+       end;
+       
+/**
+机组，GIS坐标，楼层平面图
+**/
+create table unit_info (
+       untid number(10)
+       ,untname varchar(20) not null
+       ,bldid number(10) not null
+       ,primary key (untid)
+       ,foreign key (bldid) references building_info(bldid)
+);
+
+create or replace trigger unit_trigger before
+       insert on unit_info for each row
+       begin
+         select general_sequence.nextval into:new.untid from dual;
+       end;
