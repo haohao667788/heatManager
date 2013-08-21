@@ -1,7 +1,6 @@
 /**
  * 菜单界面
  * @author Teddy Bear
- * @date 2013-08-19
  */
 Ext.namespace("Heat.menu");
 
@@ -81,7 +80,7 @@ Heat.menu.on("click", function(node) {
             autoWidth: true,
             closable: true,
             layout: 'fit',
-            items: [new Heat.quxian.BasicGrid]
+            items: [new Heat[ns].BasicGrid]
         });
     Heat.tabs.setActiveTab(tab);
 });

@@ -1,7 +1,6 @@
 /**
  * 主界面
  * @author Teddy Bear
- * @date 2013-08-19
  */
 Ext.onReady(function() {
     Ext.BLANK_IMAGE_URL = "js/lib/extjs/resources/images/default/s.gif";

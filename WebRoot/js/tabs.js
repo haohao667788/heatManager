@@ -1,7 +1,6 @@
 /**
  * tab选项卡
  * @author Teddy Bear
- * @date 2013-08-19
  */
 Ext.namespace("Heat.tabs");
 

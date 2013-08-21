@@ -1,28 +1,97 @@
 /**
- * 区县tab
+ * 单元tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.quxian");
+Ext.namespace("Heat.danyuan");
 
-Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.quxian.BasicForm.superclass.constructor.call(this, {
+        Heat.danyuan.BasicForm.superclass.constructor.call(this, {
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
+            fileUpload: true,
             items: [{
                 xtype: 'hidden',
                 name: 'id'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '区县名称',
+                fieldLabel: '单元名称',
                 name: 'name',
                 width: 160,
                 allowBlank: false
+            }, new Ext.form.ComboBox({
+                hiddenName: 'loudongId',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属楼栋',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'projectId',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属项目',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'machineId',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属机组',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), {
+                xtype: 'textfield',
+                fieldLabel: 'GIS坐标',
+                name: 'GIS',
+                width: 160
+            }, {
+                xtype: 'fileuploadfield',
+                fieldLabel: '单元平面图',
+                name: 'chart',
+                width: 160,
+                buttonText: '',
+                buttonCfg: {
+                    iconCls: 'upload_icon'
+                }
             }]
         });
 
@@ -62,13 +131,13 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.quxian.BasicWin = Ext.extend(Ext.Window, {
+Heat.danyuan.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.quxian.BasicForm();
-        Heat.quxian.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.danyuan.BasicForm();
+        Heat.danyuan.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -135,12 +204,12 @@ Heat.quxian.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    quxianWin: null,
+Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    danyuanWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.quxianWin = new Heat.quxian.BasicWin();
+        this.danyuanWin = new Heat.danyuan.BasicWin();
         var store = new Ext.data.Store({
             proxy: new Ext.data.HttpProxy({url: ""}),
             reader: new Ext.data.JsonReader({
@@ -148,30 +217,53 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 root: 'root',
                 fields: [
                     {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'}
+                    {name: 'name', type: 'string'},
+                    {name: 'loudongId', type: 'int'},
+                    {name: 'loudong', type: 'string'},
+                    {name: 'projectId', type: 'int'},
+                    {name: 'project', type: 'string'},
+                    {name: 'machineId', type: 'int'},
+                    {name: 'machine', type: 'string'},
+                    {name: 'GIS', type: 'string'},
+                    {name: 'chart', type: 'string'}
                 ]
             })
         });
-        Heat.quxian.BasicGrid.superclass.constructor.call(this, {
+        Heat.danyuan.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "区县名称",
+                header: "单元名称",
                 dataIndex: 'name'
+            }, {
+                header: "所属楼栋",
+                dataIndex: 'loudong'
+            }, {
+                header: "所属项目",
+                dataIndex: 'project'
+            }, {
+                header: "所属机组",
+                dataIndex: 'machine'
+            }, {
+                header: "供热类型",
+                dataIndex: 'heat'
+            }, {
+                header: "GIS坐标",
+                dataIndex: "GIS"
             }],
 
             tbar: [{
-                text: "添加区县",
+                text: "添加单元",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改区县",
+                text: "修改单元",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除区县",
+                text: "删除单元",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -194,20 +286,20 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             collapsible: false
         });
 
-        this.quxianWin.on("submitcomplete", this.refresh, this);
+        this.danyuanWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.quxianWin.setTitle("新增区县");
-        this.quxianWin.show();
+        this.danyuanWin.setTitle("新增单元");
+        this.danyuanWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.quxianWin.setTitle("修改区县");
-            this.quxianWin.show();
-            this.quxianWin.load(selected);
+            this.danyuanWin.setTitle("修改单元");
+            this.danyuanWin.show();
+            this.danyuanWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
