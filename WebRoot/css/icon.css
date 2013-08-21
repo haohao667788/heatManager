@@ -1,0 +1,11 @@
+.add {
+    background: url("../image/add.png") no-repeat;
+}
+
+.mod {
+    background: url("../image/edit.png") no-repeat;
+}
+
+.del {
+    background: url("../image/delete.png") no-repeat;
+}
