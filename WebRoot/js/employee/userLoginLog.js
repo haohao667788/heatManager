@@ -1,15 +1,15 @@
 /**
- * 社区tab
+ * 用户登录记录tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.shequ");
+Ext.namespace("Heat.userLoginLog");
 
-Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.userLoginLog.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.shequ.BasicForm.superclass.constructor.call(this, {
-            width: 500,
+        Heat.userLoginLog.BasicForm.superclass.constructor.call(this, {
+            width: 300,
             labelAlign: 'right',
             labelWidth: 80,
             frame: true,
@@ -20,12 +20,89 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'id'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '社区名称',
+                fieldLabel: '记录姓名',
                 name: 'name',
                 width: 160,
                 allowBlank: false
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '员工工号',
+                name: 'employeeId',
+                width: 160,
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '联系方式',
+                name: 'info',
+                width: 160,
+                allowBlank: false
             }, new Ext.form.ComboBox({
-                hiddenName: 'projectId',
+                hiddenName: 'department',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属部门',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), {
+                xtype: 'textfield',
+                fieldLabel: '登录名',
+                name: 'userLoginLogname',
+                width: 160
+            }, {
+                xtype: 'textfield',
+                inputType: 'password',
+                fieldLabel: '密码',
+                name: 'password',
+                width: 160
+            }, new Ext.form.ComboBox({
+                hiddenName: 'authMethod',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '鉴权方式',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'groupId',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属权限组',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'proListId',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属项目',
@@ -42,36 +119,7 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         ['D', 'D'],
                         ['临修', '临修']]
                 })
-            }), {
-                xtype: 'textfield',
-                fieldLabel: '简称',
-                name: 'shortName',
-                width: 160
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '地址',
-                name: 'addr',
-                width: 160
-            }, {
-                xtype: 'textfield',
-                fieldLabel: 'GIS坐标',
-                name: 'GIS',
-                width: 160
-            }, {
-                xtype: 'fileuploadfield',
-                fieldLabel: '社区平面图',
-                name: 'chart',
-                width: 160,
-                buttonText: '',
-                buttonCfg: {
-                    iconCls: 'upload_icon'
-                }
-            }, {
-                xtype: "textarea",
-                fieldLabel: "描述",
-                name: "desc",
-                anchor: "95% 40%"
-            }]
+            })]
         });
 
         this.addEvents('submitcomplete');
@@ -110,13 +158,13 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
+Heat.userLoginLog.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.shequ.BasicForm();
-        Heat.shequ.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.userLoginLog.BasicForm();
+        Heat.userLoginLog.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -140,7 +188,7 @@ Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
             },
 
             title: '修改记录',
-            width: 500,
+            width: 300,
             buttonAlign: 'center',
             closeAction: 'hide'
         });
@@ -183,12 +231,12 @@ Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    shequWin: null,
+Heat.userLoginLog.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    userLoginLogWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.shequWin = new Heat.shequ.BasicWin();
+        this.userLoginLogWin = new Heat.userLoginLog.BasicWin();
         var store = new Ext.data.Store({
             proxy: new Ext.data.HttpProxy({url: ""}),
             reader: new Ext.data.JsonReader({
@@ -196,55 +244,51 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 root: 'root',
                 fields: [
                     {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'},
-                    {name: 'projectId', type: 'int'},
-                    {name: 'project', type: 'string'},
-                    {name: 'shortName', type: 'string'},
-                    {name: 'addr', type: 'string'},
-                    {name: 'desc', type: 'string'},
-                    {name: 'GIS', type: 'string'},
-                    {name: 'chart', type: 'string'}
+                    {name: 'userId', type: 'int'},
+                    {name: 'userName', type: 'string'},
+                    {name: 'loginTime', type: 'string'},
+                    {name: 'ip', type: 'string'},
+                    {name: 'loginStatus', type: 'string'},
+                    {name: 'failReason', type: 'string'},
+                    {name: 'duration', type: 'string'}
                 ]
             })
         });
-        Heat.shequ.BasicGrid.superclass.constructor.call(this, {
+        Heat.userLoginLog.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "社区名称",
-                dataIndex: 'name'
+                header: "记录编号",
+                dataIndex: 'id',
+                width: 1
             }, {
-                header: "所属项目",
-                dataIndex: 'project'
+                header: "用户编号",
+                dataIndex: 'userId',
+                width: 1
             }, {
-                header: "简称",
-                dataIndex: 'shortName'
+                header: "用户姓名",
+                dataIndex: 'userName',
+                width: 1.5
             }, {
-                header: "地址",
-                dataIndex: 'addr'
+                header: "登录时间",
+                dataIndex: 'loginTime',
+                width: 1.5
             }, {
-                header: "描述",
-                dataIndex: "desc"
+                header: "登录IP",
+                dataIndex: 'ip',
+                width: 1.5
             }, {
-                header: "GIS坐标",
-                dataIndex: "GIS"
-            }],
-
-            tbar: [{
-                text: "添加社区",
-                iconCls: "add_icon",
-                handler: this.onAddClick,
-                scope: this
-            }, '-', {
-                text: "修改社区",
-                iconCls: "mod_icon",
-                handler: this.onModClick,
-                scope: this
-            }, '-', {
-                text: "删除社区",
-                iconCls: "del_icon",
-                handler: this.onDelClick,
-                scope: this
+                header: "登录状态",
+                dataIndex: 'loginStatus',
+                width: 1
+            }, {
+                header: "失败原因",
+                dataIndex: "failReason",
+                width: 2
+            }, {
+                header: "在线时长",
+                dataIndex: "duration",
+                width: 1.5
             }],
 
             bbar: new Ext.PagingToolbar({
@@ -264,20 +308,20 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             collapsible: false
         });
 
-        this.shequWin.on("submitcomplete", this.refresh, this);
+        this.userLoginLogWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.shequWin.setTitle("新增社区");
-        this.shequWin.show();
+        this.userLoginLogWin.setTitle("新增记录");
+        this.userLoginLogWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.shequWin.setTitle("修改社区");
-            this.shequWin.show();
-            this.shequWin.load(selected);
+            this.userLoginLogWin.setTitle("修改记录");
+            this.userLoginLogWin.show();
+            this.userLoginLogWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }

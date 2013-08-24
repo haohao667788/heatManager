@@ -262,29 +262,41 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             store: store,
 
             columns: [{
+                header: "楼栋编号",
+                dataIndex: 'id',
+                width: 1
+            }, {
                 header: "楼栋名称",
-                dataIndex: 'name'
+                dataIndex: 'name',
+                width: 2
             }, {
                 header: "地址",
-                dataIndex: 'addr'
+                dataIndex: 'addr',
+                width: 2
             }, {
                 header: "所属社区",
-                dataIndex: 'shequ'
+                dataIndex: 'shequ',
+                width: 1
             }, {
                 header: "所属项目",
-                dataIndex: 'project'
+                dataIndex: 'project',
+                width: 1
             }, {
                 header: "所属热源",
-                dataIndex: 'heat'
+                dataIndex: 'heat',
+                width: 1
             }, {
                 header: "供热类型",
-                dataIndex: 'heat'
+                dataIndex: 'heat',
+                width: 1
             }, {
                 header: "描述",
-                dataIndex: "desc"
+                dataIndex: "desc",
+                width: 2
             }, {
                 header: "GIS坐标",
-                dataIndex: "GIS"
+                dataIndex: "GIS",
+                width: 1
             }],
 
             tbar: [{

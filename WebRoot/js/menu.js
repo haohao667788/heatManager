@@ -40,31 +40,147 @@ Heat.menu = new Ext.tree.TreePanel({
         expanded: true,
         leaf: false,
         children: [{
-            text: '分级信息',
+            text: '区域管理',
             leaf: false,
             children: [{
-                text: '区县信息',
-                ns: 'quxian',
+                text: '员工与任务',
+                leaf: false,
+                children: [{
+                    text: '员工查询',
+                    ns: 'employeeInfo',
+                    leaf: true
+                }, {
+                    text: '任务下达',
+                    ns: 'task',
+                    leaf: true
+                }, {
+                    text: '账户管理',
+                    ns: 'employee',
+                    leaf: true
+                }, {
+                    text: '登录日志',
+                    ns: 'userLoginLog',
+                    leaf: true
+                }]
+            }, {
+                text: '大区管理',
+                leaf: false,
+                children: [{
+                    text: '收费年度',
+                    ns: 'fareYear',
+                    leaf: true
+                }, {
+                    text: '任务分析',
+                    ns: 'taskAnalysis',
+                    leaf: true
+                }, {
+                    text: '大区管理',
+                    ns: 'daqu',
+                    leaf: true
+                }, {
+                    text: '项目管理',
+                    ns: 'project',
+                    leaf: true
+                }, {
+                    text: '社区管理',
+                    ns: 'shequ',
+                    leaf: true
+                }, {
+                    text: '楼栋管理',
+                    ns: 'loudong',
+                    leaf: true
+                }, {
+                    text: '单元管理',
+                    ns: 'danyuan',
+                    leaf: true
+                }]
+            }, {
+                text: '分级管理',
+                leaf: false,
+                children: [{
+                    text: '城市管理',
+                    ns: 'city',
+                    leaf: true
+                }, {
+                    text: '行政区管理',
+                    ns: 'quxian',
+                    leaf: true
+                }, {
+                    text: '热源厂管理',
+                    ns: 'heatFactory',
+                    leaf: true
+                }, {
+                    text: '换热站管理',
+                    ns: 'heatSwitcher',
+                    leaf: true
+                }]
+            }]
+        }, {
+            text: "收费管理",
+            leaf: false,
+            children: [{
+                text: '收费流水',
+                ns: 'fareFlow',
                 leaf: true
             }, {
-                text: '大区信息',
-                ns: 'daqu',
+                text: '用户管理',
+                ns: 'user',
+                leaf: true
+            }]
+        }, {
+            text: "收费工作台",
+            leaf: false,
+            children: [{
+                text: '用户查询',
+                ns: 'userInfo',
                 leaf: true
             }, {
-                text: '项目信息',
-                ns: 'project',
+                text: '用户缴费',
+                ns: 'userFare',
                 leaf: true
             }, {
-                text: '社区信息',
-                ns: 'shequ',
+                text: '收款确认',
+                leaf: false,
+                children: [{
+                    text: '当日收款确认',
+                    ns: 'todayFareConfirm',
+                    leaf: true
+                }, {
+                    text: '历史收款确认',
+                    ns: 'historyFareConfirm',
+                    leaf: true
+                }]
+            }]
+        }, {
+            text: '财务工作台',
+            leaf: false,
+            children: [{
+                text: '银行信息管理',
+                ns: 'bankInfo',
                 leaf: true
             }, {
-                text: '楼栋信息',
-                ns: 'loudong',
+                text: '财务凭证查询',
+                ns: 'financeTicket',
+                leaf: true
+            }]
+        }, {
+            text: "系统管理",
+            leaf: false,
+            children: [{
+                text: '权限管理',
+                ns: 'authGroup',
                 leaf: true
             }, {
-                text: '单元信息',
-                ns: 'danyuan',
+                text: '全局用户管理',
+                ns: 'administrator',
+                leaf: true
+            }, {
+                text: '数据管理',
+                ns: 'dataAdmin',
+                leaf: true
+            }, {
+                text: '系统设置',
+                ns: 'system',
                 leaf: true
             }]
         }]
