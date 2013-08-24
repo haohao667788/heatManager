@@ -25,7 +25,7 @@ public class CountyInfo implements java.io.Serializable {
 	private Long ctyid;
 	private String ctyname;
 	private String comm;
-	private Set<DistrictInfo> districtInfos = new HashSet<DistrictInfo>(0);
+	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 
 	// Constructors
 
@@ -39,11 +39,10 @@ public class CountyInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public CountyInfo(String ctyname, String comm,
-			Set<DistrictInfo> districtInfos) {
+	public CountyInfo(String ctyname, String comm, Set<ProjectInfo> projectInfos) {
 		this.ctyname = ctyname;
 		this.comm = comm;
-		this.districtInfos = districtInfos;
+		this.projectInfos = projectInfos;
 	}
 
 	// Property accessors
@@ -78,12 +77,12 @@ public class CountyInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "countyInfo")
-	public Set<DistrictInfo> getDistrictInfos() {
-		return this.districtInfos;
+	public Set<ProjectInfo> getProjectInfos() {
+		return this.projectInfos;
 	}
 
-	public void setDistrictInfos(Set<DistrictInfo> districtInfos) {
-		this.districtInfos = districtInfos;
+	public void setProjectInfos(Set<ProjectInfo> projectInfos) {
+		this.projectInfos = projectInfos;
 	}
 
 }

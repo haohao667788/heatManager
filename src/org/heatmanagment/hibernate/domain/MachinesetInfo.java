@@ -28,6 +28,7 @@ public class MachinesetInfo implements java.io.Serializable {
 	private HeatsourceInfo heatsourceInfo;
 	private String mchname;
 	private String gis;
+	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
 	// Constructors
@@ -37,17 +38,17 @@ public class MachinesetInfo implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public MachinesetInfo(HeatsourceInfo heatsourceInfo, String mchname) {
-		this.heatsourceInfo = heatsourceInfo;
+	public MachinesetInfo(String mchname) {
 		this.mchname = mchname;
 	}
 
 	/** full constructor */
 	public MachinesetInfo(HeatsourceInfo heatsourceInfo, String mchname,
-			String gis, Set<UnitInfo> unitInfos) {
+			String gis, Set<UsersInfo> usersInfos, Set<UnitInfo> unitInfos) {
 		this.heatsourceInfo = heatsourceInfo;
 		this.mchname = mchname;
 		this.gis = gis;
+		this.usersInfos = usersInfos;
 		this.unitInfos = unitInfos;
 	}
 
@@ -65,7 +66,7 @@ public class MachinesetInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SRCID", nullable = false)
+	@JoinColumn(name = "SRCID")
 	public HeatsourceInfo getHeatsourceInfo() {
 		return this.heatsourceInfo;
 	}
@@ -83,13 +84,22 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.mchname = mchname;
 	}
 
-	@Column(name = "GIS", length = 20)
+	@Column(name = "GIS", length = 2000)
 	public String getGis() {
 		return this.gis;
 	}
 
 	public void setGis(String gis) {
 		this.gis = gis;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machinesetInfo")
+	public Set<UsersInfo> getUsersInfos() {
+		return this.usersInfos;
+	}
+
+	public void setUsersInfos(Set<UsersInfo> usersInfos) {
+		this.usersInfos = usersInfos;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machinesetInfo")

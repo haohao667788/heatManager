@@ -24,12 +24,12 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(BuildingInfoDAO.class);
 	// property constants
+	public static final String CMTNAME = "cmtname";
 	public static final String BLDNAME = "bldname";
 	public static final String BLDADDRESS = "bldaddress";
 	public static final String HEATTYPE = "heattype";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
-	public static final String DESP = "desp";
 	public static final String COMM = "comm";
 
 	public void save(BuildingInfo transientInstance) {
@@ -97,6 +97,10 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 		}
 	}
 
+	public List<BuildingInfo> findByCmtname(Object cmtname) {
+		return findByProperty(CMTNAME, cmtname);
+	}
+
 	public List<BuildingInfo> findByBldname(Object bldname) {
 		return findByProperty(BLDNAME, bldname);
 	}
@@ -115,10 +119,6 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 
 	public List<BuildingInfo> findByPicaddress(Object picaddress) {
 		return findByProperty(PICADDRESS, picaddress);
-	}
-
-	public List<BuildingInfo> findByDesp(Object desp) {
-		return findByProperty(DESP, desp);
 	}
 
 	public List<BuildingInfo> findByComm(Object comm) {

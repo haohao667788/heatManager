@@ -25,7 +25,6 @@ public class DistrictInfoDAO extends BaseHibernateDAO {
 			.getLogger(DistrictInfoDAO.class);
 	// property constants
 	public static final String DSTNAME = "dstname";
-	public static final String DESP = "desp";
 	public static final String COMM = "comm";
 
 	public void save(DistrictInfo transientInstance) {
@@ -95,10 +94,6 @@ public class DistrictInfoDAO extends BaseHibernateDAO {
 
 	public List<DistrictInfo> findByDstname(Object dstname) {
 		return findByProperty(DSTNAME, dstname);
-	}
-
-	public List<DistrictInfo> findByDesp(Object desp) {
-		return findByProperty(DESP, desp);
 	}
 
 	public List<DistrictInfo> findByComm(Object comm) {

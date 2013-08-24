@@ -27,7 +27,6 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public static final String SRCNAME = "srcname";
 	public static final String SRCADDRESS = "srcaddress";
 	public static final String HEATTYPE = "heattype";
-	public static final String DESP = "desp";
 	public static final String COMM = "comm";
 
 	public void save(HeatsourceInfo transientInstance) {
@@ -105,10 +104,6 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 
 	public List<HeatsourceInfo> findByHeattype(Object heattype) {
 		return findByProperty(HEATTYPE, heattype);
-	}
-
-	public List<HeatsourceInfo> findByDesp(Object desp) {
-		return findByProperty(DESP, desp);
 	}
 
 	public List<HeatsourceInfo> findByComm(Object comm) {
