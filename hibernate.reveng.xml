@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+
+
+	<table
+		name="COMMUNITY_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+<table
+	name="BUILDING_INFO"
+	schema="HEATMGR">
+	<primary-key>
+		<generator class="sequence"></generator>
+	</primary-key>
+</table>
+<table
+		name="UNIT_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+	<table
+		name="PROJECT_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+	<table
+		name="MACHINESET_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+	<table
+		name="HEATSOURCE_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+	<table
+		name="DISTRICT_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+	<table
+		name="COUNTY_INFO"
+		schema="HEATMGR">
+		<primary-key>
+			<generator class="sequence"></generator>
+		</primary-key>
+	</table>
+</hibernate-reverse-engineering>
