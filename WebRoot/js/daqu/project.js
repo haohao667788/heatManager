@@ -16,15 +16,15 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
             bodyStyle: 'padding: 5px 0 0 0',
             items: [{
                 xtype: 'hidden',
-                name: 'id'
+                name: 'pjtid'
             }, {
                 xtype: 'textfield',
                 fieldLabel: '项目名称',
-                name: 'name',
+                name: 'pjtname',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
-                hiddenName: 'quxianId',
+                hiddenName: 'dstid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属大区',
@@ -46,10 +46,10 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 fieldLabel: '项目开始时间',
                 editable: false,
                 format: 'Y-m-d',
-                name: 'startTime',
+                name: 'start_date',
                 width: 160
             }, new Ext.form.ComboBox({
-                hiddenName: 'zhongtu',
+                hiddenName: 'middle',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '是否中途收购',
@@ -66,7 +66,7 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }), {
                 xtype: "textarea",
                 fieldLabel: "描述",
-                name: "desc",
+                name: "desp",
                 anchor: "95% 60%"
             }]
         });
@@ -192,13 +192,14 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'root',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'},
-                    {name: 'daquId', type: 'int'},
-                    {name: 'daqu', type: 'string'},
-                    {name: 'startTime', type: 'string'},
-                    {name: 'zhongtu', type: 'string'},
-                    {name: 'desc', type: 'string'}
+                    {name: 'pjtid', type: 'int'},
+                    {name: 'pjtname', type: 'string'},
+                    {name: 'dstid', type: 'int'},
+                    {name: 'dstname', type: 'string'},
+                    {name: 'start_date', type: 'string'},
+                    {name: 'middle', type: 'string'},
+                    {name: 'status', type: 'string'},
+                    {name: 'desp', type: 'string'}
                 ]
             })
         });
@@ -207,27 +208,31 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "项目编号",
-                dataIndex: 'id',
+                dataIndex: 'pjtid',
                 width: 1
             }, {
                 header: "项目名称",
-                dataIndex: 'name',
+                dataIndex: 'pjtname',
                 width: 3
             }, {
                 header: "所属大区",
-                dataIndex: 'quxian',
+                dataIndex: 'dstname',
                 width: 1
             }, {
                 header: "项目开始时间",
-                dataIndex: 'startTime',
+                dataIndex: 'start_date',
                 width: 1
             }, {
                 header: "是否中途收购",
-                dataIndex: 'zhongtu',
+                dataIndex: 'middle',
+                width: 1
+            }, {
+                header: "状态",
+                dataIndex: 'status',
                 width: 1
             }, {
                 header: "描述",
-                dataIndex: "desc",
+                dataIndex: "desp",
                 width: 3
             }],
 

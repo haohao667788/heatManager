@@ -16,11 +16,11 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
             bodyStyle: 'padding: 5px 0 0 0',
             items: [{
                 xtype: 'hidden',
-                name: 'id'
+                name: 'ctyid'
             }, {
                 xtype: 'textfield',
                 fieldLabel: '区县名称',
-                name: 'name',
+                name: 'ctyname',
                 width: 160,
                 allowBlank: false
             }]
@@ -147,8 +147,8 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'root',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'}
+                    {name: 'ctyid', type: 'int'},
+                    {name: 'ctyname', type: 'string'}
                 ]
             })
         });
@@ -157,11 +157,11 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "区县编号",
-                dataIndex: 'id',
+                dataIndex: 'ctyid',
                 width: 1
             }, {
                 header: "区县名称",
-                dataIndex: 'name',
+                dataIndex: 'ctyname',
                 width: 5
             }],
 

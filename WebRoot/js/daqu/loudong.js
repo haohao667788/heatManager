@@ -17,20 +17,20 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
             fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'id'
+                name: 'bldid'
             }, {
                 xtype: 'textfield',
                 fieldLabel: '楼栋名称',
-                name: 'name',
+                name: 'bldname',
                 width: 160,
                 allowBlank: false
             }, {
                 xtype: 'textfield',
                 fieldLabel: '地址',
-                name: 'addr',
+                name: 'bldaddress',
                 width: 160
             }, new Ext.form.ComboBox({
-                hiddenName: 'shequId',
+                hiddenName: 'cmtid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属社区',
@@ -48,25 +48,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         ['临修', '临修']]
                 })
             }), new Ext.form.ComboBox({
-                hiddenName: 'projectId',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '所属项目',
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [['A', 'A'],
-                        ['B', 'B'],
-                        ['C', 'C'],
-                        ['D', 'D'],
-                        ['临修', '临修']]
-                })
-            }), new Ext.form.ComboBox({
-                hiddenName: 'heatId',
+                hiddenName: 'srcid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属热源',
@@ -84,7 +66,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         ['临修', '临修']]
                 })
             }), new Ext.form.ComboBox({
-                hiddenName: 'heatId',
+                hiddenName: 'heattype',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '供热类型',
@@ -101,13 +83,13 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 })
             }), {
                 xtype: 'textfield',
-                fieldLabel: 'GIS坐标',
+                fieldLabel: 'gis',
                 name: 'GIS',
                 width: 160
             }, {
                 xtype: 'fileuploadfield',
                 fieldLabel: '楼栋平面图',
-                name: 'chart',
+                name: 'picaddress',
                 width: 160,
                 buttonText: '',
                 buttonCfg: {
@@ -116,7 +98,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }, {
                 xtype: "textarea",
                 fieldLabel: "描述",
-                name: "desc",
+                name: "desp",
                 anchor: "95% 40%"
             }]
         });
@@ -242,19 +224,19 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'root',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'},
-                    {name: 'shequId', type: 'int'},
-                    {name: 'shequ', type: 'string'},
-                    {name: 'projectId', type: 'int'},
-                    {name: 'project', type: 'string'},
-                    {name: 'heatId', type: 'int'},
-                    {name: 'heat', type: 'string'},
-                    {name: 'type', type: 'string'},
-                    {name: 'addr', type: 'string'},
-                    {name: 'desc', type: 'string'},
-                    {name: 'GIS', type: 'string'},
-                    {name: 'chart', type: 'string'}
+                    {name: 'bldid', type: 'int'},
+                    {name: 'bldname', type: 'string'},
+                    {name: 'cmtid', type: 'int'},
+                    {name: 'cmtname', type: 'string'},
+                    {name: 'pjtid', type: 'int'},
+                    {name: 'pjtname', type: 'string'},
+                    {name: 'srcid', type: 'int'},
+                    {name: 'srcname', type: 'string'},
+                    {name: 'heattype', type: 'string'},
+                    {name: 'bldaddress', type: 'string'},
+                    {name: 'desp', type: 'string'},
+                    {name: 'gis', type: 'string'},
+                    {name: 'picaddress', type: 'string'}
                 ]
             })
         });
@@ -263,39 +245,39 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "楼栋编号",
-                dataIndex: 'id',
+                dataIndex: 'bldid',
                 width: 1
             }, {
                 header: "楼栋名称",
-                dataIndex: 'name',
+                dataIndex: 'bldname',
                 width: 2
             }, {
                 header: "地址",
-                dataIndex: 'addr',
+                dataIndex: 'bldaddress',
                 width: 2
             }, {
                 header: "所属社区",
-                dataIndex: 'shequ',
+                dataIndex: 'cmtname',
                 width: 1
             }, {
                 header: "所属项目",
-                dataIndex: 'project',
+                dataIndex: 'pjtname',
                 width: 1
             }, {
                 header: "所属热源",
-                dataIndex: 'heat',
+                dataIndex: 'srcid',
                 width: 1
             }, {
                 header: "供热类型",
-                dataIndex: 'heat',
+                dataIndex: 'heattype',
                 width: 1
             }, {
                 header: "描述",
-                dataIndex: "desc",
+                dataIndex: "desp",
                 width: 2
             }, {
                 header: "GIS坐标",
-                dataIndex: "GIS",
+                dataIndex: "gis",
                 width: 1
             }],
 

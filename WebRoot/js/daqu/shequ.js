@@ -17,15 +17,15 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
             fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'id'
+                name: 'cmtid'
             }, {
                 xtype: 'textfield',
                 fieldLabel: '社区名称',
-                name: 'name',
+                name: 'cmtname',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
-                hiddenName: 'projectId',
+                hiddenName: 'pjtid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属项目',
@@ -45,22 +45,22 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }), {
                 xtype: 'textfield',
                 fieldLabel: '简称',
-                name: 'shortName',
+                name: 'briefname',
                 width: 160
             }, {
                 xtype: 'textfield',
                 fieldLabel: '地址',
-                name: 'addr',
+                name: 'cmtaddress',
                 width: 160
             }, {
                 xtype: 'textfield',
                 fieldLabel: 'GIS坐标',
-                name: 'GIS',
+                name: 'gis',
                 width: 160
             }, {
                 xtype: 'fileuploadfield',
                 fieldLabel: '社区平面图',
-                name: 'chart',
+                name: 'picaddress',
                 width: 160,
                 buttonText: '',
                 buttonCfg: {
@@ -69,7 +69,7 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }, {
                 xtype: "textarea",
                 fieldLabel: "描述",
-                name: "desc",
+                name: "desp",
                 anchor: "95% 40%"
             }]
         });
@@ -195,15 +195,15 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'root',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'},
-                    {name: 'projectId', type: 'int'},
-                    {name: 'project', type: 'string'},
-                    {name: 'shortName', type: 'string'},
-                    {name: 'addr', type: 'string'},
-                    {name: 'desc', type: 'string'},
-                    {name: 'GIS', type: 'string'},
-                    {name: 'chart', type: 'string'}
+                    {name: 'cmtid', type: 'int'},
+                    {name: 'cmtname', type: 'string'},
+                    {name: 'ptjid', type: 'int'},
+                    {name: 'ptjname', type: 'string'},
+                    {name: 'briefname', type: 'string'},
+                    {name: 'cmtaddress', type: 'string'},
+                    {name: 'desp', type: 'string'},
+                    {name: 'gis', type: 'string'},
+                    {name: 'picaddress', type: 'string'}
                 ]
             })
         });
@@ -212,31 +212,31 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "社区编号",
-                dataIndex: 'id',
+                dataIndex: 'cmtid',
                 width: 1
             }, {
                 header: "社区名称",
-                dataIndex: 'name',
+                dataIndex: 'cmtname',
                 width: 2
             }, {
                 header: "所属项目",
-                dataIndex: 'project',
+                dataIndex: 'ptjname',
                 width: 1
             }, {
                 header: "简称",
-                dataIndex: 'shortName',
+                dataIndex: 'briefname',
                 width: 1
             }, {
                 header: "地址",
-                dataIndex: 'addr',
+                dataIndex: 'cmtaddress',
                 width: 2
             }, {
                 header: "描述",
-                dataIndex: "desc",
+                dataIndex: "desp",
                 width: 2
             }, {
                 header: "GIS坐标",
-                dataIndex: "GIS",
+                dataIndex: "gis",
                 width: 1
             }],
 

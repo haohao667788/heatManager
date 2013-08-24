@@ -16,15 +16,15 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
             bodyStyle: 'padding: 5px 0 0 0',
             items: [{
                 xtype: 'hidden',
-                name: 'id'
+                name: 'dstid'
             }, {
                 xtype: 'textfield',
                 fieldLabel: '大区名称',
-                name: 'name',
+                name: 'dstname',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
-                    hiddenName: 'quxianId',
+                    hiddenName: 'ctyid',
                     mode: 'local',
                     width: 160,
                     fieldLabel: '所属区县',
@@ -44,7 +44,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }), {
                 xtype: "textarea",
                 fieldLabel: "描述",
-                name: "desc",
+                name: "desp",
                 anchor: "95% 60%"
             }]
         });
@@ -170,11 +170,11 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'root',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'},
-                    {name: 'quxianId', type: 'int'},
-                    {name: 'quxian', type: 'string'},
-                    {name: 'desc', type: 'string'}
+                    {name: 'dstid', type: 'int'},
+                    {name: 'dstname', type: 'string'},
+                    {name: 'ctyid', type: 'int'},
+                    {name: 'ctyname', type: 'string'},
+                    {name: 'desp', type: 'string'}
                 ]
             })
         });
@@ -183,19 +183,19 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "大区编号",
-                dataIndex: "id",
+                dataIndex: "dstid",
                 width: 1
             }, {
                 header: "大区名称",
-                dataIndex: 'name',
+                dataIndex: 'dstname',
                 width: 4
             }, {
                 header: "所属区县",
-                dataIndex: 'quxian',
+                dataIndex: 'ctyname',
                 width: 2
             }, {
                 header: "描述",
-                dataIndex: "desc",
+                dataIndex: "desp",
                 width: 4
             }],
 

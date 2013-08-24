@@ -17,15 +17,15 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
             fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'id'
+                name: 'untid'
             }, {
                 xtype: 'textfield',
                 fieldLabel: '单元名称',
-                name: 'name',
+                name: 'untname',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
-                hiddenName: 'loudongId',
+                hiddenName: 'bldid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属楼栋',
@@ -43,25 +43,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         ['临修', '临修']]
                 })
             }), new Ext.form.ComboBox({
-                hiddenName: 'projectId',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '所属项目',
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [['A', 'A'],
-                        ['B', 'B'],
-                        ['C', 'C'],
-                        ['D', 'D'],
-                        ['临修', '临修']]
-                })
-            }), new Ext.form.ComboBox({
-                hiddenName: 'machineId',
+                hiddenName: 'mchid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属机组',
@@ -81,12 +63,12 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }), {
                 xtype: 'textfield',
                 fieldLabel: 'GIS坐标',
-                name: 'GIS',
+                name: 'gis',
                 width: 160
             }, {
                 xtype: 'fileuploadfield',
                 fieldLabel: '单元平面图',
-                name: 'chart',
+                name: 'picaddress',
                 width: 160,
                 buttonText: '',
                 buttonCfg: {
@@ -216,16 +198,16 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'root',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'name', type: 'string'},
-                    {name: 'loudongId', type: 'int'},
-                    {name: 'loudong', type: 'string'},
-                    {name: 'projectId', type: 'int'},
-                    {name: 'project', type: 'string'},
-                    {name: 'machineId', type: 'int'},
-                    {name: 'machine', type: 'string'},
-                    {name: 'GIS', type: 'string'},
-                    {name: 'chart', type: 'string'}
+                    {name: 'untid', type: 'int'},
+                    {name: 'untname', type: 'string'},
+                    {name: 'bldId', type: 'int'},
+                    {name: 'bldname', type: 'string'},
+                    {name: 'pjtid', type: 'int'},
+                    {name: 'pjtname', type: 'string'},
+                    {name: 'mchid', type: 'int'},
+                    {name: 'mchname', type: 'string'},
+                    {name: 'gis', type: 'string'},
+                    {name: 'picaddress', type: 'string'}
                 ]
             })
         });
@@ -234,31 +216,27 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "单元编号",
-                dataIndex: 'id',
+                dataIndex: 'untid',
                 width: 1
             }, {
                 header: "单元名称",
-                dataIndex: 'name',
+                dataIndex: 'untname',
                 width: 2
             }, {
                 header: "所属楼栋",
-                dataIndex: 'loudong',
+                dataIndex: 'bldname',
                 width: 1
             }, {
                 header: "所属项目",
-                dataIndex: 'project',
+                dataIndex: 'pjtname',
                 width: 1
             }, {
                 header: "所属机组",
-                dataIndex: 'machine',
-                width: 1
-            }, {
-                header: "供热类型",
-                dataIndex: 'heat',
+                dataIndex: 'mchname',
                 width: 1
             }, {
                 header: "GIS坐标",
-                dataIndex: "GIS",
+                dataIndex: "gis",
                 width: 1
             }],
 
