@@ -55,7 +55,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryDanyuan.json"}),
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryUnit.json"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -260,6 +260,44 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
+            }, '->', new Ext.form.ComboBox({
+                hiddenName: 'cmtid',
+                mode: 'local',
+                width: 100,
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                editable: false,
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryShequ.json?query=true"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'bldid',
+                mode: 'local',
+                width: 100,
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                editable: false,
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryLoudong.json?query=true"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
+                })
+            }), {
+                text: '查询',
+                name: 'search',
+                iconCls: 'search',
+                handler: this.onSearchClick,
+                scope: this
             }],
 
             bbar: new Ext.PagingToolbar({
@@ -279,6 +317,18 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             collapsible: false,
             listeners: {
                 render: function(grid) {
+                    var store = grid.getStore(),
+                        tbar = grid.getTopToolbar(),
+                        filters = tbar.findByType("combo");
+                    if (grid.cmtid && grid.bldid) {
+                        store.setBaseParam("cmitd", grid.cmtid);
+                        store.setBaseParam("bldtd", grid.bldid);
+                        filters[0].setValue(grid.cmtname);
+                        filters[1].setValue(grid.bldname);
+                    } else {
+                        filters[0].setValue("全部社区");
+                        filters[1].setValue("全部楼栋");
+                    }
                     grid.getStore().load();
                 }
             }
@@ -325,6 +375,28 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             })
         }
+    },
+
+    onSearchClick: function() {
+        var data = {params: {}},
+            store = this.getStore(),
+            tbar = this.getTopToolbar(),
+            filters = tbar.findByType("combo"),
+            cmtid = filters[0].getValue(),
+            bldid = filters[1].getValue();
+        if (cmtid == "全部社区") {
+            cmtid = 0;
+        }
+        if (bldid == "全部楼栋") {
+            bldid = 0;
+        }
+        if (store.lastOptions.params) {
+            data.params.start = store.lastOptions.params.start;
+            data.params.limit = store.lastOptions.params.limit;
+        }
+        store.setBaseParam("cmtid", cmtid);
+        store.setBaseParam("bldid", bldid);
+        store.load(data);
     },
 
     refresh: function() {

@@ -280,6 +280,39 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 render: function(grid) {
                     grid.getStore().load();
+                },
+                rowcontextmenu: function(grid, rowIndex, e) {
+                    e.preventDefault();
+                    if (rowIndex < 0) return;
+                    var menu = new Ext.menu.Menu([{
+                        text: "查看所有楼栋",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                cmtid = record.get('cmtid'),
+                                cmtname = record.get('cmtname'),
+                                newGrid = new Heat.loudong.BasicGrid;
+
+                            newGrid.cmtid = cmtid;
+                            newGrid.cmtname = cmtname;
+                            var tab = Heat.tabs.add({
+                                title: "楼栋管理",
+                                //iconCls: 'fwxtabpanelicon',
+                                border: 0,
+                                autoWidth: true,
+                                closable: true,
+                                layout: 'fit',
+                                items: [newGrid]
+                            });
+                            Heat.tabs.setActiveTab(tab);
+
+                        }
+                    }, {
+                        text: "显示社区平面图",
+                        handler: function() {
+                            console.log(rowIndex);
+                        }
+                    }]);
+                    menu.showAt(e.getPoint());
                 }
             }
         });

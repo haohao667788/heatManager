@@ -13,3 +13,7 @@
 .upload_icon {
     background: url("../image/upload.png") no-repeat;
 }
+
+.search {
+    background: url("../image/search.png") no-repeat;
+}
