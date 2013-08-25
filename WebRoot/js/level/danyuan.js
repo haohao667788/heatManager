@@ -9,6 +9,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.danyuan.BasicForm.superclass.constructor.call(this, {
+            url: '/data/level/danyuan/list.json',
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -34,13 +35,13 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 displayField: 'text',
                 allowBlank: false,
                 editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [['A', 'A'],
-                        ['B', 'B'],
-                        ['C', 'C'],
-                        ['D', 'D'],
-                        ['临修', '临修']]
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryLoudong.json"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
                 })
             }), new Ext.form.ComboBox({
                 hiddenName: 'mchid',
@@ -52,13 +53,13 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 displayField: 'text',
                 allowBlank: false,
                 editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [['A', 'A'],
-                        ['B', 'B'],
-                        ['C', 'C'],
-                        ['D', 'D'],
-                        ['临修', '临修']]
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryDanyuan.json"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
                 })
             }), {
                 xtype: 'textfield',
@@ -78,6 +79,10 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
         });
 
         this.addEvents('submitcomplete');
+    },
+
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
     },
 
     //提交表单数据
@@ -193,14 +198,14 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.danyuanWin = new Heat.danyuan.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: ""}),
+            proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
-                root: 'root',
+                root: 'data',
                 fields: [
                     {name: 'untid', type: 'int'},
                     {name: 'untname', type: 'string'},
-                    {name: 'bldId', type: 'int'},
+                    {name: 'bldid', type: 'int'},
                     {name: 'bldname', type: 'string'},
                     {name: 'pjtid', type: 'int'},
                     {name: 'pjtname', type: 'string'},
@@ -225,7 +230,7 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }, {
                 header: "所属楼栋",
                 dataIndex: 'bldname',
-                width: 1
+                width: 2
             }, {
                 header: "所属项目",
                 dataIndex: 'pjtname',
@@ -271,7 +276,12 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             frame: true,
             loadMask: true,
-            collapsible: false
+            collapsible: false,
+            listeners: {
+                render: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         });
 
         this.danyuanWin.on("submitcomplete", this.refresh, this);

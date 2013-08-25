@@ -1,52 +1,77 @@
 /**
- * 大区tab
+ * 社区tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.daqu");
+Ext.namespace("Heat.shequ");
 
-Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.daqu.BasicForm.superclass.constructor.call(this, {
-            url: '/data/daqu/daqu/update.json',
+        Heat.shequ.BasicForm.superclass.constructor.call(this, {
+            url: '/data/level/shequ/update.json',
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
+            fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'dstid'
+                name: 'cmtid'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '大区名称',
-                name: 'dstname',
+                fieldLabel: '社区名称',
+                name: 'cmtname',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
-                    hiddenName: 'ctyid',
-                    mode: 'local',
-                    width: 160,
-                    fieldLabel: '所属区县',
-                    triggerAction: 'all',
-                    valueField: 'value',
-                    displayField: 'text',
-                    allowBlank: false,
-                    editable: false,
-                    store: new Ext.data.Store({
-                        autoLoad: true,
-                        proxy: new Ext.data.HttpProxy({url: "/data/daqu/daqu/queryQuxian.json"}),
-                        reader: new Ext.data.ArrayReader({}, [
-                            {name: 'value'},
-                            {name: 'text'}
-                        ])
-                    })
+                hiddenName: 'pjtid',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属项目',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/shequ/queryProject.json"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
+                })
             }), {
+                xtype: 'textfield',
+                fieldLabel: '简称',
+                name: 'briefname',
+                width: 160
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '地址',
+                name: 'cmtaddress',
+                width: 160
+            }, {
+                xtype: 'textfield',
+                fieldLabel: 'GIS坐标',
+                name: 'gis',
+                width: 160
+            }, {
+                xtype: 'fileuploadfield',
+                fieldLabel: '社区平面图',
+                name: 'picaddress',
+                width: 160,
+                buttonText: '',
+                buttonCfg: {
+                    iconCls: 'upload_icon'
+                }
+            }, {
                 xtype: "textarea",
                 fieldLabel: "描述",
                 name: "desp",
-                anchor: "95% 60%"
+                anchor: "95% 40%"
             }]
         });
 
@@ -57,6 +82,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().loadRecord(record);
     },
 
+    //提交表单数据
     formSubmit: function() {
         this.getForm().submit({
             clientValidation: true,
@@ -82,19 +108,20 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().reset();
     },
 
+    //当表单提交成功后，触发complete事件(win由于监听了complete事件能通过得到响应)
     submitcomplete: function(form, action) {
         this.fireEvent('submitcomplete');
     }
 });
 
 
-Heat.daqu.BasicWin = Ext.extend(Ext.Window, {
+Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.daqu.BasicForm();
-        Heat.daqu.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.shequ.BasicForm();
+        Heat.shequ.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -161,59 +188,75 @@ Heat.daqu.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    daquWin: null,
+Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    shequWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.daquWin = new Heat.daqu.BasicWin();
+        this.shequWin = new Heat.shequ.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/daqu/daqu/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/data/level/shequ/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'dstid', type: 'int'},
-                    {name: 'dstname', type: 'string'},
-                    {name: 'ctyid', type: 'int'},
-                    {name: 'ctyname', type: 'string'},
-                    {name: 'desp', type: 'string'}
+                    {name: 'cmtid', type: 'int'},
+                    {name: 'cmtname', type: 'string'},
+                    {name: 'pjtid', type: 'int'},
+                    {name: 'pjtname', type: 'string'},
+                    {name: 'briefname', type: 'string'},
+                    {name: 'cmtaddress', type: 'string'},
+                    {name: 'desp', type: 'string'},
+                    {name: 'gis', type: 'string'},
+                    {name: 'picaddress', type: 'string'}
                 ]
             })
         });
-        Heat.daqu.BasicGrid.superclass.constructor.call(this, {
+        Heat.shequ.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "大区编号",
-                dataIndex: "dstid",
+                header: "社区编号",
+                dataIndex: 'cmtid',
                 width: 1
             }, {
-                header: "大区名称",
-                dataIndex: 'dstname',
-                width: 4
+                header: "社区名称",
+                dataIndex: 'cmtname',
+                width: 2
             }, {
-                header: "所属区县",
-                dataIndex: 'ctyname',
+                header: "所属项目",
+                dataIndex: 'pjtname',
+                width: 1
+            }, {
+                header: "简称",
+                dataIndex: 'briefname',
+                width: 1
+            }, {
+                header: "地址",
+                dataIndex: 'cmtaddress',
                 width: 2
             }, {
                 header: "描述",
                 dataIndex: "desp",
-                width: 4
+                width: 2
+            }, {
+                header: "GIS坐标",
+                dataIndex: "gis",
+                width: 1
             }],
 
             tbar: [{
-                text: "添加大区",
+                text: "添加社区",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改大区",
+                text: "修改社区",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除大区",
+                text: "删除社区",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -241,20 +284,20 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
 
-        this.daquWin.on("submitcomplete", this.refresh, this);
+        this.shequWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.daquWin.setTitle("新增大区");
-        this.daquWin.show();
+        this.shequWin.setTitle("新增社区");
+        this.shequWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.daquWin.setTitle("修改大区");
-            this.daquWin.show();
-            this.daquWin.load(selected);
+            this.shequWin.setTitle("修改社区");
+            this.shequWin.show();
+            this.shequWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
@@ -285,7 +328,7 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
-        this.daquWin.hide();
+        this.shequWin.hide();
         this.getStore().reload();
     },
 

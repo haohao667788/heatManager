@@ -1,5 +1,5 @@
 /**
- * 用户tab
+ * 员工tab
  * @author Teddy Bear
  */
 Ext.namespace("Heat.employee");
@@ -20,7 +20,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'id'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '用户姓名',
+                fieldLabel: '员工姓名',
                 name: 'name',
                 width: 160,
                 allowBlank: false
@@ -267,11 +267,11 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             store: store,
 
             columns: [{
-                header: "用户编号",
+                header: "员工编号",
                 dataIndex: 'id',
                 width: 80
             }, {
-                header: "用户姓名",
+                header: "员工姓名",
                 dataIndex: 'name',
                 width: 100
             }, {
@@ -325,17 +325,17 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }],
 
             tbar: [{
-                text: "添加用户",
+                text: "添加员工",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改用户",
+                text: "修改员工",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除用户",
+                text: "删除员工",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -362,14 +362,14 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     onAddClick: function() {
-        this.employeeWin.setTitle("新增用户");
+        this.employeeWin.setTitle("新增员工");
         this.employeeWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.employeeWin.setTitle("修改用户");
+            this.employeeWin.setTitle("修改员工");
             this.employeeWin.show();
             this.employeeWin.load(selected);
         } catch(error) {

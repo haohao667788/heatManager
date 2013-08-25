@@ -1,14 +1,15 @@
 /**
- * 社区tab
+ * 楼栋tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.shequ");
+Ext.namespace("Heat.loudong");
 
-Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.shequ.BasicForm.superclass.constructor.call(this, {
+        Heat.loudong.BasicForm.superclass.constructor.call(this, {
+            url: "/data/level/loudong/update.json",
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -17,18 +18,59 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
             fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'cmtid'
+                name: 'bldid'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '社区名称',
-                name: 'cmtname',
+                fieldLabel: '楼栋名称',
+                name: 'bldname',
                 width: 160,
                 allowBlank: false
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '地址',
+                name: 'bldaddress',
+                width: 160
             }, new Ext.form.ComboBox({
-                hiddenName: 'pjtid',
+                hiddenName: 'cmtid',
                 mode: 'local',
                 width: 160,
-                fieldLabel: '所属项目',
+                fieldLabel: '所属社区',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/queryShequ.json"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'srcid',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属热源',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/queryHeat.json"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'heattype',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '供热类型',
                 triggerAction: 'all',
                 valueField: 'value',
                 displayField: 'text',
@@ -36,30 +78,18 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
-                    data: [['A', 'A'],
-                        ['B', 'B'],
-                        ['C', 'C'],
-                        ['D', 'D'],
-                        ['临修', '临修']]
+                    data: [['A', '居民'],
+                        ['B', '工业'],
+                        ['C', '商业']]
                 })
             }), {
                 xtype: 'textfield',
-                fieldLabel: '简称',
-                name: 'briefname',
-                width: 160
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '地址',
-                name: 'cmtaddress',
-                width: 160
-            }, {
-                xtype: 'textfield',
-                fieldLabel: 'GIS坐标',
+                fieldLabel: 'GIS',
                 name: 'gis',
                 width: 160
             }, {
                 xtype: 'fileuploadfield',
-                fieldLabel: '社区平面图',
+                fieldLabel: '楼栋平面图',
                 name: 'picaddress',
                 width: 160,
                 buttonText: '',
@@ -75,6 +105,10 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
         });
 
         this.addEvents('submitcomplete');
+    },
+
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
     },
 
     //提交表单数据
@@ -110,13 +144,13 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
+Heat.loudong.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.shequ.BasicForm();
-        Heat.shequ.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.loudong.BasicForm();
+        Heat.loudong.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -183,53 +217,65 @@ Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    shequWin: null,
+Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    loudongWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.shequWin = new Heat.shequ.BasicWin();
+        this.loudongWin = new Heat.loudong.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: ""}),
+            proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
-                root: 'root',
+                root: 'data',
                 fields: [
+                    {name: 'bldid', type: 'int'},
+                    {name: 'bldname', type: 'string'},
                     {name: 'cmtid', type: 'int'},
                     {name: 'cmtname', type: 'string'},
-                    {name: 'ptjid', type: 'int'},
-                    {name: 'ptjname', type: 'string'},
-                    {name: 'briefname', type: 'string'},
-                    {name: 'cmtaddress', type: 'string'},
+                    {name: 'pjtid', type: 'int'},
+                    {name: 'pjtname', type: 'string'},
+                    {name: 'srcid', type: 'int'},
+                    {name: 'srcname', type: 'string'},
+                    {name: 'heattype', type: 'string'},
+                    {name: 'bldaddress', type: 'string'},
                     {name: 'desp', type: 'string'},
                     {name: 'gis', type: 'string'},
                     {name: 'picaddress', type: 'string'}
                 ]
             })
         });
-        Heat.shequ.BasicGrid.superclass.constructor.call(this, {
+        Heat.loudong.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "社区编号",
-                dataIndex: 'cmtid',
+                header: "楼栋编号",
+                dataIndex: 'bldid',
                 width: 1
             }, {
-                header: "社区名称",
-                dataIndex: 'cmtname',
+                header: "楼栋名称",
+                dataIndex: 'bldname',
                 width: 2
-            }, {
-                header: "所属项目",
-                dataIndex: 'ptjname',
-                width: 1
-            }, {
-                header: "简称",
-                dataIndex: 'briefname',
-                width: 1
             }, {
                 header: "地址",
-                dataIndex: 'cmtaddress',
+                dataIndex: 'bldaddress',
                 width: 2
+            }, {
+                header: "所属社区",
+                dataIndex: 'cmtname',
+                width: 1
+            }, {
+                header: "所属项目",
+                dataIndex: 'pjtname',
+                width: 1
+            }, {
+                header: "所属热源",
+                dataIndex: 'srcid',
+                width: 1
+            }, {
+                header: "供热类型",
+                dataIndex: 'heattype',
+                width: 1
             }, {
                 header: "描述",
                 dataIndex: "desp",
@@ -241,17 +287,17 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }],
 
             tbar: [{
-                text: "添加社区",
+                text: "添加楼栋",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改社区",
+                text: "修改楼栋",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除社区",
+                text: "删除楼栋",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -271,23 +317,28 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             frame: true,
             loadMask: true,
-            collapsible: false
+            collapsible: false,
+            listeners: {
+                render: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         });
 
-        this.shequWin.on("submitcomplete", this.refresh, this);
+        this.loudongWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.shequWin.setTitle("新增社区");
-        this.shequWin.show();
+        this.loudongWin.setTitle("新增楼栋");
+        this.loudongWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.shequWin.setTitle("修改社区");
-            this.shequWin.show();
-            this.shequWin.load(selected);
+            this.loudongWin.setTitle("修改楼栋");
+            this.loudongWin.show();
+            this.loudongWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }

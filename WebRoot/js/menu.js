@@ -81,18 +81,6 @@ Heat.menu = new Ext.tree.TreePanel({
                     text: '项目管理',
                     ns: 'project',
                     leaf: true
-                }, {
-                    text: '社区管理',
-                    ns: 'shequ',
-                    leaf: true
-                }, {
-                    text: '楼栋管理',
-                    ns: 'loudong',
-                    leaf: true
-                }, {
-                    text: '单元管理',
-                    ns: 'danyuan',
-                    leaf: true
                 }]
             }, {
                 text: '分级管理',
@@ -104,6 +92,18 @@ Heat.menu = new Ext.tree.TreePanel({
                 }, {
                     text: '行政区管理',
                     ns: 'quxian',
+                    leaf: true
+                }, {
+                    text: '社区管理',
+                    ns: 'shequ',
+                    leaf: true
+                }, {
+                    text: '楼栋管理',
+                    ns: 'loudong',
+                    leaf: true
+                }, {
+                    text: '单元管理',
+                    ns: 'danyuan',
                     leaf: true
                 }, {
                     text: '热源厂管理',

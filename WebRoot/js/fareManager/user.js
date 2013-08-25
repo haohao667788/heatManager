@@ -1,15 +1,15 @@
 /**
- * 楼栋tab
+ * 用户tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.loudong");
+Ext.namespace("Heat.user");
 
-Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.loudong.BasicForm.superclass.constructor.call(this, {
-            width: 500,
+        Heat.user.BasicForm.superclass.constructor.call(this, {
+            width: 300,
             labelAlign: 'right',
             labelWidth: 80,
             frame: true,
@@ -17,23 +17,30 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
             fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'bldid'
+                name: 'id'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '楼栋名称',
-                name: 'bldname',
+                fieldLabel: '用户姓名',
+                name: 'name',
                 width: 160,
                 allowBlank: false
             }, {
                 xtype: 'textfield',
-                fieldLabel: '地址',
-                name: 'bldaddress',
-                width: 160
+                fieldLabel: '用户工号',
+                name: 'userId',
+                width: 160,
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '联系方式',
+                name: 'info',
+                width: 160,
+                allowBlank: false
             }, new Ext.form.ComboBox({
-                hiddenName: 'cmtid',
+                hiddenName: 'department',
                 mode: 'local',
                 width: 160,
-                fieldLabel: '所属社区',
+                fieldLabel: '所属部门',
                 triggerAction: 'all',
                 valueField: 'value',
                 displayField: 'text',
@@ -46,67 +53,82 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         ['C', 'C'],
                         ['D', 'D'],
                         ['临修', '临修']]
-                })
-            }), new Ext.form.ComboBox({
-                hiddenName: 'srcid',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '所属热源',
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [['A', 'A'],
-                        ['B', 'B'],
-                        ['C', 'C'],
-                        ['D', 'D'],
-                        ['临修', '临修']]
-                })
-            }), new Ext.form.ComboBox({
-                hiddenName: 'heattype',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '供热类型',
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [['A', '居民'],
-                        ['B', '工业'],
-                        ['C', '商业']]
                 })
             }), {
                 xtype: 'textfield',
-                fieldLabel: 'gis',
-                name: 'GIS',
+                fieldLabel: '登录名',
+                name: 'username',
                 width: 160
             }, {
-                xtype: 'fileuploadfield',
-                fieldLabel: '楼栋平面图',
-                name: 'picaddress',
+                xtype: 'textfield',
+                inputType: 'password',
+                fieldLabel: '密码',
+                name: 'password',
+                width: 160
+            }, new Ext.form.ComboBox({
+                hiddenName: 'authMethod',
+                mode: 'local',
                 width: 160,
-                buttonText: '',
-                buttonCfg: {
-                    iconCls: 'upload_icon'
-                }
-            }, {
-                xtype: "textarea",
-                fieldLabel: "描述",
-                name: "desp",
-                anchor: "95% 40%"
-            }]
+                fieldLabel: '鉴权方式',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'groupId',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属权限组',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
+                hiddenName: 'proListId',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属项目',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            })]
         });
 
         this.addEvents('submitcomplete');
     },
 
-    //提交表单数据
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
+    },
+
     formSubmit: function() {
         this.getForm().submit({
             clientValidation: true,
@@ -132,20 +154,19 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().reset();
     },
 
-    //当表单提交成功后，触发complete事件(win由于监听了complete事件能通过得到响应)
     submitcomplete: function(form, action) {
         this.fireEvent('submitcomplete');
     }
 });
 
 
-Heat.loudong.BasicWin = Ext.extend(Ext.Window, {
+Heat.user.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.loudong.BasicForm();
-        Heat.loudong.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.user.BasicForm();
+        Heat.user.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -169,7 +190,7 @@ Heat.loudong.BasicWin = Ext.extend(Ext.Window, {
             },
 
             title: '修改记录',
-            width: 500,
+            width: 300,
             buttonAlign: 'center',
             closeAction: 'hide'
         });
@@ -212,87 +233,111 @@ Heat.loudong.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    loudongWin: null,
+Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    userWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.loudongWin = new Heat.loudong.BasicWin();
+        this.userWin = new Heat.user.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: ""}),
+            proxy: new Ext.data.HttpProxy({url: "/data/fareManager/user/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
-                root: 'root',
+                root: 'data',
                 fields: [
-                    {name: 'bldid', type: 'int'},
-                    {name: 'bldname', type: 'string'},
-                    {name: 'cmtid', type: 'int'},
-                    {name: 'cmtname', type: 'string'},
-                    {name: 'pjtid', type: 'int'},
-                    {name: 'pjtname', type: 'string'},
-                    {name: 'srcid', type: 'int'},
-                    {name: 'srcname', type: 'string'},
-                    {name: 'heattype', type: 'string'},
-                    {name: 'bldaddress', type: 'string'},
-                    {name: 'desp', type: 'string'},
-                    {name: 'gis', type: 'string'},
-                    {name: 'picaddress', type: 'string'}
+                    {name: 'id', type: 'int'},
+                    {name: 'name', type: 'string'},
+                    {name: 'userId', type: 'int'},
+                    {name: 'info', type: 'string'},
+                    {name: 'departmentId', type: 'int'},
+                    {name: 'department', type: 'string'},
+                    {name: 'username', type: 'string'},
+                    {name: 'password', type: 'string'},
+                    {name: 'authMethod', type: 'string'},
+                    {name: 'groupId', type: 'init'},
+                    {name: 'group', type: 'string'},
+                    {name: 'proListId', type: 'string'},
+                    {name: 'proList', type: 'string'},
+                    {name: 'createTime', type: 'string'},
+                    {name: 'lastLoginTime', type: 'string'},
+                    {name: 'lastDuration', type: 'string'},
+                    {name: 'credit', type: 'int'}
                 ]
             })
         });
-        Heat.loudong.BasicGrid.superclass.constructor.call(this, {
+        Heat.user.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "楼栋编号",
-                dataIndex: 'bldid',
-                width: 1
+                header: "用户编号",
+                dataIndex: 'id',
+                width: 80
             }, {
-                header: "楼栋名称",
-                dataIndex: 'bldname',
-                width: 2
+                header: "用户姓名",
+                dataIndex: 'name',
+                width: 100
             }, {
-                header: "地址",
-                dataIndex: 'bldaddress',
-                width: 2
+                header: "用户工号",
+                dataIndex: 'userId',
+                width: 80
             }, {
-                header: "所属社区",
-                dataIndex: 'cmtname',
-                width: 1
+                header: "联系方式",
+                dataIndex: 'info',
+                width: 160
+            }, {
+                header: "所属部门",
+                dataIndex: 'department',
+                width: 160
+            }, {
+                header: "登录名",
+                dataIndex: 'username',
+                width: 160
+            }, {
+                header: "密码",
+                dataIndex: "password",
+                width: 160
+            }, {
+                header: "鉴权方式",
+                dataIndex: "authMethod",
+                width: 160
+            }, {
+                header: "所属权限组",
+                dataIndex: "group",
+                width: 160
             }, {
                 header: "所属项目",
-                dataIndex: 'pjtname',
-                width: 1
+                dataIndex: "proList",
+                width: 160
             }, {
-                header: "所属热源",
-                dataIndex: 'srcid',
-                width: 1
+                header: "添加时间",
+                dataIndex: "createTime",
+                width: 120
             }, {
-                header: "供热类型",
-                dataIndex: 'heattype',
-                width: 1
+                header: "上次登录时间",
+                dataIndex: 'lastLoginTime',
+                width: 160
             }, {
-                header: "描述",
-                dataIndex: "desp",
-                width: 2
+                header: "上次登录时长",
+                dataIndex: 'lastDuration',
+                width: 160
             }, {
-                header: "GIS坐标",
-                dataIndex: "gis",
-                width: 1
+                header: "登录积分",
+                dataIndex: 'credit',
+                width: 160
             }],
 
             tbar: [{
-                text: "添加楼栋",
+                text: "添加用户",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改楼栋",
+                text: "修改用户",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除楼栋",
+                text: "删除用户",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -307,28 +352,33 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }),
 
             viewConfig: {
-                forceFit: true
+                forceFit: false
             },
 
             frame: true,
             loadMask: true,
-            collapsible: false
+            collapsible: false,
+            listeners: {
+                render: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         });
 
-        this.loudongWin.on("submitcomplete", this.refresh, this);
+        this.userWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.loudongWin.setTitle("新增楼栋");
-        this.loudongWin.show();
+        this.userWin.setTitle("新增用户");
+        this.userWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.loudongWin.setTitle("修改楼栋");
-            this.loudongWin.show();
-            this.loudongWin.load(selected);
+            this.userWin.setTitle("修改用户");
+            this.userWin.show();
+            this.userWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
