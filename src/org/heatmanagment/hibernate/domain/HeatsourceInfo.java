@@ -29,10 +29,9 @@ public class HeatsourceInfo implements java.io.Serializable {
 	private String srcname;
 	private String srcaddress;
 	private String heattype;
-	private String desp;
 	private String comm;
-	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
+	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 
 	// Constructors
 
@@ -47,16 +46,15 @@ public class HeatsourceInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public HeatsourceInfo(DistrictInfo districtInfo, String srcname,
-			String srcaddress, String heattype, String desp, String comm,
-			Set<BuildingInfo> buildingInfos, Set<MachinesetInfo> machinesetInfos) {
+			String srcaddress, String heattype, String comm,
+			Set<MachinesetInfo> machinesetInfos, Set<BuildingInfo> buildingInfos) {
 		this.districtInfo = districtInfo;
 		this.srcname = srcname;
 		this.srcaddress = srcaddress;
 		this.heattype = heattype;
-		this.desp = desp;
 		this.comm = comm;
-		this.buildingInfos = buildingInfos;
 		this.machinesetInfos = machinesetInfos;
+		this.buildingInfos = buildingInfos;
 	}
 
 	// Property accessors
@@ -109,15 +107,6 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.heattype = heattype;
 	}
 
-	@Column(name = "DESP", length = 200)
-	public String getDesp() {
-		return this.desp;
-	}
-
-	public void setDesp(String desp) {
-		this.desp = desp;
-	}
-
 	@Column(name = "COMM", length = 2000)
 	public String getComm() {
 		return this.comm;
@@ -128,21 +117,21 @@ public class HeatsourceInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
-	public Set<BuildingInfo> getBuildingInfos() {
-		return this.buildingInfos;
-	}
-
-	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
-		this.buildingInfos = buildingInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
 	public Set<MachinesetInfo> getMachinesetInfos() {
 		return this.machinesetInfos;
 	}
 
 	public void setMachinesetInfos(Set<MachinesetInfo> machinesetInfos) {
 		this.machinesetInfos = machinesetInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
+	public Set<BuildingInfo> getBuildingInfos() {
+		return this.buildingInfos;
+	}
+
+	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
+		this.buildingInfos = buildingInfos;
 	}
 
 }

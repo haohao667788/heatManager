@@ -27,11 +27,12 @@ public class ProjectInfo implements java.io.Serializable {
 
 	private Long pjtid;
 	private DistrictInfo districtInfo;
+	private CountyInfo countyInfo;
 	private String pjtname;
+	private String middle;
 	private Timestamp startDate;
-	private String desp;
 	private String comm;
-	private Set<CommunityInfo> communityInfos = new HashSet<CommunityInfo>(0);
+	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
 
@@ -40,23 +41,21 @@ public class ProjectInfo implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public ProjectInfo(DistrictInfo districtInfo, String pjtname,
-			Timestamp startDate) {
-		this.districtInfo = districtInfo;
+	public ProjectInfo(String pjtname) {
 		this.pjtname = pjtname;
-		this.startDate = startDate;
 	}
 
 	/** full constructor */
-	public ProjectInfo(DistrictInfo districtInfo, String pjtname,
-			Timestamp startDate, String desp, String comm,
-			Set<CommunityInfo> communityInfos) {
+	public ProjectInfo(DistrictInfo districtInfo, CountyInfo countyInfo,
+			String pjtname, String middle, Timestamp startDate, String comm,
+			Set<UsersInfo> usersInfos) {
 		this.districtInfo = districtInfo;
+		this.countyInfo = countyInfo;
 		this.pjtname = pjtname;
+		this.middle = middle;
 		this.startDate = startDate;
-		this.desp = desp;
 		this.comm = comm;
-		this.communityInfos = communityInfos;
+		this.usersInfos = usersInfos;
 	}
 
 	// Property accessors
@@ -73,13 +72,23 @@ public class ProjectInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DSTID", nullable = false)
+	@JoinColumn(name = "DSTID")
 	public DistrictInfo getDistrictInfo() {
 		return this.districtInfo;
 	}
 
 	public void setDistrictInfo(DistrictInfo districtInfo) {
 		this.districtInfo = districtInfo;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CTYID")
+	public CountyInfo getCountyInfo() {
+		return this.countyInfo;
+	}
+
+	public void setCountyInfo(CountyInfo countyInfo) {
+		this.countyInfo = countyInfo;
 	}
 
 	@Column(name = "PJTNAME", nullable = false, length = 40)
@@ -91,22 +100,22 @@ public class ProjectInfo implements java.io.Serializable {
 		this.pjtname = pjtname;
 	}
 
-	@Column(name = "START_DATE", nullable = false, length = 7)
+	@Column(name = "MIDDLE", length = 4)
+	public String getMiddle() {
+		return this.middle;
+	}
+
+	public void setMiddle(String middle) {
+		this.middle = middle;
+	}
+
+	@Column(name = "START_DATE", length = 7)
 	public Timestamp getStartDate() {
 		return this.startDate;
 	}
 
 	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
-	}
-
-	@Column(name = "DESP", length = 200)
-	public String getDesp() {
-		return this.desp;
-	}
-
-	public void setDesp(String desp) {
-		this.desp = desp;
 	}
 
 	@Column(name = "COMM", length = 2000)
@@ -119,12 +128,12 @@ public class ProjectInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "projectInfo")
-	public Set<CommunityInfo> getCommunityInfos() {
-		return this.communityInfos;
+	public Set<UsersInfo> getUsersInfos() {
+		return this.usersInfos;
 	}
 
-	public void setCommunityInfos(Set<CommunityInfo> communityInfos) {
-		this.communityInfos = communityInfos;
+	public void setUsersInfos(Set<UsersInfo> usersInfos) {
+		this.usersInfos = usersInfos;
 	}
 
 }

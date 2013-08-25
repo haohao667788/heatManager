@@ -9,32 +9,28 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.SEQUENCE;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * CommunityInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "COMMUNITY_INFO", schema = "HEATMGR")
+@Table(name = "COMMUNITY_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = "CMTNAME"))
 public class CommunityInfo implements java.io.Serializable {
 
 	// Fields
 
 	private Long cmtid;
-	private DistrictInfo districtInfo;
-	private ProjectInfo projectInfo;
 	private String cmtname;
 	private String briefname;
 	private String cmtaddress;
 	private String gis;
 	private String picaddress;
-	private String desp;
 	private String comm;
-	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
+	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
 
@@ -42,29 +38,17 @@ public class CommunityInfo implements java.io.Serializable {
 	public CommunityInfo() {
 	}
 
-	/** minimal constructor */
-	public CommunityInfo(ProjectInfo projectInfo, String cmtname,
-			String cmtaddress) {
-		this.projectInfo = projectInfo;
-		this.cmtname = cmtname;
-		this.cmtaddress = cmtaddress;
-	}
-
 	/** full constructor */
-	public CommunityInfo(DistrictInfo districtInfo, ProjectInfo projectInfo,
-			String cmtname, String briefname, String cmtaddress, String gis,
-			String picaddress, String desp, String comm,
-			Set<BuildingInfo> buildingInfos) {
-		this.districtInfo = districtInfo;
-		this.projectInfo = projectInfo;
+	public CommunityInfo(String cmtname, String briefname, String cmtaddress,
+			String gis, String picaddress, String comm,
+			Set<UsersInfo> usersInfos) {
 		this.cmtname = cmtname;
 		this.briefname = briefname;
 		this.cmtaddress = cmtaddress;
 		this.gis = gis;
 		this.picaddress = picaddress;
-		this.desp = desp;
 		this.comm = comm;
-		this.buildingInfos = buildingInfos;
+		this.usersInfos = usersInfos;
 	}
 
 	// Property accessors
@@ -80,27 +64,7 @@ public class CommunityInfo implements java.io.Serializable {
 		this.cmtid = cmtid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DSTID")
-	public DistrictInfo getDistrictInfo() {
-		return this.districtInfo;
-	}
-
-	public void setDistrictInfo(DistrictInfo districtInfo) {
-		this.districtInfo = districtInfo;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PJTID", nullable = false)
-	public ProjectInfo getProjectInfo() {
-		return this.projectInfo;
-	}
-
-	public void setProjectInfo(ProjectInfo projectInfo) {
-		this.projectInfo = projectInfo;
-	}
-
-	@Column(name = "CMTNAME", nullable = false, length = 20)
+	@Column(name = "CMTNAME", unique = true, length = 20)
 	public String getCmtname() {
 		return this.cmtname;
 	}
@@ -118,7 +82,7 @@ public class CommunityInfo implements java.io.Serializable {
 		this.briefname = briefname;
 	}
 
-	@Column(name = "CMTADDRESS", nullable = false, length = 200)
+	@Column(name = "CMTADDRESS", length = 200)
 	public String getCmtaddress() {
 		return this.cmtaddress;
 	}
@@ -127,7 +91,7 @@ public class CommunityInfo implements java.io.Serializable {
 		this.cmtaddress = cmtaddress;
 	}
 
-	@Column(name = "GIS", length = 20)
+	@Column(name = "GIS", length = 2000)
 	public String getGis() {
 		return this.gis;
 	}
@@ -145,15 +109,6 @@ public class CommunityInfo implements java.io.Serializable {
 		this.picaddress = picaddress;
 	}
 
-	@Column(name = "DESP", length = 200)
-	public String getDesp() {
-		return this.desp;
-	}
-
-	public void setDesp(String desp) {
-		this.desp = desp;
-	}
-
 	@Column(name = "COMM", length = 2000)
 	public String getComm() {
 		return this.comm;
@@ -164,12 +119,12 @@ public class CommunityInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
-	public Set<BuildingInfo> getBuildingInfos() {
-		return this.buildingInfos;
+	public Set<UsersInfo> getUsersInfos() {
+		return this.usersInfos;
 	}
 
-	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
-		this.buildingInfos = buildingInfos;
+	public void setUsersInfos(Set<UsersInfo> usersInfos) {
+		this.usersInfos = usersInfos;
 	}
 
 }

@@ -29,7 +29,6 @@ public class CommunityInfoDAO extends BaseHibernateDAO {
 	public static final String CMTADDRESS = "cmtaddress";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
-	public static final String DESP = "desp";
 	public static final String COMM = "comm";
 
 	public void save(CommunityInfo transientInstance) {
@@ -115,10 +114,6 @@ public class CommunityInfoDAO extends BaseHibernateDAO {
 
 	public List<CommunityInfo> findByPicaddress(Object picaddress) {
 		return findByProperty(PICADDRESS, picaddress);
-	}
-
-	public List<CommunityInfo> findByDesp(Object desp) {
-		return findByProperty(DESP, desp);
 	}
 
 	public List<CommunityInfo> findByComm(Object comm) {

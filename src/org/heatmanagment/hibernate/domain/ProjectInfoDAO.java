@@ -26,7 +26,7 @@ public class ProjectInfoDAO extends BaseHibernateDAO {
 			.getLogger(ProjectInfoDAO.class);
 	// property constants
 	public static final String PJTNAME = "pjtname";
-	public static final String DESP = "desp";
+	public static final String MIDDLE = "middle";
 	public static final String COMM = "comm";
 
 	public void save(ProjectInfo transientInstance) {
@@ -98,8 +98,8 @@ public class ProjectInfoDAO extends BaseHibernateDAO {
 		return findByProperty(PJTNAME, pjtname);
 	}
 
-	public List<ProjectInfo> findByDesp(Object desp) {
-		return findByProperty(DESP, desp);
+	public List<ProjectInfo> findByMiddle(Object middle) {
+		return findByProperty(MIDDLE, middle);
 	}
 
 	public List<ProjectInfo> findByComm(Object comm) {

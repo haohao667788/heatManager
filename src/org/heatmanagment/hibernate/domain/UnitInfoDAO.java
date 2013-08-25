@@ -1,6 +1,7 @@
 package org.heatmanagment.hibernate.domain;
 
 import java.util.List;
+import java.util.Set;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import static org.hibernate.criterion.Example.create;
@@ -23,6 +24,8 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(UnitInfoDAO.class);
 	// property constants
+	public static final String CMTNAME = "cmtname";
+	public static final String BLDNAME = "bldname";
 	public static final String UNTNAME = "untname";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
@@ -91,6 +94,14 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List<UnitInfo> findByCmtname(Object cmtname) {
+		return findByProperty(CMTNAME, cmtname);
+	}
+
+	public List<UnitInfo> findByBldname(Object bldname) {
+		return findByProperty(BLDNAME, bldname);
 	}
 
 	public List<UnitInfo> findByUntname(Object untname) {

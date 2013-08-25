@@ -1,20 +1,20 @@
-drop sequence ctytrigger if exists;
-drop sequence dstid if exists;
-drop sequence pjt_id if exists;
-drop sequence cmt_id if exists;
-drop sequence bld_id if exists;
-drop sequence unt_id if exists;
-drop sequence mch_id if exists;
-drop sequence src_id if exists;
+drop sequence dst_id;
+drop sequence cty_id;
+drop sequence pjt_id;
+drop sequence cmt_id; 
+drop sequence bld_id; 
+drop sequence unt_id; 
+drop sequence mch_id; 
+drop sequence src_id; 
 
-drop table unit_info if exists;
-drop table building_info if exists;
-drop table community_info if exists;
-drop table project_info if exists;
-drop table district_info if exists;
-drop table heatsource_info if exists;
-drop table machineset_info if exists;
-drop table county_info if exists;
+drop table unit_info;
+drop table building_info;
+drop table community_info;
+drop table project_info;
+drop table district_info;
+drop table heatsource_info;
+drop table machineset_info;
+drop table county_info;
 
 /** 区县表及其相关 */
 create sequence cty_id
@@ -51,11 +51,8 @@ create sequence dst_id
 create table district_info (
        dstid number(10)
        ,dstname varchar2(40) not null
-       ,ctyid number(6) not null
-       ,desp varchar2(200)
        ,comm varchar2(2000)
        ,primary key (dstid)
-       ,foreign key (ctyid) references county_info(ctyid)
 );
 
 create or replace trigger dst_trigger 
@@ -77,11 +74,13 @@ create sequence pjt_id
 create table project_info (
        pjtid number(10)
        ,pjtname varchar2(40) not null
-       ,dstid number(8) not null
-       ,start_date date not null
-       ,desp varchar2(200)
+       ,middle varchar2(4)
+       ,dstid number(10)
+       ,ctyid number(10)
+       ,start_date date
        ,comm varchar2(2000)
        ,primary key (pjtid)
+       ,foreign key (ctyid) references county_info(ctyid)
        ,foreign key (dstid) references district_info(dstid)
 );
 
@@ -103,18 +102,13 @@ create sequence cmt_id
 
 create table community_info (
        cmtid number(10)
-       ,pjtid number(10) not null
-       ,cmtname varchar2(20) not null
-       ,briefname varchar(10)
-       ,cmtaddress varchar2(200) not null
-       ,dstid number(10)
-       ,gis varchar2(20)
-       ,picaddress varhcar2(100)
-       ,desp varchar2(200)
+       ,cmtname varchar2(20) unique
+       ,briefname varchar2(10)
+       ,cmtaddress varchar2(200)
+       ,gis varchar2(2000)
+       ,picaddress varchar2(100)
        ,comm varchar2(2000)
        ,primary key (cmtid)
-       ,foreign key (pjtid) references project_info(pjtid)
-       ,foreign key (dstid) references district_info(dstid)
 );
 
 create or replace trigger cmt_trigger 
@@ -140,7 +134,6 @@ create table heatsource_info(
        ,dstid number(10)
        ,srcaddress varchar2(200)
        ,heattype varchar2(20)
-       ,desp varchar2(200)
        ,comm varchar2(2000)
        ,primary key (srcid)
        ,foreign key (dstid) references district_info(dstid)
@@ -163,11 +156,11 @@ create sequence mch_id
        nocache;
 
 /** 班组 缺少**/
-create machineset_info(
+create table machineset_info(
        mchid number(10)
        ,mchname varchar2(20) not null
-       ,srcid number(10) not null
-       ,gis varchar2(20)
+       ,srcid number(10)
+       ,gis varchar2(2000)
        ,primary key (mchid)
        ,foreign key (srcid) references heatsource_info(srcid)
 );
@@ -190,17 +183,17 @@ create sequence bld_id
        
 create table building_info (
        bldid number(10)
-       ,bldname varchar2(20) not null
-       ,bldaddress varchar2(200) not null
-       ,cmtid number(10) not null
-       ,srcid number(10) not null
-       ,heattype varchar2(10) not null
-       ,gis varchar2(20)
+       ,cmtname varchar2(20)
+       ,bldname varchar2(20)
+       ,bldaddress varchar2(200)
+       ,srcid number(10)
+       ,heattype varchar2(10)
+       ,gis varchar2(2000)
        ,picaddress varchar2(100)
-       ,desp varchar2(200)
        ,comm varchar2(2000)
        ,primary key (bldid)
-       ,foreign key (cmtid) references community_info(cmtid)
+       ,unique (cmtname,bldname)
+       ,foreign key (cmtname) references community_info(cmtname)
        ,foreign key (srcid) references heatsource_info(srcid)
 );
 
@@ -223,14 +216,16 @@ create sequence unt_id
        
 create table unit_info (
        untid number(10)
-       ,untname varchar2(20) not null
-       ,bldid number(10) not null
-       ,mchid number(10) not null
-       ,gis varchar2(20)
+       ,cmtname varchar2(20)
+       ,bldname varchar2(20)
+       ,untname varchar2(20)
+       ,mchid number(10)
+       ,gis varchar2(2000)
        ,picaddress varchar2(100)
        ,comm varchar2(2000)
        ,primary key (untid)
-       ,foreign key (bldid) references building_info(bldid)
+       ,unique (cmtname,bldname,untname)
+       ,foreign key (cmtname,bldname) references building_info(cmtname,bldname)
        ,foreign key (mchid) references machineset_info(mchid)
 );
 
