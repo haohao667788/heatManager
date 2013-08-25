@@ -3,10 +3,10 @@ package org.heatmanagment.hibernate.domain;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
-import static org.hibernate.criterion.Example.create;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * @author MyEclipse Persistence Tools
  */
 
-public class HeatsourceInfoDAO extends BaseHibernateDAO {
+public class HeatsourceInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(HeatsourceInfoDAO.class);
 	// property constants
@@ -29,10 +29,14 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public static final String HEATTYPE = "heattype";
 	public static final String COMM = "comm";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(HeatsourceInfo transientInstance) {
 		log.debug("saving HeatsourceInfo instance");
 		try {
-			getSession().save(transientInstance);
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -43,7 +47,7 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public void delete(HeatsourceInfo persistentInstance) {
 		log.debug("deleting HeatsourceInfo instance");
 		try {
-			getSession().delete(persistentInstance);
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -54,8 +58,9 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public HeatsourceInfo findById(java.lang.Long id) {
 		log.debug("getting HeatsourceInfo instance with id: " + id);
 		try {
-			HeatsourceInfo instance = (HeatsourceInfo) getSession().get(
-					"org.heatmanagment.hibernate.domain.HeatsourceInfo", id);
+			HeatsourceInfo instance = (HeatsourceInfo) getHibernateTemplate()
+					.get("org.heatmanagment.hibernate.domain.HeatsourceInfo",
+							id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,10 +71,8 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public List<HeatsourceInfo> findByExample(HeatsourceInfo instance) {
 		log.debug("finding HeatsourceInfo instance by example");
 		try {
-			List<HeatsourceInfo> results = (List<HeatsourceInfo>) getSession()
-					.createCriteria(
-							"org.heatmanagment.hibernate.domain.HeatsourceInfo")
-					.add(create(instance)).list();
+			List<HeatsourceInfo> results = (List<HeatsourceInfo>) getHibernateTemplate()
+					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;
@@ -85,9 +88,7 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from HeatsourceInfo as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
-			queryObject.setParameter(0, value);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -114,8 +115,7 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 		log.debug("finding all HeatsourceInfo instances");
 		try {
 			String queryString = "from HeatsourceInfo";
-			Query queryObject = getSession().createQuery(queryString);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -125,8 +125,8 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public HeatsourceInfo merge(HeatsourceInfo detachedInstance) {
 		log.debug("merging HeatsourceInfo instance");
 		try {
-			HeatsourceInfo result = (HeatsourceInfo) getSession().merge(
-					detachedInstance);
+			HeatsourceInfo result = (HeatsourceInfo) getHibernateTemplate()
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -138,7 +138,7 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public void attachDirty(HeatsourceInfo instance) {
 		log.debug("attaching dirty HeatsourceInfo instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -149,11 +149,16 @@ public class HeatsourceInfoDAO extends BaseHibernateDAO {
 	public void attachClean(HeatsourceInfo instance) {
 		log.debug("attaching clean HeatsourceInfo instance");
 		try {
-			getSession().lock(instance, LockMode.NONE);
+			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
+	}
+
+	public static HeatsourceInfoDAO getFromApplicationContext(
+			ApplicationContext ctx) {
+		return (HeatsourceInfoDAO) ctx.getBean("HeatsourceInfoDAO");
 	}
 }

@@ -47,14 +47,6 @@ public class UsersInfo implements java.io.Serializable {
 	public UsersInfo() {
 	}
 
-	/** minimal constructor */
-	public UsersInfo(BuildingInfo buildingInfo, UnitInfo unitInfo,
-			CommunityInfo communityInfo) {
-		this.buildingInfo = buildingInfo;
-		this.unitInfo = unitInfo;
-		this.communityInfo = communityInfo;
-	}
-
 	/** full constructor */
 	public UsersInfo(MachinesetInfo machinesetInfo, ProjectInfo projectInfo,
 			BuildingInfo buildingInfo, UnitInfo unitInfo,
@@ -117,7 +109,7 @@ public class UsersInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "BLDID", nullable = false)
+	@JoinColumn(name = "BLDID")
 	public BuildingInfo getBuildingInfo() {
 		return this.buildingInfo;
 	}
@@ -127,7 +119,7 @@ public class UsersInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "UNTID", nullable = false)
+	@JoinColumn(name = "UNTID")
 	public UnitInfo getUnitInfo() {
 		return this.unitInfo;
 	}
@@ -137,7 +129,7 @@ public class UsersInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CMTID", nullable = false)
+	@JoinColumn(name = "CMTID")
 	public CommunityInfo getCommunityInfo() {
 		return this.communityInfo;
 	}

@@ -3,10 +3,10 @@ package org.heatmanagment.hibernate.domain;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
-import static org.hibernate.criterion.Example.create;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -20,11 +20,10 @@ import org.slf4j.LoggerFactory;
  * @author MyEclipse Persistence Tools
  */
 
-public class BuildingInfoDAO extends BaseHibernateDAO {
+public class BuildingInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(BuildingInfoDAO.class);
 	// property constants
-	public static final String CMTNAME = "cmtname";
 	public static final String BLDNAME = "bldname";
 	public static final String BLDADDRESS = "bldaddress";
 	public static final String HEATTYPE = "heattype";
@@ -32,10 +31,14 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public static final String PICADDRESS = "picaddress";
 	public static final String COMM = "comm";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(BuildingInfo transientInstance) {
 		log.debug("saving BuildingInfo instance");
 		try {
-			getSession().save(transientInstance);
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -46,7 +49,7 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public void delete(BuildingInfo persistentInstance) {
 		log.debug("deleting BuildingInfo instance");
 		try {
-			getSession().delete(persistentInstance);
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -57,7 +60,7 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public BuildingInfo findById(java.lang.Long id) {
 		log.debug("getting BuildingInfo instance with id: " + id);
 		try {
-			BuildingInfo instance = (BuildingInfo) getSession().get(
+			BuildingInfo instance = (BuildingInfo) getHibernateTemplate().get(
 					"org.heatmanagment.hibernate.domain.BuildingInfo", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -69,10 +72,8 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public List<BuildingInfo> findByExample(BuildingInfo instance) {
 		log.debug("finding BuildingInfo instance by example");
 		try {
-			List<BuildingInfo> results = (List<BuildingInfo>) getSession()
-					.createCriteria(
-							"org.heatmanagment.hibernate.domain.BuildingInfo")
-					.add(create(instance)).list();
+			List<BuildingInfo> results = (List<BuildingInfo>) getHibernateTemplate()
+					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;
@@ -88,17 +89,11 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from BuildingInfo as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
-			queryObject.setParameter(0, value);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
-	}
-
-	public List<BuildingInfo> findByCmtname(Object cmtname) {
-		return findByProperty(CMTNAME, cmtname);
 	}
 
 	public List<BuildingInfo> findByBldname(Object bldname) {
@@ -129,8 +124,7 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 		log.debug("finding all BuildingInfo instances");
 		try {
 			String queryString = "from BuildingInfo";
-			Query queryObject = getSession().createQuery(queryString);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -140,7 +134,7 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public BuildingInfo merge(BuildingInfo detachedInstance) {
 		log.debug("merging BuildingInfo instance");
 		try {
-			BuildingInfo result = (BuildingInfo) getSession().merge(
+			BuildingInfo result = (BuildingInfo) getHibernateTemplate().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -153,7 +147,7 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public void attachDirty(BuildingInfo instance) {
 		log.debug("attaching dirty BuildingInfo instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -164,11 +158,16 @@ public class BuildingInfoDAO extends BaseHibernateDAO {
 	public void attachClean(BuildingInfo instance) {
 		log.debug("attaching clean BuildingInfo instance");
 		try {
-			getSession().lock(instance, LockMode.NONE);
+			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
+	}
+
+	public static BuildingInfoDAO getFromApplicationContext(
+			ApplicationContext ctx) {
+		return (BuildingInfoDAO) ctx.getBean("BuildingInfoDAO");
 	}
 }

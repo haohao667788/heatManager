@@ -14,25 +14,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * BuildingInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "BUILDING_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
-		"CMTNAME", "BLDNAME" }))
+@Table(name = "BUILDING_INFO", schema = "HEATMGR")
 public class BuildingInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2061534269931491489L;
 	private Long bldid;
 	private HeatsourceInfo heatsourceInfo;
-	private String cmtname;
+	private CommunityInfo communityInfo;
 	private String bldname;
 	private String bldaddress;
 	private String heattype;
@@ -40,6 +34,7 @@ public class BuildingInfo implements java.io.Serializable {
 	private String picaddress;
 	private String comm;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
+	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
 	// Constructors
 
@@ -48,11 +43,12 @@ public class BuildingInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public BuildingInfo(HeatsourceInfo heatsourceInfo, String cmtname,
-			String bldname, String bldaddress, String heattype, String gis,
-			String picaddress, String comm, Set<UsersInfo> usersInfos) {
+	public BuildingInfo(HeatsourceInfo heatsourceInfo,
+			CommunityInfo communityInfo, String bldname, String bldaddress,
+			String heattype, String gis, String picaddress, String comm,
+			Set<UsersInfo> usersInfos, Set<UnitInfo> unitInfos) {
 		this.heatsourceInfo = heatsourceInfo;
-		this.cmtname = cmtname;
+		this.communityInfo = communityInfo;
 		this.bldname = bldname;
 		this.bldaddress = bldaddress;
 		this.heattype = heattype;
@@ -60,6 +56,7 @@ public class BuildingInfo implements java.io.Serializable {
 		this.picaddress = picaddress;
 		this.comm = comm;
 		this.usersInfos = usersInfos;
+		this.unitInfos = unitInfos;
 	}
 
 	// Property accessors
@@ -85,13 +82,14 @@ public class BuildingInfo implements java.io.Serializable {
 		this.heatsourceInfo = heatsourceInfo;
 	}
 
-	@Column(name = "CMTNAME", length = 20)
-	public String getCmtname() {
-		return this.cmtname;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CMTID")
+	public CommunityInfo getCommunityInfo() {
+		return this.communityInfo;
 	}
 
-	public void setCmtname(String cmtname) {
-		this.cmtname = cmtname;
+	public void setCommunityInfo(CommunityInfo communityInfo) {
+		this.communityInfo = communityInfo;
 	}
 
 	@Column(name = "BLDNAME", length = 20)
@@ -155,6 +153,15 @@ public class BuildingInfo implements java.io.Serializable {
 
 	public void setUsersInfos(Set<UsersInfo> usersInfos) {
 		this.usersInfos = usersInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "buildingInfo")
+	public Set<UnitInfo> getUnitInfos() {
+		return this.unitInfos;
+	}
+
+	public void setUnitInfos(Set<UnitInfo> unitInfos) {
+		this.unitInfos = unitInfos;
 	}
 
 }

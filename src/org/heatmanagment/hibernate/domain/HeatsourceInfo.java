@@ -30,8 +30,8 @@ public class HeatsourceInfo implements java.io.Serializable {
 	private String srcaddress;
 	private String heattype;
 	private String comm;
-	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
 	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
+	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
 
 	// Constructors
 
@@ -47,14 +47,14 @@ public class HeatsourceInfo implements java.io.Serializable {
 	/** full constructor */
 	public HeatsourceInfo(DistrictInfo districtInfo, String srcname,
 			String srcaddress, String heattype, String comm,
-			Set<MachinesetInfo> machinesetInfos, Set<BuildingInfo> buildingInfos) {
+			Set<BuildingInfo> buildingInfos, Set<MachinesetInfo> machinesetInfos) {
 		this.districtInfo = districtInfo;
 		this.srcname = srcname;
 		this.srcaddress = srcaddress;
 		this.heattype = heattype;
 		this.comm = comm;
-		this.machinesetInfos = machinesetInfos;
 		this.buildingInfos = buildingInfos;
+		this.machinesetInfos = machinesetInfos;
 	}
 
 	// Property accessors
@@ -117,21 +117,21 @@ public class HeatsourceInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
-	public Set<MachinesetInfo> getMachinesetInfos() {
-		return this.machinesetInfos;
-	}
-
-	public void setMachinesetInfos(Set<MachinesetInfo> machinesetInfos) {
-		this.machinesetInfos = machinesetInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
 	public Set<BuildingInfo> getBuildingInfos() {
 		return this.buildingInfos;
 	}
 
 	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
 		this.buildingInfos = buildingInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
+	public Set<MachinesetInfo> getMachinesetInfos() {
+		return this.machinesetInfos;
+	}
+
+	public void setMachinesetInfos(Set<MachinesetInfo> machinesetInfos) {
+		this.machinesetInfos = machinesetInfos;
 	}
 
 }

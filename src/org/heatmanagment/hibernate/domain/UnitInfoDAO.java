@@ -3,10 +3,10 @@ package org.heatmanagment.hibernate.domain;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
-import static org.hibernate.criterion.Example.create;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -20,21 +20,23 @@ import org.slf4j.LoggerFactory;
  * @author MyEclipse Persistence Tools
  */
 
-public class UnitInfoDAO extends BaseHibernateDAO {
+public class UnitInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(UnitInfoDAO.class);
 	// property constants
-	public static final String CMTNAME = "cmtname";
-	public static final String BLDNAME = "bldname";
 	public static final String UNTNAME = "untname";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
 	public static final String COMM = "comm";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(UnitInfo transientInstance) {
 		log.debug("saving UnitInfo instance");
 		try {
-			getSession().save(transientInstance);
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -45,7 +47,7 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	public void delete(UnitInfo persistentInstance) {
 		log.debug("deleting UnitInfo instance");
 		try {
-			getSession().delete(persistentInstance);
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -56,7 +58,7 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	public UnitInfo findById(java.lang.Long id) {
 		log.debug("getting UnitInfo instance with id: " + id);
 		try {
-			UnitInfo instance = (UnitInfo) getSession().get(
+			UnitInfo instance = (UnitInfo) getHibernateTemplate().get(
 					"org.heatmanagment.hibernate.domain.UnitInfo", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -68,10 +70,8 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	public List<UnitInfo> findByExample(UnitInfo instance) {
 		log.debug("finding UnitInfo instance by example");
 		try {
-			List<UnitInfo> results = (List<UnitInfo>) getSession()
-					.createCriteria(
-							"org.heatmanagment.hibernate.domain.UnitInfo")
-					.add(create(instance)).list();
+			List<UnitInfo> results = (List<UnitInfo>) getHibernateTemplate()
+					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;
@@ -87,21 +87,11 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from UnitInfo as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
-			queryObject.setParameter(0, value);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
-	}
-
-	public List<UnitInfo> findByCmtname(Object cmtname) {
-		return findByProperty(CMTNAME, cmtname);
-	}
-
-	public List<UnitInfo> findByBldname(Object bldname) {
-		return findByProperty(BLDNAME, bldname);
 	}
 
 	public List<UnitInfo> findByUntname(Object untname) {
@@ -124,8 +114,7 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 		log.debug("finding all UnitInfo instances");
 		try {
 			String queryString = "from UnitInfo";
-			Query queryObject = getSession().createQuery(queryString);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -135,7 +124,8 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	public UnitInfo merge(UnitInfo detachedInstance) {
 		log.debug("merging UnitInfo instance");
 		try {
-			UnitInfo result = (UnitInfo) getSession().merge(detachedInstance);
+			UnitInfo result = (UnitInfo) getHibernateTemplate().merge(
+					detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -147,7 +137,7 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	public void attachDirty(UnitInfo instance) {
 		log.debug("attaching dirty UnitInfo instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -158,11 +148,15 @@ public class UnitInfoDAO extends BaseHibernateDAO {
 	public void attachClean(UnitInfo instance) {
 		log.debug("attaching clean UnitInfo instance");
 		try {
-			getSession().lock(instance, LockMode.NONE);
+			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
+	}
+
+	public static UnitInfoDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (UnitInfoDAO) ctx.getBean("UnitInfoDAO");
 	}
 }
