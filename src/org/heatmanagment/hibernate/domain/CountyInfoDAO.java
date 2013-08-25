@@ -3,10 +3,10 @@ package org.heatmanagment.hibernate.domain;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
-import static org.hibernate.criterion.Example.create;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -20,17 +20,21 @@ import org.slf4j.LoggerFactory;
  * @author MyEclipse Persistence Tools
  */
 
-public class CountyInfoDAO extends BaseHibernateDAO {
+public class CountyInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(CountyInfoDAO.class);
 	// property constants
 	public static final String CTYNAME = "ctyname";
 	public static final String COMM = "comm";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(CountyInfo transientInstance) {
 		log.debug("saving CountyInfo instance");
 		try {
-			getSession().save(transientInstance);
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -41,7 +45,7 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 	public void delete(CountyInfo persistentInstance) {
 		log.debug("deleting CountyInfo instance");
 		try {
-			getSession().delete(persistentInstance);
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -52,7 +56,7 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 	public CountyInfo findById(java.lang.Long id) {
 		log.debug("getting CountyInfo instance with id: " + id);
 		try {
-			CountyInfo instance = (CountyInfo) getSession().get(
+			CountyInfo instance = (CountyInfo) getHibernateTemplate().get(
 					"org.heatmanagment.hibernate.domain.CountyInfo", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -64,10 +68,8 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 	public List<CountyInfo> findByExample(CountyInfo instance) {
 		log.debug("finding CountyInfo instance by example");
 		try {
-			List<CountyInfo> results = (List<CountyInfo>) getSession()
-					.createCriteria(
-							"org.heatmanagment.hibernate.domain.CountyInfo")
-					.add(create(instance)).list();
+			List<CountyInfo> results = (List<CountyInfo>) getHibernateTemplate()
+					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;
@@ -83,9 +85,7 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from CountyInfo as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
-			queryObject.setParameter(0, value);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -104,8 +104,7 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 		log.debug("finding all CountyInfo instances");
 		try {
 			String queryString = "from CountyInfo";
-			Query queryObject = getSession().createQuery(queryString);
-			return queryObject.list();
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -115,7 +114,7 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 	public CountyInfo merge(CountyInfo detachedInstance) {
 		log.debug("merging CountyInfo instance");
 		try {
-			CountyInfo result = (CountyInfo) getSession().merge(
+			CountyInfo result = (CountyInfo) getHibernateTemplate().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -128,7 +127,7 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 	public void attachDirty(CountyInfo instance) {
 		log.debug("attaching dirty CountyInfo instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -139,11 +138,15 @@ public class CountyInfoDAO extends BaseHibernateDAO {
 	public void attachClean(CountyInfo instance) {
 		log.debug("attaching clean CountyInfo instance");
 		try {
-			getSession().lock(instance, LockMode.NONE);
+			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
+	}
+
+	public static CountyInfoDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (CountyInfoDAO) ctx.getBean("CountyInfoDAO");
 	}
 }

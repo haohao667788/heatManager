@@ -30,7 +30,9 @@ public class CommunityInfo implements java.io.Serializable {
 	private String gis;
 	private String picaddress;
 	private String comm;
+	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
+	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
 	// Constructors
 
@@ -41,14 +43,17 @@ public class CommunityInfo implements java.io.Serializable {
 	/** full constructor */
 	public CommunityInfo(String cmtname, String briefname, String cmtaddress,
 			String gis, String picaddress, String comm,
-			Set<UsersInfo> usersInfos) {
+			Set<BuildingInfo> buildingInfos, Set<UsersInfo> usersInfos,
+			Set<UnitInfo> unitInfos) {
 		this.cmtname = cmtname;
 		this.briefname = briefname;
 		this.cmtaddress = cmtaddress;
 		this.gis = gis;
 		this.picaddress = picaddress;
 		this.comm = comm;
+		this.buildingInfos = buildingInfos;
 		this.usersInfos = usersInfos;
+		this.unitInfos = unitInfos;
 	}
 
 	// Property accessors
@@ -119,12 +124,30 @@ public class CommunityInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
+	public Set<BuildingInfo> getBuildingInfos() {
+		return this.buildingInfos;
+	}
+
+	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
+		this.buildingInfos = buildingInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
 	public Set<UsersInfo> getUsersInfos() {
 		return this.usersInfos;
 	}
 
 	public void setUsersInfos(Set<UsersInfo> usersInfos) {
 		this.usersInfos = usersInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
+	public Set<UnitInfo> getUnitInfos() {
+		return this.unitInfos;
+	}
+
+	public void setUnitInfos(Set<UnitInfo> unitInfos) {
+		this.unitInfos = unitInfos;
 	}
 
 }

@@ -14,22 +14,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * UnitInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "UNIT_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
-		"CMTNAME", "BLDNAME", "UNTNAME" }))
+@Table(name = "UNIT_INFO", schema = "HEATMGR")
 public class UnitInfo implements java.io.Serializable {
 
 	// Fields
 
 	private Long untid;
 	private MachinesetInfo machinesetInfo;
-	private String cmtname;
-	private String bldname;
+	private BuildingInfo buildingInfo;
+	private CommunityInfo communityInfo;
 	private String untname;
 	private String gis;
 	private String picaddress;
@@ -43,12 +41,12 @@ public class UnitInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public UnitInfo(MachinesetInfo machinesetInfo, String cmtname,
-			String bldname, String untname, String gis, String picaddress,
-			String comm, Set<UsersInfo> usersInfos) {
+	public UnitInfo(MachinesetInfo machinesetInfo, BuildingInfo buildingInfo,
+			CommunityInfo communityInfo, String untname, String gis,
+			String picaddress, String comm, Set<UsersInfo> usersInfos) {
 		this.machinesetInfo = machinesetInfo;
-		this.cmtname = cmtname;
-		this.bldname = bldname;
+		this.buildingInfo = buildingInfo;
+		this.communityInfo = communityInfo;
 		this.untname = untname;
 		this.gis = gis;
 		this.picaddress = picaddress;
@@ -79,22 +77,24 @@ public class UnitInfo implements java.io.Serializable {
 		this.machinesetInfo = machinesetInfo;
 	}
 
-	@Column(name = "CMTNAME", length = 20)
-	public String getCmtname() {
-		return this.cmtname;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "BLDID")
+	public BuildingInfo getBuildingInfo() {
+		return this.buildingInfo;
 	}
 
-	public void setCmtname(String cmtname) {
-		this.cmtname = cmtname;
+	public void setBuildingInfo(BuildingInfo buildingInfo) {
+		this.buildingInfo = buildingInfo;
 	}
 
-	@Column(name = "BLDNAME", length = 20)
-	public String getBldname() {
-		return this.bldname;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CMTID")
+	public CommunityInfo getCommunityInfo() {
+		return this.communityInfo;
 	}
 
-	public void setBldname(String bldname) {
-		this.bldname = bldname;
+	public void setCommunityInfo(CommunityInfo communityInfo) {
+		this.communityInfo = communityInfo;
 	}
 
 	@Column(name = "UNTNAME", length = 20)
