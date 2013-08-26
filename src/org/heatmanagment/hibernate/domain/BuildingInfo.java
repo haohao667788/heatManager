@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.SEQUENCE;
+
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -60,9 +62,9 @@ public class BuildingInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "generator")
 	@Id
-	@GeneratedValue(strategy = SEQUENCE, generator = "generator")
+	@SequenceGenerator(name = "BLD_ID", allocationSize = 1, sequenceName = "BLD_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "BLD_ID")
 	@Column(name = "BLDID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getBldid() {
 		return this.bldid;

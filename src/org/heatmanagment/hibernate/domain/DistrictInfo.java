@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -49,9 +51,10 @@ public class DistrictInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "generator")
+
 	@Id
-	@GeneratedValue(strategy = SEQUENCE, generator = "generator")
+	@SequenceGenerator(name = "DST_ID", allocationSize = 1, sequenceName = "DST_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "DST_ID")
 	@Column(name = "DSTID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getDstid() {
 		return this.dstid;
