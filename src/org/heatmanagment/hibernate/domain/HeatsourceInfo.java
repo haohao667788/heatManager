@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.SEQUENCE;
+
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -58,9 +60,9 @@ public class HeatsourceInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "generator")
+	@SequenceGenerator(name = "SRC_ID", allocationSize = 1, sequenceName = "SRC_ID")
 	@Id
-	@GeneratedValue(strategy = SEQUENCE, generator = "generator")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SRC_ID")
 	@Column(name = "SRCID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getSrcid() {
 		return this.srcid;

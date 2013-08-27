@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -57,9 +59,9 @@ public class CommunityInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "generator")
 	@Id
-	@GeneratedValue(strategy = SEQUENCE, generator = "generator")
+	@SequenceGenerator(name = "CMT_ID", allocationSize = 1, sequenceName = "CMT_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CMT_ID")
 	@Column(name = "CMTID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getCmtid() {
 		return this.cmtid;
