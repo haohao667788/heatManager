@@ -346,7 +346,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                         tbar = grid.getTopToolbar(),
                         filters = tbar.findByType("combo");
                     if (grid.cmtid) {
-                        store.setBaseParam("cmitd", grid.cmtid);
+                        store.setBaseParam("cmtid", grid.cmtid);
                         filters[0].setValue(grid.cmtname);
                     } else {
                         filters[0].setValue("全部社区");

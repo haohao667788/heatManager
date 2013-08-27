@@ -140,16 +140,8 @@ Heat.menu = new Ext.tree.TreePanel({
                 leaf: true
             }, {
                 text: '收款确认',
-                leaf: false,
-                children: [{
-                    text: '当日收款确认',
-                    ns: 'todayFareConfirm',
-                    leaf: true
-                }, {
-                    text: '历史收款确认',
-                    ns: 'historyFareConfirm',
-                    leaf: true
-                }]
+                ns: 'fareConfirm',
+                leaf: true
             }]
         }, {
             text: '财务工作台',

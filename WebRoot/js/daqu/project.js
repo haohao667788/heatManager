@@ -187,7 +187,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.projectWin = new Heat.project.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: ""}),
+            proxy: new Ext.data.HttpProxy({url: "/data/daqu/project/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'root',
@@ -251,6 +251,28 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
+            }, '->', new Ext.form.ComboBox({
+                hiddenName: 'dstid',
+                mode: 'local',
+                width: 100,
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                editable: false,
+                store: new Ext.data.Store({
+                    autoLoad: true,
+                    proxy: new Ext.data.HttpProxy({url: "/data/daqu/project/queryDaqu.json?query=true"}),
+                    reader: new Ext.data.ArrayReader({}, [
+                        {name: 'value'},
+                        {name: 'text'}
+                    ])
+                })
+            }), {
+                text: '查询',
+                name: 'search',
+                iconCls: 'search',
+                handler: this.onSearchClick,
+                scope: this
             }],
 
             bbar: new Ext.PagingToolbar({
@@ -267,7 +289,33 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             frame: true,
             loadMask: true,
-            collapsible: false
+            collapsible: false,
+            listeners: {
+                render: function(grid) {
+                    var store = grid.getStore(),
+                        tbar = grid.getTopToolbar(),
+                        filters = tbar.findByType("combo");
+                    if (grid.dstid) {
+                        store.setBaseParam("dstid", grid.dstid);
+                        filters[0].setValue(grid.dstname);
+                    } else {
+                        filters[0].setValue("全部大区");
+                    }
+                    grid.getStore().load();
+                },
+                rowcontextmenu: function(grid, rowIndex, e) {
+                    e.preventDefault();
+                    if (rowIndex < 0) return;
+                    // TODO: 判断项目是否已分配
+                    var menu = new Ext.menu.Menu([{
+                        text: "分配项目",
+                        handler: function() {
+
+                        }
+                    }]);
+                    menu.showAt(e.getPoint());
+                }
+            }
         });
 
         this.projectWin.on("submitcomplete", this.refresh, this);
@@ -311,6 +359,23 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             })
         }
+    },
+
+    onSearchClick: function() {
+        var data = {params: {}},
+            store = this.getStore(),
+            tbar = this.getTopToolbar(),
+            filters = tbar.findByType("combo"),
+            dstid = filters[0].getValue();
+        if (dstid == "全部大区") {
+            dstid = 0;
+        }
+        if (store.lastOptions.params) {
+            data.params.start = store.lastOptions.params.start;
+            data.params.limit = store.lastOptions.params.limit;
+        }
+        store.setBaseParam("dstid", dstid);
+        store.load(data);
     },
 
     refresh: function() {

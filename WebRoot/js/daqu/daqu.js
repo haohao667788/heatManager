@@ -28,7 +28,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     hiddenName: 'ctyid',
                     mode: 'local',
                     width: 160,
-                    fieldLabel: '所属区县',
+                    fieldLabel: '所属行政区',
                     triggerAction: 'all',
                     valueField: 'value',
                     displayField: 'text',
@@ -175,7 +175,9 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 fields: [
                     {name: 'dstid', type: 'int'},
                     {name: 'dstname', type: 'string'},
-                    {name: 'ctyid', type: 'int'},
+                    {name: 'cityid', tiype: 'int'},
+                    {name: 'cityname', type: 'string'},
+                    {name: 'ctyid', tiype: 'int'},
                     {name: 'ctyname', type: 'string'},
                     {name: 'desp', type: 'string'}
                 ]
@@ -193,7 +195,7 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 dataIndex: 'dstname',
                 width: 4
             }, {
-                header: "所属区县",
+                header: "所属行政区",
                 dataIndex: 'ctyname',
                 width: 2
             }, {
@@ -237,6 +239,34 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 render: function(grid) {
                     grid.getStore().load();
+                },
+                rowcontextmenu: function(grid, rowIndex, e) {
+                    e.preventDefault();
+                    if (rowIndex < 0) return;
+                    var menu = new Ext.menu.Menu([{
+                        text: "查看所有项目",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                dstid = record.get('dstid'),
+                                dstname = record.get('dstname'),
+                                newGrid = new Heat.project.BasicGrid;
+
+                            newGrid.dstid = dstid;
+                            newGrid.dstname = dstname;
+                            var tab = Heat.tabs.add({
+                                title: "项目管理",
+                                //iconCls: 'fwxtabpanelicon',
+                                border: 0,
+                                autoWidth: true,
+                                closable: true,
+                                layout: 'fit',
+                                items: [newGrid]
+                            });
+                            Heat.tabs.setActiveTab(tab);
+
+                        }
+                    }]);
+                    menu.showAt(e.getPoint());
                 }
             }
         });

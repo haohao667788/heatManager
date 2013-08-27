@@ -1,14 +1,14 @@
 /**
- * 行政区tab
+ * 城市tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.quxian");
+Ext.namespace("Heat.city");
 
-Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.city.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.quxian.BasicForm.superclass.constructor.call(this, {
+        Heat.city.BasicForm.superclass.constructor.call(this, {
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -19,7 +19,7 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'ctyid'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '行政区名称',
+                fieldLabel: '城市名称',
                 name: 'ctyname',
                 width: 160,
                 allowBlank: false
@@ -62,13 +62,13 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.quxian.BasicWin = Ext.extend(Ext.Window, {
+Heat.city.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.quxian.BasicForm();
-        Heat.quxian.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.city.BasicForm();
+        Heat.city.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -135,66 +135,52 @@ Heat.quxian.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    quxianWin: null,
+Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    cityWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.quxianWin = new Heat.quxian.BasicWin();
+        this.cityWin = new Heat.city.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/quxian/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/data/level/city/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'ctyid', type: 'int'},
-                    {name: 'ctyname', type: 'string'},
                     {name: 'cityid', type: 'int'},
                     {name: 'cityname', type: 'string'}
                 ]
             })
         });
-        Heat.quxian.BasicGrid.superclass.constructor.call(this, {
+        Heat.city.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "行政区编号",
-                dataIndex: 'ctyid',
+                header: "城市编号",
+                dataIndex: 'cityid',
                 width: 1
             }, {
-                header: "行政区名称",
-                dataIndex: 'ctyname',
-                width: 5
-            }, {
-                header: "所属城市",
+                header: "城市名称",
                 dataIndex: 'cityname',
-                width: 2
+                width: 5
             }],
 
-            tbar: ['->',
-            new Ext.form.ComboBox({
-                hiddenName: 'cityid',
-                mode: 'local',
-                width: 100,
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                editable: false,
-                store: new Ext.data.Store({
-                    autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/quxian/queryCity.json?query=true"}),
-                    reader: new Ext.data.ArrayReader({}, [
-                        {name: 'value'},
-                        {name: 'text'}
-                    ])
-                })
-            }), {
-                text: '查询',
-                name: 'search',
-                iconCls: 'search',
-                handler: this.onSearchClick,
-                scope: this
-            }],
+//            tbar: [{
+//                text: "添加城市",
+//                iconCls: "add_icon",
+//                handler: this.onAddClick,
+//                scope: this
+//            }, '-', {
+//                text: "修改城市",
+//                iconCls: "mod_icon",
+//                handler: this.onModClick,
+//                scope: this
+//            }, '-', {
+//                text: "删除城市",
+//                iconCls: "del_icon",
+//                handler: this.onDelClick,
+//                scope: this
+//            }],
 
             bbar: new Ext.PagingToolbar({
                 pageSize: 20,
@@ -213,36 +199,23 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             collapsible: false,
             listeners: {
                 render: function(grid) {
-                    var store = grid.getStore(),
-                        tbar = grid.getTopToolbar(),
-                        filters = tbar.findByType("combo");
-                    if (grid.cityid) {
-                        store.setBaseParam("cityid", grid.cityid);
-                        filters[0].setValue(grid.cityname);
-                    } else {
-                        filters[0].setValue("全部城市");
-                    }
                     grid.getStore().load();
                 },
                 rowcontextmenu: function(grid, rowIndex, e) {
                     e.preventDefault();
                     if (rowIndex < 0) return;
                     var menu = new Ext.menu.Menu([{
-                        text: "查看所有大区",
+                        text: "查看所有行政区",
                         handler: function() {
                             var record = grid.getStore().getAt(rowIndex),
                                 cityid = record.get('cityid'),
                                 cityname = record.get('cityname'),
-                                ctyid = record.get('ctyid'),
-                                ctyname = record.get('ctyname'),
-                                newGrid = new Heat.daqu.BasicGrid;
+                                newGrid = new Heat.quxian.BasicGrid;
 
                             newGrid.cityid = cityid;
                             newGrid.cityname = cityname;
-                            newGrid.ctyid = ctyid;
-                            newGrid.ctyname = ctyname;
                             var tab = Heat.tabs.add({
-                                title: "大区管理",
+                                title: "行政区管理",
                                 //iconCls: 'fwxtabpanelicon',
                                 border: 0,
                                 autoWidth: true,
@@ -259,20 +232,20 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
 
-        this.quxianWin.on("submitcomplete", this.refresh, this);
+        this.cityWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.quxianWin.setTitle("新增行政区");
-        this.quxianWin.show();
+        this.cityWin.setTitle("新增城市");
+        this.cityWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.quxianWin.setTitle("修改行政区");
-            this.quxianWin.show();
-            this.quxianWin.load(selected);
+            this.cityWin.setTitle("修改城市");
+            this.cityWin.show();
+            this.cityWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
@@ -300,23 +273,6 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             })
         }
-    },
-
-    onSearchClick: function() {
-        var data = {params: {}},
-            store = this.getStore(),
-            tbar = this.getTopToolbar(),
-            filters = tbar.findByType("combo"),
-            cityid = filters[0].getValue();
-        if (cityid == "全部城市") {
-            cityid = 0;
-        }
-        if (store.lastOptions.params) {
-            data.params.start = store.lastOptions.params.start;
-            data.params.limit = store.lastOptions.params.limit;
-        }
-        store.setBaseParam("cityid", cityid);
-        store.load(data);
     },
 
     refresh: function() {
