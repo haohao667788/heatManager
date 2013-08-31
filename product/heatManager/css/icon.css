@@ -1,0 +1,19 @@
+.add_icon {
+    background: url("../image/add.png") no-repeat;
+}
+
+.mod_icon {
+    background: url("../image/edit.png") no-repeat;
+}
+
+.del_icon {
+    background: url("../image/delete.png") no-repeat;
+}
+
+.upload_icon {
+    background: url("../image/upload.png") no-repeat;
+}
+
+.search {
+    background: url("../image/search.png") no-repeat;
+}

@@ -1,0 +1,18 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "dstid": 1,
+        "dstname": "大区1",
+        "ctyid": 1,
+        "ctyname": "行政区1",
+        "desp": "这是大区1"
+    }, {
+        "dstid": 2,
+        "dstname": "大区2",
+        "ctyid": 1,
+        "ctyname": "行政区1",
+        "desp": "这是大区2"
+    }]
+}
