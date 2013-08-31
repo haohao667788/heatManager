@@ -36,13 +36,6 @@ create table users_info(
        ,foreign key (mchid) references machineset_info(mchid)
 );
 
-create or replace trigger usr_trigger 
-before insert on users_info 
-for each row 
-  begin 
-    select usr_id.nextval into :new.usrid from dual;
-  end;
-/
 
 /* 计费信息 */
 create sequence fee_id
@@ -71,13 +64,6 @@ create table fee_info(
        ,foreign key (usrid) references users_info(usrid)
 );
 
-create or replace trigger fee_trigger 
-before insert on fee_info 
-for each row 
-  begin 
-    select fee_id.nextval into :new.feeid from dual;
-  end;
-/
 
 
 /* 用户日志*/
@@ -97,14 +83,6 @@ create table user_log(
        ,primary key (logid)
        ,foreign key (usrid) references users_info(usrid)
 );
-
-create or replace trigger log_trigger
-before insert on user_log
-for each row
-  begin
-    select log_id.nextval into :new.logid from dual;
-  end;
-/
 
 
 /* 账户信息 ,账号内部使用？*/
@@ -149,13 +127,6 @@ create table charge_info(
        ,foreign key (accid) references account_info(accid)
 );
 
-create or replace trigger chg_trigger
-before insert on charge_info
-for each row
-  begin
-    select charge_id.nextval into :new.chgid from dual;
-  end;
-/
 
 /* 缴费流水记录*/
 
@@ -183,14 +154,6 @@ create table charge_record(
        ,foreign key (accid) references account_info(accid)
        ,foreign key (chgid) references charge_info(chgid)      
 );
-
-create or replace trigger record_trigger
-before insert on charge_record
-for each row
-  begin
-    select record_id.nextval into :new.rcdid from dual;
-  end;
-/
 
 
 

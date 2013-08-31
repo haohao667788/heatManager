@@ -43,6 +43,6 @@ create or replace trigger login_trigger
 before insert on login_info 
 for each row 
   begin 
-    select login_id.nextval into :new.ctyid from dual;
+    select login_id.nextval into :new.lginid from dual;
   end;
 /

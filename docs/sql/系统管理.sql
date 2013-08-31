@@ -38,11 +38,3 @@ create table login_info(
        ,primary key (lginid)
        ,foreign key (stfid) references staff_info(stfid)
 );
-
-create or replace trigger login_trigger 
-before insert on login_info 
-for each row 
-  begin 
-    select login_id.nextval into :new.lginid from dual;
-  end;
-/

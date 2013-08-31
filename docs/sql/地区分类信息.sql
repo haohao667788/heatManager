@@ -31,13 +31,6 @@ create table county_info (
        ,primary key (ctyid)
 );
 
-create or replace trigger cty_trigger 
-before insert on county_info 
-for each row 
-  begin 
-    select cty_id.nextval into :new.ctyid from dual;
-  end;
-/
        
 
 /** 大区表及其相关 */
@@ -55,13 +48,6 @@ create table district_info (
        ,primary key (dstid)
 );
 
-create or replace trigger dst_trigger 
-before insert on district_info 
-for each row 
-  begin 
-    select dst_id.nextval into :new.dstid from dual;
-  end;
-/
 
 /** 项目表及其相关 */
 create sequence pjt_id
@@ -84,13 +70,6 @@ create table project_info (
        ,foreign key (dstid) references district_info(dstid)
 );
 
-create or replace trigger pjt_trigger 
-before insert on project_info 
-for each row 
-  begin 
-    select pjt_id.nextval into :new.pjtid from dual;
-  end;
-/
 
 /** 社区表及其相关 */
 create sequence cmt_id
@@ -111,13 +90,6 @@ create table community_info (
        ,primary key (cmtid)
 );
 
-create or replace trigger cmt_trigger 
-before insert on community_info 
-for each row 
-  begin 
-    select cmt_id.nextval into :new.cmtid from dual;
-  end;
-/
 
 /** 热源（换热站）表及其相关 */
 create sequence src_id
@@ -139,13 +111,6 @@ create table heatsource_info(
        ,foreign key (dstid) references district_info(dstid)
 );
 
-create or replace trigger src_trigger 
-before insert on heatsource_info 
-for each row 
-  begin 
-    select src_id.nextval into :new.srcid from dual;
-  end;
-/
 
 /** 机组表及其相关 */
 create sequence mch_id
@@ -165,13 +130,6 @@ create table machineset_info(
        ,foreign key (srcid) references heatsource_info(srcid)
 );
 
-create or replace trigger mch_trigger 
-before insert on machineset_info 
-for each row 
-  begin 
-    select mch_id.nextval into :new.mchid from dual;
-  end;
-/
 
 /** 楼栋表及其相关 */
 create sequence bld_id
@@ -197,13 +155,6 @@ create table building_info (
        ,foreign key (srcid) references heatsource_info(srcid)
 );
 
-create or replace trigger bld_trigger 
-before insert on building_info 
-for each row 
-  begin 
-    select bld_id.nextval into :new.bldid from dual;
-  end;
-/
 
 
 /** 单元表及其相关 */
@@ -229,10 +180,3 @@ create table unit_info (
        ,foreign key (mchid) references machineset_info(mchid)
 );
 
-create or replace trigger unt_trigger 
-before insert on unit_info 
-for each row 
-  begin 
-    select unt_id.nextval into :new.untid from dual;
-  end;
-/

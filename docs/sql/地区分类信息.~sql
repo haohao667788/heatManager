@@ -225,8 +225,7 @@ create table unit_info (
        ,comm varchar2(2000)
        ,primary key (untid)
        ,unique (cmtname,bldname,untname)
-       ,foreign key (bldname) references building_info(bldname)
-       ,foreign key (cmtname) references community_info(cmtname)
+       ,foreign key (cmtname,bldname) references building_info(cmtname,bldname)
        ,foreign key (mchid) references machineset_info(mchid)
 );
 
