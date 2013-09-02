@@ -9,7 +9,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.daqu.BasicForm.superclass.constructor.call(this, {
-            url: '/data/daqu/daqu/update.json',
+            url: '/heatManager/data/daqu/daqu/update.json',
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -36,7 +36,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     editable: false,
                     store: new Ext.data.Store({
                         autoLoad: true,
-                        proxy: new Ext.data.HttpProxy({url: "/data/daqu/daqu/queryQuxian.json"}),
+                        proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/daqu/queryQuxian.json"}),
                         reader: new Ext.data.ArrayReader({}, [
                             {name: 'value'},
                             {name: 'text'}
@@ -168,7 +168,7 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.daquWin = new Heat.daqu.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/daqu/daqu/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/daqu/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

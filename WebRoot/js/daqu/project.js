@@ -187,7 +187,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.projectWin = new Heat.project.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/daqu/project/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/list.json"}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'root',
@@ -261,7 +261,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/daqu/project/queryDaqu.json?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/queryDaqu.json?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
