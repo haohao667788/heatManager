@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/data/daqu")
 public class DistrictController {
 
-	@Autowired(required = true)
-	private DistrictService service;
+	@Autowired
+	private DistrictService districtService;
 	private SuccessOut success;
 
 	private ObjectMapper mapper = new ObjectMapper();
@@ -39,8 +39,8 @@ public class DistrictController {
 	public String update(@RequestBody String dstBody, Writer writer)
 			throws IOException {
 		DistrictInfo info = this.mapper.readValue(dstBody, DistrictInfo.class);
-		this.service.saveOrUpdateDistrict(info.getDstid(), info.getDstname(),
-				info.getComm());
+		this.districtService.saveOrUpdateDistrict(info.getDstid(),
+				info.getDstname(), info.getComm());
 		return this.mapper.writeValueAsString(this.success);
 	}
 
@@ -50,7 +50,7 @@ public class DistrictController {
 		String outCome = null;
 		try {
 			BoundOut in = this.mapper.readValue(bound, BoundOut.class);
-			List<DistrictInfo> infos = this.service.findAllDistrict(
+			List<DistrictInfo> infos = this.districtService.findAllDistrict(
 					in.getStart(), in.getLimit());
 			DistrictOut out = new DistrictOut();
 			out.setSuccess(true);
@@ -71,7 +71,7 @@ public class DistrictController {
 		String outCome = null;
 		try {
 			DistrictInfo info = this.mapper.readValue(id, DistrictInfo.class);
-			this.service.deleteDistrict(info.getDstid());
+			this.districtService.deleteDistrict(info.getDstid());
 			outCome = this.mapper.writeValueAsString(this.success);
 		} catch (Exception e) {
 			e.printStackTrace();

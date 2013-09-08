@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DistrictServiceImpl implements DistrictService {
 
-	@Autowired
 	private DistrictInfoDAO dao;
+
+	public DistrictServiceImpl() {
+		this.dao = new DistrictInfoDAO();
+	}
 
 	@Override
 	public void saveOrUpdateDistrict(Long id, String name, String comm) {
