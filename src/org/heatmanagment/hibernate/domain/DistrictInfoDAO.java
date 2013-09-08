@@ -1,11 +1,17 @@
 package org.heatmanagment.hibernate.domain;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -20,6 +26,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("unchecked")
 public class DistrictInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(DistrictInfoDAO.class);
@@ -109,6 +116,22 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 			log.error("find all failed", re);
 			throw re;
 		}
+	}
+
+	public List findPage(final int start, final int limit) {
+		log.debug("finding all DistrictInfo instances within bound");
+		return getHibernateTemplate().executeFind(new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session)
+					throws HibernateException, SQLException {
+				String queryString = "from DistrictInfo";
+				Query query = session.createQuery(queryString);
+				query.setFirstResult(start);
+				query.setMaxResults(limit);
+
+				return query.list();
+			}
+		});
 	}
 
 	public DistrictInfo merge(DistrictInfo detachedInstance) {

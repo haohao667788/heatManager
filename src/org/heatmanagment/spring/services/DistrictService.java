@@ -1,6 +1,6 @@
 package org.heatmanagment.spring.services;
 
-import java.util.Set;
+import java.util.List;
 
 import org.heatmanagment.hibernate.domain.DistrictInfo;
 
@@ -12,9 +12,7 @@ import org.heatmanagment.hibernate.domain.DistrictInfo;
  */
 public interface DistrictService {
 
-	void addDistrict(String name, String comm);
-
-	void alterDistrict(Long id, String name, String comm);
+	void saveOrUpdateDistrict(Long id, String name, String comm);
 
 	/**
 	 * Delete District information according to its id.
@@ -31,6 +29,6 @@ public interface DistrictService {
 	 * @param limit
 	 *            page items limit
 	 */
-	Set<DistrictInfo> findAllDistrict(int start, int limit);
+	List<DistrictInfo> findAllDistrict(int start, int limit);
 
 }

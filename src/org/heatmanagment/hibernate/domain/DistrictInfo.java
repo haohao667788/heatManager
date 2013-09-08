@@ -15,17 +15,23 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * DistrictInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "DISTRICT_INFO", schema = "HEATMGR")
+@JsonAutoDetect
 public class DistrictInfo implements java.io.Serializable {
 
 	// Fields
 
 	private Long dstid;
 	private String dstname;
+
+	@JsonProperty("desp")
 	private String comm;
 	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);

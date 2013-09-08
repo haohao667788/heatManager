@@ -10,17 +10,22 @@
 	xmlns:jee="http://www.springframework.org/schema/jee"
 	xsi:schemaLocation="
 			http://www.springframework.org/schema/aop 
-			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+			http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
 			http://www.springframework.org/schema/beans 
-			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 			http://www.springframework.org/schema/context 
-			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+			http://www.springframework.org/schema/context/spring-context-3.1.xsd
 			http://www.springframework.org/schema/jee 
-			http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+			http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
 			http://www.springframework.org/schema/tx 
-            http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+            http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
             http://www.springframework.org/schema/mvc
-            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+            http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<context:component-scan base-package="org.heatmanagment.spring">
+	</context:component-scan>
+
+	<context:annotation-config />
 
 	<!-- Open up annotation attributes -->
 	<mvc:annotation-driven />
@@ -41,7 +46,25 @@
 	<mvc:resources
 		location="/"
 		mapping="*.html" />
-		
+
+	<!-- Request and Response message converter -->
+	<bean
+		id="stringHttpMessageConverter"
+		class="org.springframework.http.converter.StringHttpMessageConverter" />
+	<bean
+		id="jsonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="stringHttpMessageConverter" />
+				<ref bean="jsonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
 	<bean
 		id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource">
@@ -178,8 +201,5 @@
 
 	<!-- Persistence related configuration -->
 	<import resource="dao.xml"></import>
-
-	<context:component-scan base-package="org.heatmanagment.spring.controllers">
-	</context:component-scan>
 
 </beans>

@@ -2,7 +2,6 @@ package org.heatmanagment.spring.controllers;
 
 import org.heatmanagment.spring.services.CountyService;
 
-
 public class CountyController {
 
 	private CountyService service;

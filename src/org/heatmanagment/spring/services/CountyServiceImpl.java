@@ -15,10 +15,6 @@ public class CountyServiceImpl implements CountyService {
 	@Autowired
 	private CountyInfoDAO dao;
 
-	public CountyServiceImpl(CountyInfoDAO dao) {
-		this.dao = dao;
-	}
-
 	@Override
 	@Transactional
 	public void insertOrUpdateCounty(Long id, String name, String comm) {

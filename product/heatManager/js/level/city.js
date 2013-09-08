@@ -9,6 +9,7 @@ Heat.city.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.city.BasicForm.superclass.constructor.call(this, {
+            url: '/heatManager/data/level/city/update'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -27,6 +28,10 @@ Heat.city.BasicForm = Ext.extend(Ext.form.FormPanel, {
         });
 
         this.addEvents('submitcomplete');
+    },
+
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
     },
 
     //提交表单数据
@@ -142,7 +147,7 @@ Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.cityWin = new Heat.city.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/city/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/city/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -165,22 +170,22 @@ Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 5
             }],
 
-//            tbar: [{
-//                text: "添加城市",
-//                iconCls: "add_icon",
-//                handler: this.onAddClick,
-//                scope: this
-//            }, '-', {
-//                text: "修改城市",
-//                iconCls: "mod_icon",
-//                handler: this.onModClick,
-//                scope: this
-//            }, '-', {
-//                text: "删除城市",
-//                iconCls: "del_icon",
-//                handler: this.onDelClick,
-//                scope: this
-//            }],
+            tbar: [{
+                text: "添加城市",
+                iconCls: "add_icon",
+                handler: this.onAddClick,
+                scope: this
+            }, '-', {
+                text: "修改城市",
+                iconCls: "mod_icon",
+                handler: this.onModClick,
+                scope: this
+            }, '-', {
+                text: "删除城市",
+                iconCls: "del_icon",
+                handler: this.onDelClick,
+                scope: this
+            }],
 
             bbar: new Ext.PagingToolbar({
                 pageSize: 20,
@@ -266,7 +271,7 @@ Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '',
+                url: '/heatManager/data/level/city/del'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();
