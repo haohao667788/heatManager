@@ -12,7 +12,7 @@ Heat.userFare.BasicForm = Ext.extend(Ext.form.FormPanel, {
             url: '/heatManager/data/farespace/userFare/update'+debug,
             width: 500,
             labelAlign: 'right',
-            labelWidth: 85,
+            labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             columnLines: true,
