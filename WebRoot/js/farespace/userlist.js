@@ -2,14 +2,14 @@
  * 用户tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.user");
+Ext.namespace("Heat.userlist");
 
-Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.userlist.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.user.BasicForm.superclass.constructor.call(this, {
-            url: '/heatManager/data/fare/user/update'+debug,
+        Heat.userlist.BasicForm.superclass.constructor.call(this, {
+            url: '/heatManager/data/farespace/userlist/update'+debug,
             width: 600,
             labelAlign: 'right',
             labelWidth: 80,
@@ -49,7 +49,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryShequ"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryShequ"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -67,7 +67,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryLoudong"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryLoudong"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -85,7 +85,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryDanyuan"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryDanyuan"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -115,7 +115,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryUnit"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryUnit"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -230,13 +230,13 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.user.BasicWin = Ext.extend(Ext.Window, {
+Heat.userlist.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.user.BasicForm();
-        Heat.user.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.userlist.BasicForm();
+        Heat.userlist.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -303,14 +303,14 @@ Heat.user.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    userWin: null,
+Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    userlistWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.userWin = new Heat.user.BasicWin();
+        this.userlistWin = new Heat.userlist.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -339,7 +339,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 ]
             })
         });
-        Heat.user.BasicGrid.superclass.constructor.call(this, {
+        Heat.userlist.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
@@ -431,24 +431,55 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 render: function(grid) {
                     grid.getStore().load();
+                },
+                rowcontextmenu: function(grid, rowIndex, e) {
+                    e.preventDefault();
+                    if (rowIndex < 0) return;
+                    var menu = new Ext.menu.Menu([{
+                        text: "用户收费",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                usrid = record.get('usrid'),
+                                newGrid = new Heat.userFare.BasicGrid();
+
+                            newGrid.usrid = usrid;
+                            var tab = Heat.tabs.add({
+                                title: "用户收费",
+                                //iconCls: 'fwxtabpanelicon',
+                                border: 0,
+                                autoWidth: true,
+                                closable: true,
+                                layout: 'fit',
+                                items: [newGrid]
+                            });
+                            Heat.tabs.setActiveTab(tab);
+
+                        }
+                    }, {
+                        text: "显示楼栋平面图",
+                        handler: function() {
+                            console.log(rowIndex);
+                        }
+                    }]);
+                    menu.showAt(e.getPoint());
                 }
             }
         });
 
-        this.userWin.on("submitcomplete", this.refresh, this);
+        this.userlistWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.userWin.setTitle("新增用户");
-        this.userWin.show();
+        this.userlistWin.setTitle("新增用户");
+        this.userlistWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.userWin.setTitle("修改用户");
-            this.userWin.show();
-            this.userWin.load(selected);
+            this.userlistWin.setTitle("修改用户");
+            this.userlistWin.show();
+            this.userlistWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
@@ -469,7 +500,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/data/fare/user/list'+debug,
+                url: '/heatManager/data/farespace/userlist/list'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();
@@ -479,7 +510,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
-        this.userWin.hide();
+        this.userlistWin.hide();
         this.getStore().reload();
     },
 

@@ -136,7 +136,7 @@ Heat.menu = new Ext.tree.TreePanel({
                 leaf: true
             }, {
                 text: '用户缴费',
-                ns: 'userFare',
+                ns: 'userlist',
                 leaf: true
             }, {
                 text: '收款确认',
