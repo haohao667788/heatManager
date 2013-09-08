@@ -1,0 +1,16 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "ctyid": 1,
+        "ctyname": "行政区1",
+        "cityid": 1,
+        "cityname": "城市1"
+    }, {
+        "ctyid": 2,
+        "ctyname": "行政区2",
+        "cityid": 2,
+        "cityname": "城市2"
+    }]
+}
