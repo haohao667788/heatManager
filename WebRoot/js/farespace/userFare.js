@@ -40,17 +40,39 @@ Heat.userFare.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         allowBlank: false,
                         listeners: {
                             change: function(input, value) {
-                                var form = input.ownerCt.ownerCt.ownerCt.getForm(),
-                                    fare = form.findField("dueFare").getValue(),
-                                    left = fare-value;
-                                form.findField("leftFare").setValue(left);
+                                var form = input.ownerCt.ownerCt.ownerCt,
+                                    basicForm = form.getForm(),
+                                    fare = basicForm.findField("dueFare").getValue(),
+                                    v = value == "" ? 0 : value,
+                                    accountFare = basicForm.findField("accountPay").checked ? form.ownerCt.accountFare : 0,
+                                    left = (+v)+(+accountFare)-(+fare);
+
+                                basicForm.findField("leftFare").setValue(left);
                             }
                         }
                     }, {
                         xtype: 'checkbox',
                         boxLabel: '使用存款支付',
-                        name: 'accoutPay',
-                        width: 120
+                        name: 'accountPay',
+                        width: 120,
+                        listeners: {
+                            check: function(checkbox, checked) {
+                                var form = checkbox.ownerCt.ownerCt.ownerCt,
+                                    basicForm = form.getForm(),
+                                    fare = basicForm.findField("dueFare").getValue(),
+                                    value = basicForm.findField("actualFare").getValue(),
+                                    v = value == "" ? 0 : value,
+                                    accountFare = basicForm.findField("accountPay").checked ? form.ownerCt.accountFare : 0,
+                                    left = (+v)+(+accountFare)-(+fare);
+
+                                if (checked) {
+                                    Ext.query(".accountFare")[0].innerHTML = accountFare;
+                                } else {
+                                    Ext.query(".accountFare")[0].innerHTML = 0;
+                                }
+                                basicForm.findField("leftFare").setValue(left);
+                            }
+                        }
                     }]
                 }]
             }, {
@@ -67,7 +89,7 @@ Heat.userFare.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 disabled: true
             }, {
-                html: '使用存款<span style="color:red;">0</span>元',
+                html: '使用存款<span class="accountFare" style="color:red;">0</span>元',
                 bodyStyle: {
                     margin: '0 0 10px 85px'
                 }
@@ -224,9 +246,9 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'lastYue', type: 'float'},
                     {name: 'thisYue', type: 'float'},
                     {name: 'dueFare', type: 'float'},
-                    {name: 'actualFare', tiype: 'float'},
+                    {name: 'actualFare', type: 'float'},
                     {name: 'lastFareTime', type: 'string'},
-                    {name: 'leftFare', type: 'float'}
+                    {name: 'accountFare', type: 'float'}
                 ]
             })
         });
@@ -286,7 +308,7 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.grid.GridPanel, {
     getSelected: function() {
         var sm = this.getSelectionModel();
         if (sm.getCount() == 0) {
-            throw new Error('请先选择一条记录');
+            throw new Error('请先选择一条账户信息');
         }
         return sm.getSelected();
     }
@@ -308,9 +330,9 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
                 fields: [
                     {name: 'id', type: 'int'},
                     {name: 'usrid', type: 'string'},
-                    {name: 'year', tiype: 'string'},
+                    {name: 'year', type: 'string'},
                     {name: 'type', type: 'string'},
-                    {name: 'area', tiype: 'float'},
+                    {name: 'area', type: 'float'},
                     {name: 'rate', type: 'float'},
                     {name: 'dueFare', type: 'float'},
                     {name: 'actualFare', type: 'float'},
@@ -421,14 +443,23 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
     },
 
     onFareClick: function() {
-        var records = this.recordGrid.getSelected(),
-            sum = 0;
-        for (var i = 0, l = records.length; i < l; i++) {
-            var record = records[i];
-            sum += record.get('dueFare');
+        try {
+            var user = this.accountGrid.getSelected(),
+                records = this.recordGrid.getSelected(),
+                sum = 0,
+                ids = [];
+            for (var i = 0, l = records.length; i < l; i++) {
+                var record = records[i];
+                sum += record.get('dueFare');
+                ids.push(record.get('id'));
+            }
+            this.fareWin.fare = sum;
+            this.fareWin.ids = ids.join(',');
+            this.fareWin.accountFare = user.get("accountFare");
+            this.fareWin.show();
+        } catch(err) {
+            Ext.Msg.alert('系统提示', err.message);
         }
-        this.fareWin.fare = sum;
-        this.fareWin.show();
     },
 
     loadDueFare: function(id) {
