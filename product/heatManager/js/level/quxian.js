@@ -9,6 +9,7 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.quxian.BasicForm.superclass.constructor.call(this, {
+            url: "/heatManager/data/level/quxian/update"+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -27,6 +28,10 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
         });
 
         this.addEvents('submitcomplete');
+    },
+
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
     },
 
     //提交表单数据
@@ -142,7 +147,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.quxianWin = new Heat.quxian.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/quxian/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/quxian/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -171,7 +176,22 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }],
 
-            tbar: ['->',
+            tbar: [{
+                text: "添加行政区",
+                iconCls: "add_icon",
+                handler: this.onAddClick,
+                scope: this
+            }, '-', {
+                text: "修改行政区",
+                iconCls: "mod_icon",
+                handler: this.onModClick,
+                scope: this
+            }, '-', {
+                text: "删除行政区",
+                iconCls: "del_icon",
+                handler: this.onDelClick,
+                scope: this
+            }, '->',
             new Ext.form.ComboBox({
                 hiddenName: 'cityid',
                 mode: 'local',
@@ -182,7 +202,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/quxian/queryCity.json?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/quxian/queryCity"+debug+"?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -293,7 +313,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '',
+                url: "/heatManager/data/level/quxian/del"+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

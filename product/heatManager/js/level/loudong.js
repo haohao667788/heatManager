@@ -9,7 +9,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.loudong.BasicForm.superclass.constructor.call(this, {
-            url: "/data/level/loudong/update.json",
+            url: "/heatManager/data/level/loudong/update"+debug,
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -42,7 +42,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/queryShequ.json"}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -60,7 +60,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/queryHeat.json"}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryHeat"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -224,7 +224,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.loudongWin = new Heat.loudong.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -311,7 +311,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/loudong/queryShequ.json?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug+"?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -427,8 +427,8 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '',
-                params: {idToDel: id},
+                url: '/heatManager/level/loudong/del'+debug,
+                params: {bldid: id},
                 success: function(response) {
                     store.reload();
                 }

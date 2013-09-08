@@ -343,7 +343,7 @@ Heat.authGroup.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.authGroupWin = new Heat.authGroup.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/authGroup/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/authGroup/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

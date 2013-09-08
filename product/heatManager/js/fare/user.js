@@ -9,7 +9,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.user.BasicForm.superclass.constructor.call(this, {
-            url: '/data/fare/user/update.json',
+            url: '/heatManager/data/fare/user/update'+debug,
             width: 600,
             labelAlign: 'right',
             labelWidth: 80,
@@ -49,7 +49,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/user/queryShequ.json"}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryShequ"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -67,7 +67,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/user/queryLoudong.json"}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryLoudong"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -85,7 +85,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/user/queryDanyuan.json"}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryDanyuan"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -115,7 +115,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/user/queryUnit.json"}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryUnit"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -310,7 +310,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.userWin = new Heat.user.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/fare/user/list.json"}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -469,7 +469,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '',
+                url: '/heatManager/data/fare/user/list'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();
