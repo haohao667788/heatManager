@@ -9,7 +9,7 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.shequ.BasicForm.superclass.constructor.call(this, {
-            url: '/data/level/shequ/update'+debug,
+            url: '/static/data/level/shequ/update'+debug,
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -37,7 +37,7 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/shequ/queryProject"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/level/shequ/queryProject"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -195,7 +195,7 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.shequWin = new Heat.shequ.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/shequ/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/level/shequ/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

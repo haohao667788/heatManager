@@ -9,7 +9,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.employee.BasicForm.superclass.constructor.call(this, {
-            url: '/data/employee/employee'+debug,
+            url: '/static/data/employee/employee'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,

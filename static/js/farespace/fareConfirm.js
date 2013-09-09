@@ -9,7 +9,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.fareConfirm.BasicForm.superclass.constructor.call(this, {
-            url: '/data/farespace/fareConfirm/update'+debug,
+            url: '/static/data/farespace/fareConfirm/update'+debug,
             width: 600,
             labelAlign: 'right',
             labelWidth: 80,
@@ -49,7 +49,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/farespace/fareConfirm/queryShequ"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryShequ"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -67,7 +67,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/farespace/fareConfirm/queryLoudong"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryLoudong"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -85,7 +85,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/farespace/fareConfirm/queryDanyuan"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryDanyuan"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -115,7 +115,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/farespace/fareConfirm/queryUnit"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryUnit"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -310,7 +310,7 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.flowWin = new Heat.fareConfirm.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/farespace/fareConfirm/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -457,7 +457,7 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/data/farespace/fareConfirm/list'+debug,
+                url: '/static/data/farespace/fareConfirm/list'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

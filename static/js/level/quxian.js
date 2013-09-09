@@ -9,7 +9,7 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.quxian.BasicForm.superclass.constructor.call(this, {
-            url: "/data/level/quxian/update"+debug,
+            url: "/static/data/level/quxian/update"+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -147,7 +147,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.quxianWin = new Heat.quxian.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/quxian/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/level/quxian/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -202,7 +202,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/quxian/queryCity"+debug+"?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/level/quxian/queryCity"+debug+"?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -313,7 +313,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: "/data/level/quxian/del"+debug,
+                url: "/static/data/level/quxian/del"+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

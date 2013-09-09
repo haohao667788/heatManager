@@ -9,7 +9,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.danyuan.BasicForm.superclass.constructor.call(this, {
-            url: '/data/level/danyuan/list'+debug,
+            url: '/static/data/level/danyuan/list'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -37,7 +37,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryLoudong"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/level/danyuan/queryLoudong"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -55,7 +55,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryMachine"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/level/danyuan/queryMachine"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -198,7 +198,7 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.danyuanWin = new Heat.danyuan.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/level/danyuan/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -270,7 +270,7 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryShequ"+debug+"?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/level/danyuan/queryShequ"+debug+"?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -286,7 +286,7 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/level/danyuan/queryLoudong"+debug+"?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/level/danyuan/queryLoudong"+debug+"?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}

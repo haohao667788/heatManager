@@ -238,7 +238,7 @@ Heat.userLoginLog.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.userLoginLogWin = new Heat.userLoginLog.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: ""}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/employee/userLoginLog/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'root',

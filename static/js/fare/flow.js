@@ -9,7 +9,7 @@ Heat.fareflow.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.fareflow.BasicForm.superclass.constructor.call(this, {
-            url: '/data/fare/fareflow/update'+debug,
+            url: '/static/data/fare/fareflow/update'+debug,
             width: 600,
             labelAlign: 'right',
             labelWidth: 80,
@@ -49,7 +49,7 @@ Heat.fareflow.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/fareflow/queryShequ"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryShequ"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -67,7 +67,7 @@ Heat.fareflow.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/fareflow/queryLoudong"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryLoudong"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -85,7 +85,7 @@ Heat.fareflow.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/fareflow/queryDanyuan"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryDanyuan"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -115,7 +115,7 @@ Heat.fareflow.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/data/fare/fareflow/queryUnit"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryUnit"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -310,7 +310,7 @@ Heat.fareflow.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.flowWin = new Heat.fareflow.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/fare/fareflow/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -457,7 +457,7 @@ Heat.fareflow.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/data/fare/fareflow/list'+debug,
+                url: '/static/data/fare/fareflow/list'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

@@ -9,7 +9,7 @@ Heat.bank.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.bank.BasicForm.superclass.constructor.call(this, {
-            url: '/data/financespace/bank/update'+debug,
+            url: '/static/data/financespace/bank/update'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -37,7 +37,7 @@ Heat.bank.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/financespace/bank/queryKemu"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/financespace/bank/queryKemu"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -166,7 +166,7 @@ Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.bankWin = new Heat.bank.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/financespace/bank/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/financespace/bank/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

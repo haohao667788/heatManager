@@ -9,7 +9,7 @@ Heat.userFare.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.userFare.BasicForm.superclass.constructor.call(this, {
-            url: '/data/farespace/userFare/update'+debug,
+            url: '/static/data/farespace/userFare/update'+debug,
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -236,7 +236,7 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.userFareWin = new Heat.userFare.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/farespace/account/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/account/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -323,7 +323,7 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.userFareWin = new Heat.userFare.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/farespace/record/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/record/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

@@ -9,7 +9,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.daqu.BasicForm.superclass.constructor.call(this, {
-            url: '/heatManager/data/daqu/daqu/update'+debug,
+            url: '/static/static/data/daqu/daqu/update'+debug,
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -150,7 +150,7 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.daquWin = new Heat.daqu.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/daqu/daqu/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/daqu/daqu/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -279,7 +279,7 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: "/data/daqu/daqu/del"+debug,
+                url: "/static/data/daqu/daqu/del"+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

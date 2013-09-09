@@ -9,7 +9,7 @@ Heat.city.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.city.BasicForm.superclass.constructor.call(this, {
-            url: '/data/level/city/update'+debug,
+            url: '/static/data/level/city/update'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -147,7 +147,7 @@ Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.cityWin = new Heat.city.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/level/city/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/level/city/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -271,7 +271,7 @@ Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/data/level/city/del'+debug,
+                url: '/static/data/level/city/del'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

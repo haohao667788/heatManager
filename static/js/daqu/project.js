@@ -9,7 +9,7 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.project.BasicForm.superclass.constructor.call(this, {
-            url: "/data/daqu/project/update"+debug,
+            url: "/static/data/daqu/project/update"+debug,
             width: 500,
             labelAlign: 'right',
             labelWidth: 80,
@@ -188,7 +188,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.projectWin = new Heat.project.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/data/daqu/project/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/daqu/project/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'root',
@@ -262,7 +262,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/data/daqu/project/queryDaqu"+debug+"?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/static/data/daqu/project/queryDaqu"+debug+"?query=true"}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -353,7 +353,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: "/data/daqu/project/del"+debug,
+                url: "/static/data/daqu/project/del"+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();
