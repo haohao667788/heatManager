@@ -24,25 +24,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'dstname',
                 width: 160,
                 allowBlank: false
-            }, new Ext.form.ComboBox({
-                    hiddenName: 'ctyid',
-                    mode: 'local',
-                    width: 160,
-                    fieldLabel: '所属行政区',
-                    triggerAction: 'all',
-                    valueField: 'value',
-                    displayField: 'text',
-                    allowBlank: false,
-                    editable: false,
-                    store: new Ext.data.Store({
-                        autoLoad: true,
-                        proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/daqu/queryQuxian"+debug}),
-                        reader: new Ext.data.ArrayReader({}, [
-                            {name: 'value'},
-                            {name: 'text'}
-                        ])
-                    })
-            }), {
+            }, {
                 xtype: "textarea",
                 fieldLabel: "描述",
                 name: "desp",
@@ -175,10 +157,6 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 fields: [
                     {name: 'dstid', type: 'int'},
                     {name: 'dstname', type: 'string'},
-                    {name: 'cityid', tiype: 'int'},
-                    {name: 'cityname', type: 'string'},
-                    {name: 'ctyid', tiype: 'int'},
-                    {name: 'ctyname', type: 'string'},
                     {name: 'desp', type: 'string'}
                 ]
             })
@@ -194,10 +172,6 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 header: "大区名称",
                 dataIndex: 'dstname',
                 width: 4
-            }, {
-                header: "所属行政区",
-                dataIndex: 'ctyname',
-                width: 2
             }, {
                 header: "描述",
                 dataIndex: "desp",

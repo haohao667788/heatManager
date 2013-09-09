@@ -16,21 +16,31 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * CommunityInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "COMMUNITY_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = "CMTNAME"))
+@JsonAutoDetect
 public class CommunityInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8551536507060841087L;
 	private Long cmtid;
 	private String cmtname;
 	private String briefname;
 	private String cmtaddress;
 	private String gis;
 	private String picaddress;
+
+	@JsonProperty("desp")
 	private String comm;
 	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);

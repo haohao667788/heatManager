@@ -6,6 +6,7 @@ import java.util.List;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.heatmanagment.hibernate.domain.DistrictInfo;
 import org.heatmanagment.spring.entity.DistrictOut;
+import org.heatmanagment.spring.entity.SuccessOut;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +40,11 @@ public class JacksonTest {
 	}
 
 	@Test
+	public void testSuccess() {
+
+	}
+
+	// @Test
 	public void testDistrictOutObject() {
 		DistrictInfo info = new DistrictInfo();
 		info.setDstid(103948956l);

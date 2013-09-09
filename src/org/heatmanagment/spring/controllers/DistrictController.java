@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -36,28 +37,30 @@ public class DistrictController {
 
 	@RequestMapping(value = "/daqu/update")
 	@ResponseBody
-	public String update(@RequestBody String dstBody, Writer writer)
+	public String saveOrUpdate(@RequestParam(required = false) Long dstid,
+			@RequestParam String dstname, @RequestParam String desp)
 			throws IOException {
-		DistrictInfo info = this.mapper.readValue(dstBody, DistrictInfo.class);
-		this.districtService.saveOrUpdateDistrict(info.getDstid(),
-				info.getDstname(), info.getComm());
+		this.districtService.saveOrUpdateDistrict(dstid, dstname, desp);
 		return this.mapper.writeValueAsString(this.success);
 	}
 
 	@RequestMapping(value = "/daqu/list")
 	@ResponseBody
-	public String inquire(@RequestBody String bound) {
+	public String inquire(
+			@RequestParam(required = false, defaultValue = "0") Integer start,
+			@RequestParam(required = false, defaultValue = "20") Integer limit) {
+
 		String outCome = null;
 		try {
-			BoundOut in = this.mapper.readValue(bound, BoundOut.class);
 			List<DistrictInfo> infos = this.districtService.findAllDistrict(
-					in.getStart(), in.getLimit());
+					start, limit);
 			DistrictOut out = new DistrictOut();
 			out.setSuccess(true);
 			out.setMessage("");
 			out.setData(infos);
 			out.setTotalProperty(infos.size());
 			outCome = this.mapper.writeValueAsString(out);
+			// System.out.println("District outCome : " + outCome);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -66,15 +69,23 @@ public class DistrictController {
 
 	@RequestMapping(value = "/daqu/del")
 	@ResponseBody
-	public String delete(@RequestBody String id) {
+	public String delete(@RequestParam Long dstid) {
 
 		String outCome = null;
 		try {
-			DistrictInfo info = this.mapper.readValue(id, DistrictInfo.class);
-			this.districtService.deleteDistrict(info.getDstid());
+			this.districtService.deleteDistrict(dstid);
 			outCome = this.mapper.writeValueAsString(this.success);
 		} catch (Exception e) {
-			e.printStackTrace();
+			this.success.setSuccess(false);
+			this.success.setMessage(e.getMessage());
+			String re = null;
+			try {
+				re = this.mapper.writeValueAsString(this.success);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			this.success.reset();
+			return re;
 		}
 		return outCome;
 	}

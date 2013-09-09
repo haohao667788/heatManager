@@ -30,9 +30,18 @@
 	<!-- Open up annotation attributes -->
 	<mvc:annotation-driven />
 
+	<!-- Transaction Manager configuration -->
+	<bean
+		id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory" />
+	</bean>
+
 	<mvc:resources
 		location="/image/"
-		mapping="/image" />
+		mapping="/image/**" />
 
 	<mvc:resources
 		location="/css/"
@@ -95,7 +104,7 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">
-					org.hibernate.dialect.OracleDialect
+					org.hibernate.dialect.Oracle10gDialect
 				</prop>
 			</props>
 		</property>
@@ -193,6 +202,18 @@
 		class="org.heatmanagment.hibernate.domain.UsersInfoDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean
+		id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>-1</value>
+		</property>
+		<property
+			name="defaultEncoding"
+			value="utf-8">
 		</property>
 	</bean>
 

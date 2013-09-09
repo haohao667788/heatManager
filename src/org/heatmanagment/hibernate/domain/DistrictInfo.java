@@ -88,7 +88,7 @@ public class DistrictInfo implements java.io.Serializable {
 		this.comm = comm;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "districtInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
 	public Set<ProjectInfo> getProjectInfos() {
 		return this.projectInfos;
 	}
@@ -97,7 +97,7 @@ public class DistrictInfo implements java.io.Serializable {
 		this.projectInfos = projectInfos;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "districtInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
 	public Set<HeatsourceInfo> getHeatsourceInfos() {
 		return this.heatsourceInfos;
 	}

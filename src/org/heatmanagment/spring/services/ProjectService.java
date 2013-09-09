@@ -1,7 +1,8 @@
 package org.heatmanagment.spring.services;
 
-import java.util.Set;
+import java.util.List;
 
+import org.heatmanagment.hibernate.domain.DistrictInfo;
 import org.heatmanagment.hibernate.domain.ProjectInfo;
 
 /**
@@ -14,7 +15,7 @@ public interface ProjectService {
 
 	void deleteProject(Long id);
 
-	Set<ProjectInfo> findAllProject(int start, int limit);
+	List<ProjectInfo> findAllProject(int start, int limit);
 
 	/**
 	 * 
@@ -29,6 +30,6 @@ public interface ProjectService {
 	 * @param comm
 	 *            comment
 	 */
-	void alterProject(Long id, String name, Long ctyId, Long dstId,
+	void saveOrUpdateProject(Long id, String name, Long ctyId, Long dstId,
 			String middle, String comm);
 }

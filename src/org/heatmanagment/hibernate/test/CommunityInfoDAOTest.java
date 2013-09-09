@@ -24,20 +24,20 @@ public class CommunityInfoDAOTest {
 				.getFromApplicationContext(new ClassPathXmlApplicationContext(
 						"applicationContext.xml"));
 	}
-	
+
 	@Test
 	public void testDelete() {
 		String name = "创新苑";
 		CommunityInfo info = new CommunityInfo();
 		List<CommunityInfo> infos = this.dao.findByCmtname(name);
-		for(CommunityInfo temp : infos){
-			info.setCmtid(temp.getCmtid());			
+		for (CommunityInfo temp : infos) {
+			info.setCmtid(temp.getCmtid());
 			this.dao.delete(info);
 		}
 		List<CommunityInfo> infos2 = this.dao.findByCmtname(name);
 		assertTrue("The infos returned after deletion should be empty",
 				infos2.isEmpty());
-		
+
 	}
 
 	public void testCommunityInfoDao() {

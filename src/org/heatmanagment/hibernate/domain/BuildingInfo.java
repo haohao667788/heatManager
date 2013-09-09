@@ -26,6 +26,10 @@ public class BuildingInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8123468649073859264L;
 	private Long bldid;
 	private HeatsourceInfo heatsourceInfo;
 	private CommunityInfo communityInfo;

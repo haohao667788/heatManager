@@ -18,11 +18,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * ProjectInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "PROJECT_INFO", schema = "HEATMGR")
+@JsonAutoDetect
 public class ProjectInfo implements java.io.Serializable {
 
 	// Fields
@@ -33,6 +37,8 @@ public class ProjectInfo implements java.io.Serializable {
 	private String pjtname;
 	private String middle;
 	private Timestamp startDate;
+
+	@JsonProperty("desp")
 	private String comm;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 

@@ -8,6 +8,11 @@ public class SuccessOut {
 	private boolean success;
 	private String message;
 
+	public void reset() {
+		this.success = true;
+		this.message = "";
+	}
+
 	public boolean isSuccess() {
 		return success;
 	}

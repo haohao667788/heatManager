@@ -1,12 +1,14 @@
 package org.heatmanagment.hibernate.domain;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
+
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -115,6 +117,19 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 			log.error("find all failed", re);
 			throw re;
 		}
+	}
+
+	public List findAll(final int start, final int limit) {
+		log.debug("finding all ProjectInfo instances with boundary");
+		return getHibernateTemplate().executeFind(new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) {
+				String q = "from ProjectInfo";
+				Query query = session.createQuery(q);
+				query.setFirstResult(start).setMaxResults(limit);
+				return query.list();
+			}
+		});
 	}
 
 	public ProjectInfo merge(ProjectInfo detachedInstance) {
