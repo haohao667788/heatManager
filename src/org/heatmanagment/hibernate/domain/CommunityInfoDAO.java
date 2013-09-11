@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -25,7 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @see org.heatmanagment.hibernate.domain.CommunityInfo
  * @author MyEclipse Persistence Tools
  */
-
+@SuppressWarnings("unchecked")
 public class CommunityInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(CommunityInfoDAO.class);
@@ -136,18 +138,24 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
-	public List findAll(final int start, final int limit) {
-		return getHibernateTemplate().executeFind(new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session)
-					throws HibernateException, SQLException {
-				String q = "from CommunityInfo";
-				Query query = session.createQuery(q).setFirstResult(start)
-						.setMaxResults(limit);
-				return query.list();
-			}
-		});
+	
+	public List findPage(final int start, final int limit) {
+		log.debug("finding all CommunityInfo instances with boundary");
+		try {
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					String q = "from CommunityInfo";
+					Query query = session.createQuery(q).setFirstResult(start)
+							.setMaxResults(limit);
+					return query.list();
+				}
+			});
+		} catch (RuntimeErrorException re) {
+			log.error("find all CommunityInfo with boundary failed", re);
+			throw re;
+		}
 	}
 
 	public CommunityInfo merge(CommunityInfo detachedInstance) {

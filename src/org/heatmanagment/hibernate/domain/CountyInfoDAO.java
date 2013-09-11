@@ -1,13 +1,20 @@
 package org.heatmanagment.hibernate.domain;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
+
+import javax.management.RuntimeErrorException;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.stereotype.Repository;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -25,7 +32,8 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(CountyInfoDAO.class);
 	// property constants
-	public static final String CTYNAME = "ctyname";
+	public static final String TOWNNAME = "townname";
+	public static final String CITYNAME = "cityname";
 	public static final String COMM = "comm";
 
 	protected void initDao() {
@@ -93,8 +101,12 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<CountyInfo> findByCtyname(Object ctyname) {
-		return findByProperty(CTYNAME, ctyname);
+	public List<CountyInfo> findByTownname(Object townname) {
+		return findByProperty(TOWNNAME, townname);
+	}
+
+	public List<CountyInfo> findByCityname(Object cityname) {
+		return findByProperty(CITYNAME, cityname);
 	}
 
 	public List<CountyInfo> findByComm(Object comm) {
@@ -112,6 +124,24 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List findPage(final int start, final int limit) {
+		log.debug("finding all CountyInfo instances with boundary");
+		try {
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					String q = "from CountyInfo";
+					Query query = session.createQuery(q).setFirstResult(start)
+							.setMaxResults(limit);
+					return query.list();
+				}
+			});
+		} catch (RuntimeErrorException re) {
+			log.error("find all CountyInfo with boundary failed", re);
+			throw re;
+		}
+	}
 	public CountyInfo merge(CountyInfo detachedInstance) {
 		log.debug("merging CountyInfo instance");
 		try {

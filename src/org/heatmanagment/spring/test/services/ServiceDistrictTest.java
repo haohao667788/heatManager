@@ -38,7 +38,7 @@ public class ServiceDistrictTest {
 		String comm1 = "创新路500弄";
 		Long id = null;
 		this.districtSerivce.saveOrUpdateDistrict(null, name, comm);
-		List<DistrictInfo> infos = this.districtSerivce.findAllDistrict(0, 999);
+		List<DistrictInfo> infos = this.districtSerivce.findPage(0, 999);
 		for (DistrictInfo info : infos) {
 			id = info.getDstid();
 			assertEquals("name must be equal", name, info.getDstname());
@@ -47,7 +47,7 @@ public class ServiceDistrictTest {
 
 		// test update
 		this.districtSerivce.saveOrUpdateDistrict(id, name1, comm1);
-		List<DistrictInfo> temp = this.districtSerivce.findAllDistrict(0, 5);
+		List<DistrictInfo> temp = this.districtSerivce.findPage(0, 5);
 		assertEquals("There can only be one record", 1, temp.size());
 		for (DistrictInfo i : temp) {
 			assertEquals("name1 must be equal", name1, i.getDstname());

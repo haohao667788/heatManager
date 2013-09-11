@@ -3,6 +3,7 @@ package org.heatmanagment.spring.services;
 import java.util.List;
 
 import org.heatmanagment.hibernate.domain.BuildingInfo;
+import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.MachinesetInfo;
 import org.heatmanagment.hibernate.domain.UnitInfo;
 import org.heatmanagment.hibernate.domain.UnitInfoDAO;
@@ -19,33 +20,39 @@ public class UnitServiceImpl implements UnitService {
 	private UnitInfoDAO dao;
 
 	@Override
-	public List<UnitInfo> findAll(int start, int limit) {
-		return this.dao.findAll(start, limit);
+	public List<UnitInfo> findPage(int start, int limit) {
+		return this.dao.findPage(start, limit);
 	}
 
 	@Override
-	public void saveOrUpdate(Long id, String name, Long bldid, Long mchid,
-			String gis, String picaddress) {
+	public void saveOrUpdateUnit(Long id, String name, Long bldid, Long cmtid,
+			Long mchid, String gis, String picaddress) {
 		UnitInfo unt = new UnitInfo();
 		unt.setUntid(id);
 		unt.setUntname(name);
 		unt.setGis(gis);
 		unt.setPicaddress(picaddress);
 
-		BuildingInfo bld = new BuildingInfo();
-		bld.setBldid(bldid);
-
-		MachinesetInfo mch = new MachinesetInfo();
-		mch.setMchid(mchid);
-
-		unt.setMachinesetInfo(mch);
-		unt.setBuildingInfo(bld);
-
+		if (bldid != null) {
+			BuildingInfo bld = new BuildingInfo();
+			bld.setBldid(bldid);
+			unt.setBuildingInfo(bld);
+		}
+		if (cmtid != null) {
+			CommunityInfo cmt = new CommunityInfo();
+			cmt.setCmtid(cmtid);
+			unt.setCommunityInfo(cmt);
+		}
+		if (mchid != null) {
+			MachinesetInfo mch = new MachinesetInfo();
+			mch.setMchid(mchid);
+			unt.setMachinesetInfo(mch);
+		}
 		this.dao.attachDirty(unt);
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void deleteUnit(Long id) {
 		UnitInfo unt = new UnitInfo();
 		unt.setUntid(id);
 		this.dao.delete(unt);

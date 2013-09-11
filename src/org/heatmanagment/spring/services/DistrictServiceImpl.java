@@ -33,8 +33,13 @@ public class DistrictServiceImpl implements DistrictService {
 	}
 
 	@Override
-	public List<DistrictInfo> findAllDistrict(int start, int limit) {
+	public List<DistrictInfo> findPage(int start, int limit) {
 		return this.dao.findPage(start, limit);
+	}
+
+	@Override
+	public List<DistrictInfo> findAll() {
+		return this.dao.findAll();
 	}
 
 }

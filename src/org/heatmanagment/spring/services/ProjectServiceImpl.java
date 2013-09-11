@@ -26,27 +26,31 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<ProjectInfo> findAllProject(int start, int limit) {
-		return this.dao.findAll(start, limit);
+	public List<ProjectInfo> findPage(int start, int limit) {
+		return this.dao.findPage(start, limit);
 	}
 
 	@Override
 	public void saveOrUpdateProject(Long id, String name, Long ctyId,
 			Long dstId, String middle, String comm) {
-		ProjectInfo info = new ProjectInfo();
+		ProjectInfo pjt = new ProjectInfo();
 
-		CountyInfo cInfo = new CountyInfo();
-		cInfo.setCtyid(ctyId);
-		DistrictInfo dInfo = new DistrictInfo();
-		dInfo.setDstid(dstId);
+		if (ctyId != null) {
+			CountyInfo cInfo = new CountyInfo();
+			cInfo.setCtyid(ctyId);
+			pjt.setCountyInfo(cInfo);
+		}
+		if (dstId != null) {
+			DistrictInfo dInfo = new DistrictInfo();
+			dInfo.setDstid(dstId);
+			pjt.setDistrictInfo(dInfo);
+		}
 
-		info.setPjtid(id);
-		info.setPjtname(name);
-		info.setMiddle(middle);
-		info.setComm(comm);
-		info.setCountyInfo(cInfo);
-		info.setDistrictInfo(dInfo);
+		pjt.setPjtid(id);
+		pjt.setPjtname(name);
+		pjt.setMiddle(middle);
+		pjt.setComm(comm);
 
-		this.dao.save(info);
+		this.dao.attachDirty(pjt);
 	}
 }

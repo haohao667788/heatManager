@@ -31,13 +31,16 @@ public class ProjectInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3734107519050624325L;
 	private Long pjtid;
 	private DistrictInfo districtInfo;
 	private CountyInfo countyInfo;
 	private String pjtname;
 	private String middle;
 	private Timestamp startDate;
-
 	@JsonProperty("desp")
 	private String comm;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);

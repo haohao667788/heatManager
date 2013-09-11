@@ -1,9 +1,11 @@
 package org.heatmanagment.spring.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.CountyInfo;
 import org.heatmanagment.hibernate.domain.DistrictInfo;
 import org.heatmanagment.hibernate.domain.ProjectInfo;
@@ -90,10 +92,22 @@ public class ProjectController {
 	public String inquire(
 			@RequestParam(required = false, defaultValue = "0") Integer start,
 			@RequestParam(required = false, defaultValue = "20") Integer limit) {
+		if (start == null) {
+			start = new Integer(0);
+		}
+		if (limit == null) {
+			limit = new Integer(20);
+		}
 		String outCome = null;
 		try {
-			List<ProjectInfo> infos = this.projectSerivce.findAllProject(start,
-					limit);
+			List<ProjectInfo> infos = this.projectSerivce
+					.findPage(start, limit);
+			if (infos == null) {
+				SuccessOut t = new SuccessOut();
+				t.setSuccess(false);
+				t.setMessage("没有任何项目记录");
+				return this.mapper.writeValueAsString(t);
+			}
 			ProjectOut out = new ProjectOut();
 			out.setSuccess(true);
 			out.setMessage("");
@@ -102,6 +116,27 @@ public class ProjectController {
 			outCome = this.mapper.writeValueAsString(out);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return outCome;
+	}
+
+	@RequestMapping("/project/queryDaqu")
+	@ResponseBody
+	public String queryDaqu() {
+		List<DistrictInfo> dst = this.districtService.findAll();
+		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+
+		for (DistrictInfo i : dst) {
+			ArrayList<Object> temp = new ArrayList<Object>(2);
+			temp.add(i.getDstid());
+			temp.add(i.getDstname());
+			data.add(temp);
+		}
+		String outCome = null;
+		try {
+			outCome = this.mapper.writeValueAsString(data);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		return outCome;
 	}

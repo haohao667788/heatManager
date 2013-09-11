@@ -29,6 +29,8 @@ public interface DistrictService {
 	 * @param limit
 	 *            page items limit
 	 */
-	List<DistrictInfo> findAllDistrict(int start, int limit);
+	List<DistrictInfo> findPage(int start, int limit);
+
+	List<DistrictInfo> findAll();
 
 }

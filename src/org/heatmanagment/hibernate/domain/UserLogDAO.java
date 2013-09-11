@@ -2,7 +2,6 @@ package org.heatmanagment.hibernate.domain;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 
 import javax.management.RuntimeErrorException;
 
@@ -18,29 +17,29 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * DistrictInfo entities. Transaction control of the save(), update() and
- * delete() operations can directly support Spring container-managed
- * transactions or they can be augmented to handle user-managed Spring
- * transactions. Each of these methods provides additional information for how
- * to configure it for the desired type of transaction control.
+ * UserLog entities. Transaction control of the save(), update() and delete()
+ * operations can directly support Spring container-managed transactions or they
+ * can be augmented to handle user-managed Spring transactions. Each of these
+ * methods provides additional information for how to configure it for the
+ * desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.DistrictInfo
+ * @see org.heatmanagment.hibernate.domain.UserLog
  * @author MyEclipse Persistence Tools
  */
 
-public class DistrictInfoDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(DistrictInfoDAO.class);
+public class UserLogDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(UserLogDAO.class);
 	// property constants
-	public static final String DSTNAME = "dstname";
-	public static final String COMM = "comm";
+	public static final String LOGTYPE = "logtype";
+	public static final String LOGTITLE = "logtitle";
+	public static final String LOGCONTENT = "logcontent";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(DistrictInfo transientInstance) {
-		log.debug("saving DistrictInfo instance");
+	public void save(UserLog transientInstance) {
+		log.debug("saving UserLog instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -50,8 +49,8 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(DistrictInfo persistentInstance) {
-		log.debug("deleting DistrictInfo instance");
+	public void delete(UserLog persistentInstance) {
+		log.debug("deleting UserLog instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -61,11 +60,11 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public DistrictInfo findById(java.lang.Long id) {
-		log.debug("getting DistrictInfo instance with id: " + id);
+	public UserLog findById(java.lang.Long id) {
+		log.debug("getting UserLog instance with id: " + id);
 		try {
-			DistrictInfo instance = (DistrictInfo) getHibernateTemplate().get(
-					"org.heatmanagment.hibernate.domain.DistrictInfo", id);
+			UserLog instance = (UserLog) getHibernateTemplate().get(
+					"org.heatmanagment.hibernate.domain.UserLog", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -73,10 +72,10 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DistrictInfo> findByExample(DistrictInfo instance) {
-		log.debug("finding DistrictInfo instance by example");
+	public List<UserLog> findByExample(UserLog instance) {
+		log.debug("finding UserLog instance by example");
 		try {
-			List<DistrictInfo> results = (List<DistrictInfo>) getHibernateTemplate()
+			List<UserLog> results = (List<UserLog>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -88,10 +87,10 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding DistrictInfo instance with property: "
-				+ propertyName + ", value: " + value);
+		log.debug("finding UserLog instance with property: " + propertyName
+				+ ", value: " + value);
 		try {
-			String queryString = "from DistrictInfo as model where model."
+			String queryString = "from UserLog as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -100,18 +99,22 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DistrictInfo> findByDstname(Object dstname) {
-		return findByProperty(DSTNAME, dstname);
+	public List<UserLog> findByLogtype(Object logtype) {
+		return findByProperty(LOGTYPE, logtype);
 	}
 
-	public List<DistrictInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<UserLog> findByLogtitle(Object logtitle) {
+		return findByProperty(LOGTITLE, logtitle);
+	}
+
+	public List<UserLog> findByLogcontent(Object logcontent) {
+		return findByProperty(LOGCONTENT, logcontent);
 	}
 
 	public List findAll() {
-		log.debug("finding all DistrictInfo instances");
+		log.debug("finding all UserLog instances");
 		try {
-			String queryString = "from DistrictInfo";
+			String queryString = "from UserLog";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -120,28 +123,28 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 	}
 	
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all DistrictInfo instances with boundary");
+		log.debug("finding all UserLog instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from DistrictInfo";
+					String q = "from UserLog";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all DistrictInfo with boundary failed", re);
+			log.error("find all UserLog with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public DistrictInfo merge(DistrictInfo detachedInstance) {
-		log.debug("merging DistrictInfo instance");
+	public UserLog merge(UserLog detachedInstance) {
+		log.debug("merging UserLog instance");
 		try {
-			DistrictInfo result = (DistrictInfo) getHibernateTemplate().merge(
+			UserLog result = (UserLog) getHibernateTemplate().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -151,8 +154,8 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(DistrictInfo instance) {
-		log.debug("attaching dirty DistrictInfo instance");
+	public void attachDirty(UserLog instance) {
+		log.debug("attaching dirty UserLog instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -162,8 +165,8 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(DistrictInfo instance) {
-		log.debug("attaching clean DistrictInfo instance");
+	public void attachClean(UserLog instance) {
+		log.debug("attaching clean UserLog instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -173,8 +176,7 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static DistrictInfoDAO getFromApplicationContext(
-			ApplicationContext ctx) {
-		return (DistrictInfoDAO) ctx.getBean("DistrictInfoDAO");
+	public static UserLogDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (UserLogDAO) ctx.getBean("UserLogDAO");
 	}
 }

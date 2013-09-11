@@ -6,14 +6,10 @@ import org.heatmanagment.hibernate.domain.CountyInfo;
 
 public interface CountyService {
 
-	void insertOrUpdateCounty(Long id, String name, String comm);
+	void saveOrUpdateCounty(Long id, String townname, String cityname,
+			String comm);
 
 	void deleteCounty(Long id);
 
-	List<CountyInfo> findAllCounty(int start, int limit);
-
-	CountyInfo findById(Long id);
-
-	List<CountyInfo> findByName(String name);
-
+	List<CountyInfo> findPage(int start, int limit);
 }

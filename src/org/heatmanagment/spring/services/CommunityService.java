@@ -11,7 +11,7 @@ public interface CommunityService {
 
 	void deleteCommunity(Long id);
 
-	List<CommunityInfo> findAllCommunity(int start, int limit);
+	List<CommunityInfo> findPage(int start, int limit);
 
 	List<CommunityInfo> findAll();
 }

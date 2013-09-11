@@ -1,8 +1,8 @@
 package org.heatmanagment.hibernate.domain;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 import javax.management.RuntimeErrorException;
 
@@ -18,33 +18,32 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * BuildingInfo entities. Transaction control of the save(), update() and
+ * AccountrangeInfo entities. Transaction control of the save(), update() and
  * delete() operations can directly support Spring container-managed
  * transactions or they can be augmented to handle user-managed Spring
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.BuildingInfo
+ * @see org.heatmanagment.hibernate.domain.AccountrangeInfo
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
-public class BuildingInfoDAO extends HibernateDaoSupport {
+
+public class AccountrangeInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
-			.getLogger(BuildingInfoDAO.class);
+			.getLogger(AccountrangeInfoDAO.class);
 	// property constants
-	public static final String BLDNAME = "bldname";
-	public static final String BLDADDRESS = "bldaddress";
-	public static final String HEATTYPE = "heattype";
-	public static final String GIS = "gis";
-	public static final String PICADDRESS = "picaddress";
-	public static final String COMM = "comm";
+	public static final String CURBALANCE = "curbalance";
+	public static final String CURCHARGE = "curcharge";
+	public static final String CURMONEY = "curmoney";
+	public static final String FINACERANGE = "finacerange";
+	public static final String DONEFINACERANGE = "donefinacerange";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(BuildingInfo transientInstance) {
-		log.debug("saving BuildingInfo instance");
+	public void save(AccountrangeInfo transientInstance) {
+		log.debug("saving AccountrangeInfo instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -54,8 +53,8 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(BuildingInfo persistentInstance) {
-		log.debug("deleting BuildingInfo instance");
+	public void delete(AccountrangeInfo persistentInstance) {
+		log.debug("deleting AccountrangeInfo instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -65,11 +64,12 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public BuildingInfo findById(java.lang.Long id) {
-		log.debug("getting BuildingInfo instance with id: " + id);
+	public AccountrangeInfo findById(java.lang.String id) {
+		log.debug("getting AccountrangeInfo instance with id: " + id);
 		try {
-			BuildingInfo instance = (BuildingInfo) getHibernateTemplate().get(
-					"org.heatmanagment.hibernate.domain.BuildingInfo", id);
+			AccountrangeInfo instance = (AccountrangeInfo) getHibernateTemplate()
+					.get("org.heatmanagment.hibernate.domain.AccountrangeInfo",
+							id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -77,10 +77,10 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<BuildingInfo> findByExample(BuildingInfo instance) {
-		log.debug("finding BuildingInfo instance by example");
+	public List<AccountrangeInfo> findByExample(AccountrangeInfo instance) {
+		log.debug("finding AccountrangeInfo instance by example");
 		try {
-			List<BuildingInfo> results = (List<BuildingInfo>) getHibernateTemplate()
+			List<AccountrangeInfo> results = (List<AccountrangeInfo>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -92,10 +92,10 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding BuildingInfo instance with property: "
+		log.debug("finding AccountrangeInfo instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from BuildingInfo as model where model."
+			String queryString = "from AccountrangeInfo as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -104,34 +104,30 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<BuildingInfo> findByBldname(Object bldname) {
-		return findByProperty(BLDNAME, bldname);
+	public List<AccountrangeInfo> findByCurbalance(Object curbalance) {
+		return findByProperty(CURBALANCE, curbalance);
 	}
 
-	public List<BuildingInfo> findByBldaddress(Object bldaddress) {
-		return findByProperty(BLDADDRESS, bldaddress);
+	public List<AccountrangeInfo> findByCurcharge(Object curcharge) {
+		return findByProperty(CURCHARGE, curcharge);
 	}
 
-	public List<BuildingInfo> findByHeattype(Object heattype) {
-		return findByProperty(HEATTYPE, heattype);
+	public List<AccountrangeInfo> findByCurmoney(Object curmoney) {
+		return findByProperty(CURMONEY, curmoney);
 	}
 
-	public List<BuildingInfo> findByGis(Object gis) {
-		return findByProperty(GIS, gis);
+	public List<AccountrangeInfo> findByFinacerange(Object finacerange) {
+		return findByProperty(FINACERANGE, finacerange);
 	}
 
-	public List<BuildingInfo> findByPicaddress(Object picaddress) {
-		return findByProperty(PICADDRESS, picaddress);
-	}
-
-	public List<BuildingInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<AccountrangeInfo> findByDonefinacerange(Object donefinacerange) {
+		return findByProperty(DONEFINACERANGE, donefinacerange);
 	}
 
 	public List findAll() {
-		log.debug("finding all BuildingInfo instances");
+		log.debug("finding all AccountrangeInfo instances");
 		try {
-			String queryString = "from BuildingInfo";
+			String queryString = "from AccountrangeInfo";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -140,29 +136,29 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 	}
 
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all BuildingInfo instances with boundary");
+		log.debug("finding all AccountrangeInfo instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from BuildingInfo";
+					String q = "from AccountrangeInfo";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all BuildingInfo with boundary failed", re);
+			log.error("find all AccountrangeInfo with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public BuildingInfo merge(BuildingInfo detachedInstance) {
-		log.debug("merging BuildingInfo instance");
+	public AccountrangeInfo merge(AccountrangeInfo detachedInstance) {
+		log.debug("merging AccountrangeInfo instance");
 		try {
-			BuildingInfo result = (BuildingInfo) getHibernateTemplate().merge(
-					detachedInstance);
+			AccountrangeInfo result = (AccountrangeInfo) getHibernateTemplate()
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -171,8 +167,8 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(BuildingInfo instance) {
-		log.debug("attaching dirty BuildingInfo instance");
+	public void attachDirty(AccountrangeInfo instance) {
+		log.debug("attaching dirty AccountrangeInfo instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -182,8 +178,8 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(BuildingInfo instance) {
-		log.debug("attaching clean BuildingInfo instance");
+	public void attachClean(AccountrangeInfo instance) {
+		log.debug("attaching clean AccountrangeInfo instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -193,8 +189,8 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static BuildingInfoDAO getFromApplicationContext(
+	public static AccountrangeInfoDAO getFromApplicationContext(
 			ApplicationContext ctx) {
-		return (BuildingInfoDAO) ctx.getBean("BuildingInfoDAO");
+		return (AccountrangeInfoDAO) ctx.getBean("AccountrangeInfoDAO");
 	}
 }

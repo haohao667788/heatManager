@@ -50,10 +50,16 @@ public class DistrictController {
 			@RequestParam(required = false, defaultValue = "0") Integer start,
 			@RequestParam(required = false, defaultValue = "20") Integer limit) {
 
+		if (start == null) {
+			start = new Integer(0);
+		}
+		if (limit == null) {
+			limit = new Integer(20);
+		}
 		String outCome = null;
 		try {
-			List<DistrictInfo> infos = this.districtService.findAllDistrict(
-					start, limit);
+			List<DistrictInfo> infos = this.districtService.findPage(start,
+					limit);
 			DistrictOut out = new DistrictOut();
 			out.setSuccess(true);
 			out.setMessage("");

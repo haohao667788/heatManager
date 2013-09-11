@@ -9,10 +9,10 @@ import org.heatmanagment.hibernate.domain.UnitInfo;
 
 public interface UnitService {
 
-	void saveOrUpdate(Long id, String name, Long bldid, Long mchid, String gis,
-			String picaddress);
+	void saveOrUpdateUnit(Long id, String name, Long bldid, Long cmtid,
+			Long mchid, String gis, String picaddress);
 
-	void delete(Long id);
+	void deleteUnit(Long id);
 
-	List<UnitInfo> findAll(int start, int limit);
+	List<UnitInfo> findPage(int start, int limit);
 }

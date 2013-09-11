@@ -1,7 +1,13 @@
 package org.heatmanagment.hibernate.domain;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -118,18 +124,24 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
-	public List findAll(final int start, final int limit) {
+	
+	public List findPage(final int start, final int limit) {
 		log.debug("finding all ProjectInfo instances with boundary");
-		return getHibernateTemplate().executeFind(new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) {
-				String q = "from ProjectInfo";
-				Query query = session.createQuery(q);
-				query.setFirstResult(start).setMaxResults(limit);
-				return query.list();
-			}
-		});
+		try {
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					String q = "from ProjectInfo";
+					Query query = session.createQuery(q).setFirstResult(start)
+							.setMaxResults(limit);
+					return query.list();
+				}
+			});
+		} catch (RuntimeErrorException re) {
+			log.error("find all ProjectInfo with boundary failed", re);
+			throw re;
+		}
 	}
 
 	public ProjectInfo merge(ProjectInfo detachedInstance) {

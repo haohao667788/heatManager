@@ -14,18 +14,31 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * CountyInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "COUNTY_INFO", schema = "HEATMGR")
+@Table(name = "COUNTY_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"TOWNNAME", "CITYNAME" }))
+@JsonAutoDetect
 public class CountyInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2173647951354440512L;
 	private Long ctyid;
-	private String ctyname;
+	private String townname;
+	private String cityname;
+
+	@JsonProperty("desp")
 	private String comm;
 	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 
@@ -36,21 +49,23 @@ public class CountyInfo implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public CountyInfo(String ctyname) {
-		this.ctyname = ctyname;
+	public CountyInfo(String townname, String cityname) {
+		this.townname = townname;
+		this.cityname = cityname;
 	}
 
 	/** full constructor */
-	public CountyInfo(String ctyname, String comm, Set<ProjectInfo> projectInfos) {
-		this.ctyname = ctyname;
+	public CountyInfo(String townname, String cityname, String comm,
+			Set<ProjectInfo> projectInfos) {
+		this.townname = townname;
+		this.cityname = cityname;
 		this.comm = comm;
 		this.projectInfos = projectInfos;
 	}
 
 	// Property accessors
-
-	@Id
 	@SequenceGenerator(name = "CTY_ID", allocationSize = 1, sequenceName = "CTY_ID")
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CTY_ID")
 	@Column(name = "CTYID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getCtyid() {
@@ -61,13 +76,22 @@ public class CountyInfo implements java.io.Serializable {
 		this.ctyid = ctyid;
 	}
 
-	@Column(name = "CTYNAME", nullable = false, length = 20)
-	public String getCtyname() {
-		return this.ctyname;
+	@Column(name = "TOWNNAME", nullable = false, length = 20)
+	public String getTownname() {
+		return this.townname;
 	}
 
-	public void setCtyname(String ctyname) {
-		this.ctyname = ctyname;
+	public void setTownname(String townname) {
+		this.townname = townname;
+	}
+
+	@Column(name = "CITYNAME", nullable = false, length = 20)
+	public String getCityname() {
+		return this.cityname;
+	}
+
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
 	}
 
 	@Column(name = "COMM", length = 2000)

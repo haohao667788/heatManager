@@ -40,8 +40,8 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 
 	@Override
-	public List<CommunityInfo> findAllCommunity(int start, int limit) {
-		return this.dao.findAll(start, limit);
+	public List<CommunityInfo> findPage(int start, int limit) {
+		return this.dao.findPage(start, limit);
 	}
 
 	@Override

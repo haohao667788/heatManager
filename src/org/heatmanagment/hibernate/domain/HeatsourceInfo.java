@@ -17,20 +17,30 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * HeatsourceInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "HEATSOURCE_INFO", schema = "HEATMGR")
+@JsonAutoDetect
 public class HeatsourceInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2919833848912560071L;
 	private Long srcid;
 	private DistrictInfo districtInfo;
+	private ClassInfo classInfo;
 	private String srcname;
 	private String srcaddress;
 	private String heattype;
+	@JsonProperty("desp")
 	private String comm;
 	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
@@ -47,10 +57,11 @@ public class HeatsourceInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public HeatsourceInfo(DistrictInfo districtInfo, String srcname,
-			String srcaddress, String heattype, String comm,
+	public HeatsourceInfo(DistrictInfo districtInfo, ClassInfo classInfo,
+			String srcname, String srcaddress, String heattype, String comm,
 			Set<BuildingInfo> buildingInfos, Set<MachinesetInfo> machinesetInfos) {
 		this.districtInfo = districtInfo;
+		this.classInfo = classInfo;
 		this.srcname = srcname;
 		this.srcaddress = srcaddress;
 		this.heattype = heattype;
@@ -80,6 +91,16 @@ public class HeatsourceInfo implements java.io.Serializable {
 
 	public void setDistrictInfo(DistrictInfo districtInfo) {
 		this.districtInfo = districtInfo;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CLSID")
+	public ClassInfo getClassInfo() {
+		return this.classInfo;
+	}
+
+	public void setClassInfo(ClassInfo classInfo) {
+		this.classInfo = classInfo;
 	}
 
 	@Column(name = "SRCNAME", nullable = false, length = 20)

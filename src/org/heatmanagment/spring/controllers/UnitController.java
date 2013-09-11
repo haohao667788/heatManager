@@ -41,7 +41,13 @@ public class UnitController {
 	public String inquireAll(
 			@RequestParam(required = false, defaultValue = "0") Integer start,
 			@RequestParam(required = false, defaultValue = "20") Integer limit) {
-		List<UnitInfo> infos = this.unitService.findAll(start, limit);
+		if (start == null) {
+			start = new Integer(0);
+		}
+		if (limit == null) {
+			limit = new Integer(20);
+		}
+		List<UnitInfo> infos = this.unitService.findPage(start, limit);
 
 		UnitOut out = new UnitOut();
 		out.setSuccess(true);
@@ -123,4 +129,10 @@ public class UnitController {
 		}
 		return outCome;
 	}
+
+	/**
+	 * @RequestMapping("/danyuan/queryMachine")
+	 * @ResponseBody
+	 */
+
 }

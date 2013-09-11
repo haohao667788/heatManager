@@ -42,9 +42,9 @@ public class CommunityInfo implements java.io.Serializable {
 
 	@JsonProperty("desp")
 	private String comm;
+	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
-	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
 	// Constructors
 
@@ -55,22 +55,22 @@ public class CommunityInfo implements java.io.Serializable {
 	/** full constructor */
 	public CommunityInfo(String cmtname, String briefname, String cmtaddress,
 			String gis, String picaddress, String comm,
-			Set<BuildingInfo> buildingInfos, Set<UsersInfo> usersInfos,
-			Set<UnitInfo> unitInfos) {
+			Set<UnitInfo> unitInfos, Set<BuildingInfo> buildingInfos,
+			Set<UsersInfo> usersInfos) {
 		this.cmtname = cmtname;
 		this.briefname = briefname;
 		this.cmtaddress = cmtaddress;
 		this.gis = gis;
 		this.picaddress = picaddress;
 		this.comm = comm;
+		this.unitInfos = unitInfos;
 		this.buildingInfos = buildingInfos;
 		this.usersInfos = usersInfos;
-		this.unitInfos = unitInfos;
 	}
 
 	// Property accessors
-	@Id
 	@SequenceGenerator(name = "CMT_ID", allocationSize = 1, sequenceName = "CMT_ID")
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CMT_ID")
 	@Column(name = "CMTID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getCmtid() {
@@ -136,6 +136,15 @@ public class CommunityInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
+	public Set<UnitInfo> getUnitInfos() {
+		return this.unitInfos;
+	}
+
+	public void setUnitInfos(Set<UnitInfo> unitInfos) {
+		this.unitInfos = unitInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
 	public Set<BuildingInfo> getBuildingInfos() {
 		return this.buildingInfos;
 	}
@@ -151,15 +160,6 @@ public class CommunityInfo implements java.io.Serializable {
 
 	public void setUsersInfos(Set<UsersInfo> usersInfos) {
 		this.usersInfos = usersInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
-	public Set<UnitInfo> getUnitInfos() {
-		return this.unitInfos;
-	}
-
-	public void setUnitInfos(Set<UnitInfo> unitInfos) {
-		this.unitInfos = unitInfos;
 	}
 
 }

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -126,8 +128,8 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
-	public List findAll(final int start, final int limit) {
+	
+	public List findPage(final int start, final int limit) {
 		log.debug("finding all UnitInfo instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
@@ -140,7 +142,7 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 					return query.list();
 				}
 			});
-		} catch (RuntimeException re) {
+		} catch (RuntimeErrorException re) {
 			log.error("find all UnitInfo with boundary failed", re);
 			throw re;
 		}

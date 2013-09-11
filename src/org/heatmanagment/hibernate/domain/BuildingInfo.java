@@ -16,20 +16,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * BuildingInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "BUILDING_INFO", schema = "HEATMGR")
+@Table(name = "BUILDING_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"CMTID", "BLDNAME" }))
+@JsonAutoDetect
 public class BuildingInfo implements java.io.Serializable {
-
-	// Fields
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8123468649073859264L;
+	// Fields
+
 	private Long bldid;
 	private HeatsourceInfo heatsourceInfo;
 	private CommunityInfo communityInfo;
@@ -38,9 +44,11 @@ public class BuildingInfo implements java.io.Serializable {
 	private String heattype;
 	private String gis;
 	private String picaddress;
+
+	@JsonProperty("desp")
 	private String comm;
-	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
+	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
 
@@ -52,7 +60,7 @@ public class BuildingInfo implements java.io.Serializable {
 	public BuildingInfo(HeatsourceInfo heatsourceInfo,
 			CommunityInfo communityInfo, String bldname, String bldaddress,
 			String heattype, String gis, String picaddress, String comm,
-			Set<UsersInfo> usersInfos, Set<UnitInfo> unitInfos) {
+			Set<UnitInfo> unitInfos, Set<UsersInfo> usersInfos) {
 		this.heatsourceInfo = heatsourceInfo;
 		this.communityInfo = communityInfo;
 		this.bldname = bldname;
@@ -61,13 +69,13 @@ public class BuildingInfo implements java.io.Serializable {
 		this.gis = gis;
 		this.picaddress = picaddress;
 		this.comm = comm;
-		this.usersInfos = usersInfos;
 		this.unitInfos = unitInfos;
+		this.usersInfos = usersInfos;
 	}
 
 	// Property accessors
-	@Id
 	@SequenceGenerator(name = "BLD_ID", allocationSize = 1, sequenceName = "BLD_ID")
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "BLD_ID")
 	@Column(name = "BLDID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getBldid() {
@@ -153,21 +161,21 @@ public class BuildingInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "buildingInfo")
-	public Set<UsersInfo> getUsersInfos() {
-		return this.usersInfos;
-	}
-
-	public void setUsersInfos(Set<UsersInfo> usersInfos) {
-		this.usersInfos = usersInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "buildingInfo")
 	public Set<UnitInfo> getUnitInfos() {
 		return this.unitInfos;
 	}
 
 	public void setUnitInfos(Set<UnitInfo> unitInfos) {
 		this.unitInfos = unitInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "buildingInfo")
+	public Set<UsersInfo> getUsersInfos() {
+		return this.usersInfos;
+	}
+
+	public void setUsersInfos(Set<UsersInfo> usersInfos) {
+		this.usersInfos = usersInfos;
 	}
 
 }

@@ -16,12 +16,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * UnitInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "UNIT_INFO", schema = "HEATMGR")
+@Table(name = "UNIT_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"CMTID", "BLDID", "UNTNAME" }))
+@JsonAutoDetect
 public class UnitInfo implements java.io.Serializable {
 
 	// Fields
@@ -33,6 +39,7 @@ public class UnitInfo implements java.io.Serializable {
 	private String untname;
 	private String gis;
 	private String picaddress;
+	@JsonProperty("desp")
 	private String comm;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 

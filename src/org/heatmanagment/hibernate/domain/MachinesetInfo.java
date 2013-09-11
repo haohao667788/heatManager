@@ -26,8 +26,13 @@ public class MachinesetInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2825784415706550352L;
 	private Long mchid;
 	private HeatsourceInfo heatsourceInfo;
+	private ClassInfo classInfo;
 	private String mchname;
 	private String gis;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
@@ -45,9 +50,11 @@ public class MachinesetInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public MachinesetInfo(HeatsourceInfo heatsourceInfo, String mchname,
-			String gis, Set<UsersInfo> usersInfos, Set<UnitInfo> unitInfos) {
+	public MachinesetInfo(HeatsourceInfo heatsourceInfo, ClassInfo classInfo,
+			String mchname, String gis, Set<UsersInfo> usersInfos,
+			Set<UnitInfo> unitInfos) {
 		this.heatsourceInfo = heatsourceInfo;
+		this.classInfo = classInfo;
 		this.mchname = mchname;
 		this.gis = gis;
 		this.usersInfos = usersInfos;
@@ -75,6 +82,16 @@ public class MachinesetInfo implements java.io.Serializable {
 
 	public void setHeatsourceInfo(HeatsourceInfo heatsourceInfo) {
 		this.heatsourceInfo = heatsourceInfo;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CLSID")
+	public ClassInfo getClassInfo() {
+		return this.classInfo;
+	}
+
+	public void setClassInfo(ClassInfo classInfo) {
+		this.classInfo = classInfo;
 	}
 
 	@Column(name = "MCHNAME", nullable = false, length = 20)

@@ -97,15 +97,28 @@ public class CommunityController {
 	public String inquire(
 			@RequestParam(required = false, defaultValue = "0") Integer start,
 			@RequestParam(required = false, defaultValue = "20") Integer limit) {
-		List<CommunityInfo> infos = this.communityService.findAllCommunity(
-				start, limit);
-		CommunityOut out = new CommunityOut();
-		out.setSuccess(true);
-		out.setMessage("");
-		out.setData(infos);
-		out.setTotalProperty(infos.size());
+		if (start == null) {
+			start = new Integer(0);
+		}
+		if (limit == null) {
+			limit = new Integer(20);
+		}
+		List<CommunityInfo> infos = this.communityService
+				.findPage(start, limit);
 		String outCome = null;
 		try {
+			if (infos == null) {
+				SuccessOut t = new SuccessOut();
+				t.setSuccess(false);
+				t.setMessage("没有任何社区记录");
+				return this.mapper.writeValueAsString(t);
+			}
+
+			CommunityOut out = new CommunityOut();
+			out.setSuccess(true);
+			out.setMessage("");
+			out.setData(infos);
+			out.setTotalProperty(infos.size());
 			outCome = this.mapper.writeValueAsString(out);
 		} catch (Exception e) {
 			e.printStackTrace();

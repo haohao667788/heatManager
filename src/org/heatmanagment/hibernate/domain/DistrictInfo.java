@@ -28,13 +28,17 @@ public class DistrictInfo implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6965770015156663789L;
 	private Long dstid;
 	private String dstname;
 
 	@JsonProperty("desp")
 	private String comm;
-	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
+	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 
 	// Constructors
 
@@ -49,17 +53,16 @@ public class DistrictInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public DistrictInfo(String dstname, String comm,
-			Set<ProjectInfo> projectInfos, Set<HeatsourceInfo> heatsourceInfos) {
+			Set<HeatsourceInfo> heatsourceInfos, Set<ProjectInfo> projectInfos) {
 		this.dstname = dstname;
 		this.comm = comm;
-		this.projectInfos = projectInfos;
 		this.heatsourceInfos = heatsourceInfos;
+		this.projectInfos = projectInfos;
 	}
 
 	// Property accessors
-
-	@Id
 	@SequenceGenerator(name = "DST_ID", allocationSize = 1, sequenceName = "DST_ID")
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "DST_ID")
 	@Column(name = "DSTID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getDstid() {
@@ -89,21 +92,21 @@ public class DistrictInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
-	public Set<ProjectInfo> getProjectInfos() {
-		return this.projectInfos;
-	}
-
-	public void setProjectInfos(Set<ProjectInfo> projectInfos) {
-		this.projectInfos = projectInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
 	public Set<HeatsourceInfo> getHeatsourceInfos() {
 		return this.heatsourceInfos;
 	}
 
 	public void setHeatsourceInfos(Set<HeatsourceInfo> heatsourceInfos) {
 		this.heatsourceInfos = heatsourceInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
+	public Set<ProjectInfo> getProjectInfos() {
+		return this.projectInfos;
+	}
+
+	public void setProjectInfos(Set<ProjectInfo> projectInfos) {
+		this.projectInfos = projectInfos;
 	}
 
 }

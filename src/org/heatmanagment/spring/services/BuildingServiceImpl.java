@@ -19,14 +19,14 @@ public class BuildingServiceImpl implements BuildingService {
 	private BuildingInfoDAO dao;
 
 	@Override
-	public List<BuildingInfo> findAll(int start, int limit) {
-		return this.dao.findAll(start, limit);
+	public List<BuildingInfo> findPage(int start, int limit) {
+		return this.dao.findPage(start, limit);
 	}
 
 	@Override
-	public void saveOrUpdate(Long id, String name, String address, Long cmtid,
-			Long srcid, String heattype, String gis, String picaddress,
-			String comm) {
+	public void saveOrUpdateBuilding(Long id, String name, String address,
+			Long cmtid, Long srcid, String heattype, String gis,
+			String picaddress, String comm) {
 		BuildingInfo bld = new BuildingInfo();
 		bld.setBldid(id);
 		bld.setBldname(name);
@@ -36,19 +36,21 @@ public class BuildingServiceImpl implements BuildingService {
 		bld.setComm(comm);
 		bld.setPicaddress(picaddress);
 
-		CommunityInfo cmt = new CommunityInfo();
-		cmt.setCmtid(cmtid);
-
-		HeatsourceInfo src = new HeatsourceInfo();
-		src.setSrcid(srcid);
-
-		bld.setCommunityInfo(cmt);
-		bld.setHeatsourceInfo(src);
+		if (cmtid != null) {
+			CommunityInfo cmt = new CommunityInfo();
+			cmt.setCmtid(cmtid);
+			bld.setCommunityInfo(cmt);
+		}
+		if (srcid != null) {
+			HeatsourceInfo src = new HeatsourceInfo();
+			src.setSrcid(srcid);
+			bld.setHeatsourceInfo(src);
+		}
 		this.dao.attachDirty(bld);
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void deleteBuilding(Long id) {
 		BuildingInfo info = new BuildingInfo();
 		info.setBldid(id);
 		this.dao.delete(info);
@@ -62,7 +64,7 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<HeatsourceInfo> inquireHeatSrc() {
-		// TODO Auto-generated method stub
+		//null
 		return null;
 	}
 

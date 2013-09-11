@@ -8,35 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Service("countyService")
+@Service("countyService")
+@SuppressWarnings("unchecked")
+@Transactional
 public class CountyServiceImpl implements CountyService {
 
+	@Autowired
 	private CountyInfoDAO dao;
 
-	public CountyServiceImpl() {
-		this.dao = new CountyInfoDAO();
+	@Override
+	public void saveOrUpdateCounty(Long id, String townname, String cityname,
+			String comm) {
+		CountyInfo cty = new CountyInfo();
+		cty.setCtyid(id);
+		cty.setTownname(townname);
+		cty.setCityname(cityname);
+		cty.setComm(comm);
+		this.dao.attachDirty(cty);
 	}
 
 	@Override
-	@Transactional
-	public void insertOrUpdateCounty(Long id, String name, String comm) {
-		CountyInfo info = new CountyInfo();
-		if (id == null) {
-			// insert new item
-			info.setCtyname(name);
-			info.setComm(comm);
-			this.dao.save(info);
-		} else {
-			// update item
-			info.setCtyid(id);
-			info.setCtyname(name);
-			info.setComm(comm);
-			this.dao.attachDirty(info);
-		}
-	}
-
-	@Override
-	@Transactional
 	public void deleteCounty(Long id) {
 		CountyInfo info = new CountyInfo();
 		info.setCtyid(id);
@@ -44,21 +35,7 @@ public class CountyServiceImpl implements CountyService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public List<CountyInfo> findAllCounty(int start, int limit) {
-
-		return null;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public CountyInfo findById(Long id) {
-		return this.dao.findById(id);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<CountyInfo> findByName(String name) {
-		return this.dao.findByCtyname(name);
+	public List<CountyInfo> findPage(int start, int limit) {
+		return this.dao.findPage(start, limit);
 	}
 }
