@@ -75,11 +75,11 @@ public class DistrictController {
 
 	@RequestMapping(value = "/daqu/del")
 	@ResponseBody
-	public String delete(@RequestParam Long dstid) {
+	public String delete(@RequestParam Long id) {
 
 		String outCome = null;
 		try {
-			this.districtService.deleteDistrict(dstid);
+			this.districtService.deleteDistrict(id);
 			outCome = this.mapper.writeValueAsString(this.success);
 		} catch (Exception e) {
 			this.success.setSuccess(false);

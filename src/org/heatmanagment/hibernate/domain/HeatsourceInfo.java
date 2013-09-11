@@ -103,7 +103,7 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.classInfo = classInfo;
 	}
 
-	@Column(name = "SRCNAME", nullable = false, length = 20)
+	@Column(name = "SRCNAME", nullable = true, length = 20)
 	public String getSrcname() {
 		return this.srcname;
 	}

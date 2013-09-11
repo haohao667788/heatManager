@@ -79,8 +79,8 @@ public class CommunityController {
 
 	@RequestMapping("/shequ/del")
 	@ResponseBody
-	public String delete(@RequestParam Long cmtid) {
-		this.communityService.deleteCommunity(cmtid);
+	public String delete(@RequestParam Long id) {
+		this.communityService.deleteCommunity(id);
 		SuccessOut out = new SuccessOut();
 		out.reset();
 		String outCome = null;

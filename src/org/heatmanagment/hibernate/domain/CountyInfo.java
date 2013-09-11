@@ -76,7 +76,7 @@ public class CountyInfo implements java.io.Serializable {
 		this.ctyid = ctyid;
 	}
 
-	@Column(name = "TOWNNAME", nullable = false, length = 20)
+	@Column(name = "TOWNNAME", nullable = true, length = 20)
 	public String getTownname() {
 		return this.townname;
 	}
@@ -85,7 +85,7 @@ public class CountyInfo implements java.io.Serializable {
 		this.townname = townname;
 	}
 
-	@Column(name = "CITYNAME", nullable = false, length = 20)
+	@Column(name = "CITYNAME", nullable = true, length = 20)
 	public String getCityname() {
 		return this.cityname;
 	}

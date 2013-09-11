@@ -72,7 +72,7 @@ public class AccountrangeInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USRID", nullable = false)
+	@JoinColumn(name = "USRID", nullable = true)
 	public UsersInfo getUsersInfo() {
 		return this.usersInfo;
 	}
