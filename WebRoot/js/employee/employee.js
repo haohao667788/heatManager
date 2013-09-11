@@ -393,7 +393,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '',
-                params: {idToDel: id},
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

@@ -369,7 +369,7 @@ Heat.danyuan.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '/heatManager/level/danyuan/del'+debug,
-                params: {untid: id},
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

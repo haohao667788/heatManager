@@ -272,7 +272,7 @@ Heat.city.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '/heatManager/data/level/city/del'+debug,
-                params: {idToDel: id},
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

@@ -469,8 +469,8 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/data/fare/user/list'+debug,
-                params: {idToDel: id},
+                url: '/heatManager/data/fare/user/del'+debug,
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

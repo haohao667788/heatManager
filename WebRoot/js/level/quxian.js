@@ -314,7 +314,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: "/heatManager/data/level/quxian/del"+debug,
-                params: {idToDel: id},
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }
