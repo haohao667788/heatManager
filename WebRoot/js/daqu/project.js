@@ -350,7 +350,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     deleteRecord: function(btn) {
         var store = this.getStore();
         var record = this.getSelected();
-        var id = record.get('id');
+        var id = record.get('pjtid');
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: "/heatManager/data/daqu/project/del"+debug,

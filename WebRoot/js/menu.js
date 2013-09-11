@@ -86,10 +86,6 @@ Heat.menu = new Ext.tree.TreePanel({
                 text: '分级管理',
                 leaf: false,
                 children: [{
-                    text: '城市管理',
-                    ns: 'city',
-                    leaf: true
-                }, {
                     text: '行政区管理',
                     ns: 'quxian',
                     leaf: true
