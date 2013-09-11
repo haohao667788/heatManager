@@ -102,7 +102,7 @@ public class ProjectInfo implements java.io.Serializable {
 		this.countyInfo = countyInfo;
 	}
 
-	@Column(name = "PJTNAME", nullable = false, length = 40)
+	@Column(name = "PJTNAME", nullable = true, length = 40)
 	public String getPjtname() {
 		return this.pjtname;
 	}

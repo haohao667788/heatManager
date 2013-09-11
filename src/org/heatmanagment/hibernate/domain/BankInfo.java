@@ -68,7 +68,7 @@ public class BankInfo implements java.io.Serializable {
 		this.courseInfo = courseInfo;
 	}
 
-	@Column(name = "BNKNAME", nullable = false, length = 20)
+	@Column(name = "BNKNAME", nullable = true, length = 20)
 	public String getBnkname() {
 		return this.bnkname;
 	}

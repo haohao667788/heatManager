@@ -68,9 +68,9 @@ public class ProjectController {
 
 	@RequestMapping("/project/del")
 	@ResponseBody
-	public String delete(@RequestParam Long pjtid) {
+	public String delete(@RequestParam Long id) {
 		try {
-			this.projectSerivce.deleteProject(pjtid);
+			this.projectSerivce.deleteProject(id);
 			return this.mapper.writeValueAsString(this.success);
 		} catch (Exception e) {
 			this.success.setSuccess(false);

@@ -94,7 +94,7 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.classInfo = classInfo;
 	}
 
-	@Column(name = "MCHNAME", nullable = false, length = 20)
+	@Column(name = "MCHNAME", nullable = true, length = 20)
 	public String getMchname() {
 		return this.mchname;
 	}

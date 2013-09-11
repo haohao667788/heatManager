@@ -73,13 +73,13 @@ public class CountyController {
 
 	@RequestMapping(value = "/quxian/del")
 	@ResponseBody
-	public String delete(@RequestParam Long ctyid) {
+	public String delete(@RequestParam Long id) {
 
 		SuccessOut out = new SuccessOut();
 		out.reset();
 		String outCome = null;
 		try {
-			this.countyService.deleteCounty(ctyid);
+			this.countyService.deleteCounty(id);
 			outCome = this.mapper.writeValueAsString(out);
 		} catch (Exception e) {
 			out.setSuccess(false);

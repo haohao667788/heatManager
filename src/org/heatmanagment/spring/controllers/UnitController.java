@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.heatmanagment.hibernate.domain.BuildingInfo;
 import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.UnitInfo;
+import org.heatmanagment.spring.entity.SuccessOut;
 import org.heatmanagment.spring.entity.UnitOut;
 import org.heatmanagment.spring.services.BuildingService;
 import org.heatmanagment.spring.services.CommunityService;
@@ -34,6 +35,22 @@ public class UnitController {
 
 	public UnitController() {
 		this.mapper = new ObjectMapper();
+	}
+
+	@RequestMapping("/danyuan/del")
+	@ResponseBody
+	public String delete(@RequestParam Long id) {
+		this.unitService.deleteUnit(id);
+		SuccessOut out = new SuccessOut();
+		out.reset();
+		String outCome = null;
+		try {
+			outCome = this.mapper.writeValueAsString(out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return outCome;
+
 	}
 
 	@RequestMapping("/danyuan/list")

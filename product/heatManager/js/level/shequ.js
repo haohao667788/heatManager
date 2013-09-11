@@ -352,7 +352,7 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '/heatManager/level/shequ/del'+debug,
-                params: {cmtid: id},
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

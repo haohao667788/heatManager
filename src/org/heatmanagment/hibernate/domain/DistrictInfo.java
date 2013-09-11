@@ -73,7 +73,7 @@ public class DistrictInfo implements java.io.Serializable {
 		this.dstid = dstid;
 	}
 
-	@Column(name = "DSTNAME", nullable = false, length = 40)
+	@Column(name = "DSTNAME", nullable = true, length = 40)
 	public String getDstname() {
 		return this.dstname;
 	}

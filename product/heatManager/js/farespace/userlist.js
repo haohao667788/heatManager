@@ -500,8 +500,8 @@ Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/data/farespace/userlist/list'+debug,
-                params: {idToDel: id},
+                url: '/heatManager/data/farespace/userlist/del'+debug,
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

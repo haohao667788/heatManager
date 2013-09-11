@@ -22,7 +22,7 @@
             http://www.springframework.org/schema/mvc
             http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-	<context:component-scan base-package="org.heatmanagment.spring">
+	<context:component-scan base-package="org.heatmanagment">
 	</context:component-scan>
 
 	<context:annotation-config />
@@ -59,7 +59,8 @@
 	<!-- Request and Response message converter -->
 	<bean
 		id="stringHttpMessageConverter"
-		class="org.springframework.http.converter.StringHttpMessageConverter" />
+		class="org.springframework.http.converter.StringHttpMessageConverter">
+	</bean>
 	<bean
 		id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
@@ -136,6 +137,39 @@
 				</value>
 				<value>
 					org.heatmanagment.hibernate.domain.UsersInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.ChargeRecord
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.LoginInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.UserLog
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.StaffInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.ClassInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.AccountrangeInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.FeeInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.BankCertificate
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.CertificateChargeMapping
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.CourseInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.BankInfo
 				</value>
 			</list>
 		</property>
@@ -218,9 +252,86 @@
 	</bean>
 
 	<!-- Service related configuration -->
-	<import resource="service.xml"></import>
+	<!-- import resource="service.xml" -->
 
 	<!-- Persistence related configuration -->
-	<import resource="dao.xml"></import>
+	<!-- import resource="dao.xml" -->
 
+	<bean
+		id="ChargeRecordDAO"
+		class="org.heatmanagment.hibernate.domain.ChargeRecordDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="LoginInfoDAO"
+		class="org.heatmanagment.hibernate.domain.LoginInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="UserLogDAO"
+		class="org.heatmanagment.hibernate.domain.UserLogDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="StaffInfoDAO"
+		class="org.heatmanagment.hibernate.domain.StaffInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="ClassInfoDAO"
+		class="org.heatmanagment.hibernate.domain.ClassInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="AccountrangeInfoDAO"
+		class="org.heatmanagment.hibernate.domain.AccountrangeInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="FeeInfoDAO"
+		class="org.heatmanagment.hibernate.domain.FeeInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="BankCertificateDAO"
+		class="org.heatmanagment.hibernate.domain.BankCertificateDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="CertificateChargeMappingDAO"
+		class="org.heatmanagment.hibernate.domain.CertificateChargeMappingDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="CourseInfoDAO"
+		class="org.heatmanagment.hibernate.domain.CourseInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="BankInfoDAO"
+		class="org.heatmanagment.hibernate.domain.BankInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
 </beans>

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.sun.net.httpserver.Authenticator.Success;
 
@@ -44,16 +45,20 @@ public class BuildingController {
 	public String saveOrUpdate(@RequestParam(required = false) Long bldid,
 			@RequestParam String bldname, @RequestParam Long cmtid,
 			@RequestParam Long srcid, @RequestParam String heattype,
-			@RequestParam String gis, @RequestParam String picaddress,
+			@RequestParam String gis,
+			@RequestParam(value = "picaddress") CommonsMultipartFile file,
 			@RequestParam String desp) {
+		SuccessOut out = new SuccessOut();
+		out.reset();
+
 		return "";
 
 	}
 
 	@RequestMapping("/loudong/del")
 	@ResponseBody
-	public String delete(@RequestParam Long bldid) {
-		this.buildingService.deleteBuilding(bldid);
+	public String delete(@RequestParam Long id) {
+		this.buildingService.deleteBuilding(id);
 		SuccessOut out = new SuccessOut();
 		out.reset();
 		String outCome = null;
