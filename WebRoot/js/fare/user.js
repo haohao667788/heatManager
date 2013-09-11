@@ -94,13 +94,13 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }), {
                         xtype: 'textfield',
                         fieldLabel: '用户地址',
-                        name: 'usraddress',
+                        name: 'address',
                         width: 160,
                         allowBlank: false
                     }, {
                         xtype: 'textfield',
                         fieldLabel: '联系方式',
-                        name: 'communicate',
+                        name: 'phone',
                         width: 160,
                         allowBlank: false
                     }, new Ext.form.ComboBox({
@@ -130,14 +130,14 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         fieldLabel: '开户时间',
                         editable: false,
                         format: 'Y-m-d',
-                        name: 'kaihuDate',
+                        name: 'startdate',
                         width: 160
                     }, {
                         xtype: 'datefield',
                         fieldLabel: '合同签订时间',
                         editable: false,
                         format: 'Y-m-d',
-                        name: 'contractDate',
+                        name: 'contractdate',
                         width: 160
                     }, {
                         xtype: 'textfield',
@@ -148,7 +148,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }, {
                         xtype: 'textfield',
                         fieldLabel: '合同版本',
-                        name: 'contractversion',
+                        name: 'contractver',
                         width: 160,
                         allowBlank: false
                     }, {
@@ -172,7 +172,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }, {
                         xtype: 'fileuploadfield',
                         fieldLabel: '房产证影像',
-                        name: 'fangchanpic',
+                        name: 'houseidpic',
                         width: 160,
                         buttonText: '',
                         buttonCfg: {
@@ -181,7 +181,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }, {
                         xtype: 'fileuploadfield',
                         fieldLabel: '户型图纸影像',
-                        name: 'huxingpic',
+                        name: 'housepic',
                         width: 160,
                         buttonText: '',
                         buttonCfg: {
@@ -325,17 +325,17 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'untname', type: 'string'},
                     {name: 'mchid', type: 'int'},
                     {name: 'mchname', type: 'string'},
-                    {name: 'usraddress', type: 'string'},
+                    {name: 'address', type: 'string'},
                     {name: 'usrname', type: 'string'},
-                    {name: 'communicate', type: 'string'},
-                    {name: 'kaihuDate', type: 'string'},
-                    {name: 'contractDate', type: 'string'},
+                    {name: 'phone', type: 'string'},
+                    {name: 'startdate', type: 'string'},
+                    {name: 'contractdate', type: 'string'},
                     {name: 'contracttype', type: 'string'},
-                    {name: 'contractversion', type: 'string'},
+                    {name: 'contractver', type: 'string'},
                     {name: 'contractpic', type: 'string'},
                     {name: 'idpic', type: 'string'},
-                    {name: 'fangchanpic', type: 'string'},
-                    {name: 'huxingpic', type: 'string'}
+                    {name: 'houseidpic', type: 'string'},
+                    {name: 'housepic', type: 'string'}
                 ]
             })
         });
@@ -368,11 +368,11 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 160
             }, {
                 header: "用户地址",
-                dataIndex: 'usraddress',
+                dataIndex: 'address',
                 width: 160
             }, {
                 header: "联系方式",
-                dataIndex: 'communicate',
+                dataIndex: 'phone',
                 width: 120
             }, {
                 header: "所属机组",
@@ -380,11 +380,11 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 120
             }, {
                 header: "开户时间",
-                dataIndex: 'kaihuDate',
+                dataIndex: 'startdate',
                 width: 100
             }, {
                 header: "合同签订时间",
-                dataIndex: "contractDate",
+                dataIndex: "contractdate",
                 width: 100
             }, {
                 header: "合同类型",
@@ -392,7 +392,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 100
             }, {
                 header: "合同版本",
-                dataIndex: "contractversion",
+                dataIndex: "contractver",
                 width: 80
             }],
 

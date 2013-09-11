@@ -1,15 +1,15 @@
 /**
- * 行政区tab
+ * 热源tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.quxian");
+Ext.namespace("Heat.src");
 
-Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.src.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.quxian.BasicForm.superclass.constructor.call(this, {
-            url: "/heatManager/data/level/quxian/update"+debug,
+        Heat.src.BasicForm.superclass.constructor.call(this, {
+            url: "/heatManager/data/level/src/update"+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -17,20 +17,37 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
             bodyStyle: 'padding: 5px 0 0 0',
             items: [{
                 xtype: 'hidden',
-                name: 'ctyid'
+                name: 'srcid'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '行政区名称',
-                name: 'townname',
+                fieldLabel: '热源名称',
+                name: 'srcname',
                 width: 160,
                 allowBlank: false
             }, {
                 xtype: 'textfield',
-                fieldLabel: '所属城市',
-                name: 'cityname',
+                fieldLabel: '热源地址',
+                name: 'srcaddress',
                 width: 160,
                 allowBlank: false
-            }]
+            }, new Ext.form.ComboBox({
+                hiddenName: 'heattype',
+                mode: 'local',
+                fieldLabel: '热源类型',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: true,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [
+                        ['居民', '居民'],
+                        ['工业', '工业'],
+                        ['商业', '商业']
+                    ]
+                })
+            })]
         });
 
         this.addEvents('submitcomplete');
@@ -73,13 +90,13 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.quxian.BasicWin = Ext.extend(Ext.Window, {
+Heat.src.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.quxian.BasicForm();
-        Heat.quxian.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.src.BasicForm();
+        Heat.src.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -146,53 +163,58 @@ Heat.quxian.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    quxianWin: null,
+Heat.src.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    srcWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.quxianWin = new Heat.quxian.BasicWin();
+        this.srcWin = new Heat.src.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/quxian/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/src/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'ctyid', type: 'int'},
-                    {name: 'townname', type: 'string'},
-                    {name: 'cityname', type: 'string'}
+                    {name: 'srcid', type: 'int'},
+                    {name: 'srcname', type: 'string'},
+                    {name: 'srcaddress', type: 'string'},
+                    {name: 'heattype', type: 'string'}
                 ]
             })
         });
-        Heat.quxian.BasicGrid.superclass.constructor.call(this, {
+        Heat.src.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "行政区编号",
-                dataIndex: 'ctyid',
+                header: "热源编号",
+                dataIndex: 'srcid',
                 width: 1
             }, {
-                header: "行政区名称",
-                dataIndex: 'townname',
+                header: "热源名称",
+                dataIndex: 'srcname',
+                width: 2
+            }, {
+                header: "热源地址",
+                dataIndex: 'srcaddress',
                 width: 5
             }, {
-                header: "所属城市",
-                dataIndex: 'cityname',
-                width: 3
+                header: "供热类型",
+                dataIndex: 'heattype',
+                width: 2
             }],
 
             tbar: [{
-                text: "添加行政区",
+                text: "添加热源",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改行政区",
+                text: "修改热源",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除行政区",
+                text: "删除热源",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -212,28 +234,23 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             frame: true,
             loadMask: true,
-            collapsible: false,
-            listeners: {
-                render: function(grid) {
-                    grid.getStore().load();
-                }
-            }
+            collapsible: false
         });
 
-        this.quxianWin.on("submitcomplete", this.refresh, this);
+        this.srcWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.quxianWin.setTitle("新增行政区");
-        this.quxianWin.show();
+        this.srcWin.setTitle("新增热源");
+        this.srcWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.quxianWin.setTitle("修改行政区");
-            this.quxianWin.show();
-            this.quxianWin.load(selected);
+            this.srcWin.setTitle("修改热源");
+            this.srcWin.show();
+            this.srcWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
@@ -254,7 +271,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: "/heatManager/data/level/quxian/del"+debug,
+                url: "/heatManager/data/level/src/del"+debug,
                 params: {id: id},
                 success: function(response) {
                     store.reload();

@@ -103,11 +103,11 @@ Heat.menu = new Ext.tree.TreePanel({
                     leaf: true
                 }, {
                     text: '热源厂管理',
-                    ns: 'heatFactory',
+                    ns: 'src',
                     leaf: true
                 }, {
                     text: '换热站管理',
-                    ns: 'heatSwitcher',
+                    ns: 'mch',
                     leaf: true
                 }]
             }]
