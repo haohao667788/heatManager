@@ -18,23 +18,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * UsersInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "USERS_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class UsersInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6349835540411742922L;
 	private Long usrid;
 	private MachinesetInfo machinesetInfo;
 	private ProjectInfo projectInfo;
@@ -53,13 +45,12 @@ public class UsersInfo implements java.io.Serializable {
 	private String idpic;
 	private String houseidpic;
 	private String housepic;
-	@JsonProperty("desp")
-	private String comm;
-	private Set<FeeInfo> feeInfos = new HashSet<FeeInfo>(0);
-	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
-	private Set<AccountrangeInfo> accountrangeInfos = new HashSet<AccountrangeInfo>(
-			0);
+	private String desp;
 	private Set<UserLog> userLogs = new HashSet<UserLog>(0);
+	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
+	private Set<FeeInfo> feeInfos = new HashSet<FeeInfo>(0);
+	private Set<DealInfo> dealInfos = new HashSet<DealInfo>(0);
+	private Set<DueCharge> dueCharges = new HashSet<DueCharge>(0);
 
 	// Constructors
 
@@ -74,9 +65,9 @@ public class UsersInfo implements java.io.Serializable {
 			String usrname, String phone, Timestamp startdate,
 			Timestamp contractdate, String contracttype, String contractver,
 			String contractpic, String idpic, String houseidpic,
-			String housepic, String comm, Set<FeeInfo> feeInfos,
-			Set<ChargeRecord> chargeRecords,
-			Set<AccountrangeInfo> accountrangeInfos, Set<UserLog> userLogs) {
+			String housepic, String desp, Set<UserLog> userLogs,
+			Set<ChargeRecord> chargeRecords, Set<FeeInfo> feeInfos,
+			Set<DealInfo> dealInfos, Set<DueCharge> dueCharges) {
 		this.machinesetInfo = machinesetInfo;
 		this.projectInfo = projectInfo;
 		this.buildingInfo = buildingInfo;
@@ -94,11 +85,12 @@ public class UsersInfo implements java.io.Serializable {
 		this.idpic = idpic;
 		this.houseidpic = houseidpic;
 		this.housepic = housepic;
-		this.comm = comm;
-		this.feeInfos = feeInfos;
-		this.chargeRecords = chargeRecords;
-		this.accountrangeInfos = accountrangeInfos;
+		this.desp = desp;
 		this.userLogs = userLogs;
+		this.chargeRecords = chargeRecords;
+		this.feeInfos = feeInfos;
+		this.dealInfos = dealInfos;
+		this.dueCharges = dueCharges;
 	}
 
 	// Property accessors
@@ -272,25 +264,25 @@ public class UsersInfo implements java.io.Serializable {
 		this.housepic = housepic;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usersInfo")
-	public Set<FeeInfo> getFeeInfos() {
-		return this.feeInfos;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
+	public Set<UserLog> getUserLogs() {
+		return this.userLogs;
 	}
 
-	public void setFeeInfos(Set<FeeInfo> feeInfos) {
-		this.feeInfos = feeInfos;
+	public void setUserLogs(Set<UserLog> userLogs) {
+		this.userLogs = userLogs;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usersInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
 	public Set<ChargeRecord> getChargeRecords() {
 		return this.chargeRecords;
 	}
@@ -299,22 +291,31 @@ public class UsersInfo implements java.io.Serializable {
 		this.chargeRecords = chargeRecords;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usersInfo")
-	public Set<AccountrangeInfo> getAccountrangeInfos() {
-		return this.accountrangeInfos;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
+	public Set<FeeInfo> getFeeInfos() {
+		return this.feeInfos;
 	}
 
-	public void setAccountrangeInfos(Set<AccountrangeInfo> accountrangeInfos) {
-		this.accountrangeInfos = accountrangeInfos;
+	public void setFeeInfos(Set<FeeInfo> feeInfos) {
+		this.feeInfos = feeInfos;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usersInfo")
-	public Set<UserLog> getUserLogs() {
-		return this.userLogs;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
+	public Set<DealInfo> getDealInfos() {
+		return this.dealInfos;
 	}
 
-	public void setUserLogs(Set<UserLog> userLogs) {
-		this.userLogs = userLogs;
+	public void setDealInfos(Set<DealInfo> dealInfos) {
+		this.dealInfos = dealInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
+	public Set<DueCharge> getDueCharges() {
+		return this.dueCharges;
+	}
+
+	public void setDueCharges(Set<DueCharge> dueCharges) {
+		this.dueCharges = dueCharges;
 	}
 
 }

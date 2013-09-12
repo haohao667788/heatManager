@@ -1,6 +1,7 @@
 package org.heatmanagment.hibernate.domain;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
@@ -17,30 +18,32 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * UserLog entities. Transaction control of the save(), update() and delete()
+ * DealInfo entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.UserLog
+ * @see org.heatmanagment.hibernate.domain.DealInfo
  * @author MyEclipse Persistence Tools
  */
 
-public class UserLogDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(UserLogDAO.class);
+public class DealInfoDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory
+			.getLogger(DealInfoDAO.class);
 	// property constants
-	public static final String LOGTYPE = "logtype";
-	public static final String LOGTITLE = "logtitle";
-	public static final String LOGCONTENT = "logcontent";
+	public static final String CURBALANCE = "curbalance";
+	public static final String CURCHARGE = "curcharge";
+	public static final String CURMONEY = "curmoney";
+	public static final String DEALNAME = "dealname";
 	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(UserLog transientInstance) {
-		log.debug("saving UserLog instance");
+	public void save(DealInfo transientInstance) {
+		log.debug("saving DealInfo instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -50,8 +53,8 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(UserLog persistentInstance) {
-		log.debug("deleting UserLog instance");
+	public void delete(DealInfo persistentInstance) {
+		log.debug("deleting DealInfo instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -61,11 +64,11 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public UserLog findById(java.lang.Long id) {
-		log.debug("getting UserLog instance with id: " + id);
+	public DealInfo findById(java.lang.Long id) {
+		log.debug("getting DealInfo instance with id: " + id);
 		try {
-			UserLog instance = (UserLog) getHibernateTemplate().get(
-					"org.heatmanagment.hibernate.domain.UserLog", id);
+			DealInfo instance = (DealInfo) getHibernateTemplate().get(
+					"org.heatmanagment.hibernate.domain.DealInfo", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -73,10 +76,10 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<UserLog> findByExample(UserLog instance) {
-		log.debug("finding UserLog instance by example");
+	public List<DealInfo> findByExample(DealInfo instance) {
+		log.debug("finding DealInfo instance by example");
 		try {
-			List<UserLog> results = (List<UserLog>) getHibernateTemplate()
+			List<DealInfo> results = (List<DealInfo>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -88,10 +91,10 @@ public class UserLogDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding UserLog instance with property: " + propertyName
+		log.debug("finding DealInfo instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from UserLog as model where model."
+			String queryString = "from DealInfo as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -100,26 +103,30 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<UserLog> findByLogtype(Object logtype) {
-		return findByProperty(LOGTYPE, logtype);
+	public List<DealInfo> findByCurbalance(Object curbalance) {
+		return findByProperty(CURBALANCE, curbalance);
 	}
 
-	public List<UserLog> findByLogtitle(Object logtitle) {
-		return findByProperty(LOGTITLE, logtitle);
+	public List<DealInfo> findByCurcharge(Object curcharge) {
+		return findByProperty(CURCHARGE, curcharge);
 	}
 
-	public List<UserLog> findByLogcontent(Object logcontent) {
-		return findByProperty(LOGCONTENT, logcontent);
+	public List<DealInfo> findByCurmoney(Object curmoney) {
+		return findByProperty(CURMONEY, curmoney);
 	}
 
-	public List<UserLog> findByDesp(Object desp) {
+	public List<DealInfo> findByDealname(Object dealname) {
+		return findByProperty(DEALNAME, dealname);
+	}
+
+	public List<DealInfo> findByDesp(Object desp) {
 		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {
-		log.debug("finding all UserLog instances");
+		log.debug("finding all DealInfo instances");
 		try {
-			String queryString = "from UserLog";
+			String queryString = "from DealInfo";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -128,28 +135,28 @@ public class UserLogDAO extends HibernateDaoSupport {
 	}
 	
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all UserLog instances with boundary");
+		log.debug("finding all DealInfo instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from UserLog";
+					String q = "from DealInfo";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all UserLog with boundary failed", re);
+			log.error("find all DealInfo with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public UserLog merge(UserLog detachedInstance) {
-		log.debug("merging UserLog instance");
+	public DealInfo merge(DealInfo detachedInstance) {
+		log.debug("merging DealInfo instance");
 		try {
-			UserLog result = (UserLog) getHibernateTemplate().merge(
+			DealInfo result = (DealInfo) getHibernateTemplate().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -159,8 +166,8 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(UserLog instance) {
-		log.debug("attaching dirty UserLog instance");
+	public void attachDirty(DealInfo instance) {
+		log.debug("attaching dirty DealInfo instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -170,8 +177,8 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(UserLog instance) {
-		log.debug("attaching clean UserLog instance");
+	public void attachClean(DealInfo instance) {
+		log.debug("attaching clean DealInfo instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -181,7 +188,7 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static UserLogDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (UserLogDAO) ctx.getBean("UserLogDAO");
+	public static DealInfoDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (DealInfoDAO) ctx.getBean("DealInfoDAO");
 	}
 }

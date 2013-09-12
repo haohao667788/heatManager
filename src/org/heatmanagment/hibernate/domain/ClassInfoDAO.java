@@ -33,7 +33,7 @@ public class ClassInfoDAO extends HibernateDaoSupport {
 			.getLogger(ClassInfoDAO.class);
 	// property constants
 	public static final String CLSNAME = "clsname";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -104,8 +104,8 @@ public class ClassInfoDAO extends HibernateDaoSupport {
 		return findByProperty(CLSNAME, clsname);
 	}
 
-	public List<ClassInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<ClassInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

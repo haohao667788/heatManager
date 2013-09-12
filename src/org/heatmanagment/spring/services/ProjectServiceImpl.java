@@ -49,7 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
 		pjt.setPjtid(id);
 		pjt.setPjtname(name);
 		pjt.setMiddle(middle);
-		pjt.setComm(comm);
+		pjt.setDesp(comm);
 
 		this.dao.attachDirty(pjt);
 	}

@@ -27,6 +27,7 @@ public class UserLog implements java.io.Serializable {
 	private String logtype;
 	private String logtitle;
 	private String logcontent;
+	private String desp;
 
 	// Constructors
 
@@ -41,18 +42,19 @@ public class UserLog implements java.io.Serializable {
 
 	/** full constructor */
 	public UserLog(UsersInfo usersInfo, String logtype, String logtitle,
-			String logcontent) {
+			String logcontent, String desp) {
 		this.usersInfo = usersInfo;
 		this.logtype = logtype;
 		this.logtitle = logtitle;
 		this.logcontent = logcontent;
+		this.desp = desp;
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "LOG_ID", allocationSize = 1, sequenceName = "LOG_ID")
+	@SequenceGenerator(name = "LOG_ID",allocationSize = 1, sequenceName = "LOG_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "LOG_ID")
-	@Column(name = "LOGID", unique = true, nullable = false, precision = 10, scale = 0)
+	@Column(name = "LOGID", unique = true, nullable = false, precision = 15, scale = 0)
 	public Long getLogid() {
 		return this.logid;
 	}
@@ -62,7 +64,7 @@ public class UserLog implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USRID", nullable = false)
+	@JoinColumn(name = "USRID", nullable = true)
 	public UsersInfo getUsersInfo() {
 		return this.usersInfo;
 	}
@@ -96,6 +98,15 @@ public class UserLog implements java.io.Serializable {
 
 	public void setLogcontent(String logcontent) {
 		this.logcontent = logcontent;
+	}
+
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
+	}
+
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
 }

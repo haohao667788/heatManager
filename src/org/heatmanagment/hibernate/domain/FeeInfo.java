@@ -13,15 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * FeeInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "FEE_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class FeeInfo implements java.io.Serializable {
 
 	// Fields
@@ -39,8 +35,7 @@ public class FeeInfo implements java.io.Serializable {
 	private Double heatbase;
 	private Double heatrate;
 	private String housetype;
-	@JsonProperty("desp")
-	private String comm;
+	private String desp;
 
 	// Constructors
 
@@ -57,7 +52,7 @@ public class FeeInfo implements java.io.Serializable {
 	public FeeInfo(UsersInfo usersInfo, Double area, Double realarea,
 			Double feearea, String feetype, Double feerate, Double discount,
 			Double reducefee, String heatstate, Double heatbase,
-			Double heatrate, String housetype, String comm) {
+			Double heatrate, String housetype, String desp) {
 		this.usersInfo = usersInfo;
 		this.area = area;
 		this.realarea = realarea;
@@ -70,11 +65,11 @@ public class FeeInfo implements java.io.Serializable {
 		this.heatbase = heatbase;
 		this.heatrate = heatrate;
 		this.housetype = housetype;
-		this.comm = comm;
+		this.desp = desp;
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "FEE_ID", allocationSize = 1, sequenceName = "FEE_ID")
+	@SequenceGenerator(name = "FEE_ID",allocationSize = 1, sequenceName = "FEE_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "FEE_ID")
 	@Column(name = "FEEID", unique = true, nullable = false, precision = 10, scale = 0)
@@ -87,7 +82,7 @@ public class FeeInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USRID", nullable = false)
+	@JoinColumn(name = "USRID", nullable = true)
 	public UsersInfo getUsersInfo() {
 		return this.usersInfo;
 	}
@@ -195,13 +190,13 @@ public class FeeInfo implements java.io.Serializable {
 		this.housetype = housetype;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
 }

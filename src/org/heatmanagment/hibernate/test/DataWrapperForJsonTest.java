@@ -20,7 +20,7 @@ public class DataWrapperForJsonTest {
 		this.mapper = new ObjectMapper();
 	}
 
-	@Test
+	// @Test
 	@SuppressWarnings("unchecked")
 	public void testWrapperEffect() {
 
@@ -37,6 +37,11 @@ public class DataWrapperForJsonTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	@Test
+	public void testSystemTime() {
 
 	}
 }

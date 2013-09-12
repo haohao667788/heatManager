@@ -14,4 +14,6 @@ public interface CommunityService {
 	List<CommunityInfo> findPage(int start, int limit);
 
 	List<CommunityInfo> findAll();
+
+	CommunityInfo findById(Long id);
 }

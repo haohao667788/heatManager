@@ -15,4 +15,6 @@ public interface UnitService {
 	void deleteUnit(Long id);
 
 	List<UnitInfo> findPage(int start, int limit);
+
+	UnitInfo findById(Long id);
 }

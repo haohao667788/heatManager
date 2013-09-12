@@ -35,7 +35,7 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 	public static final String SRCNAME = "srcname";
 	public static final String SRCADDRESS = "srcaddress";
 	public static final String HEATTYPE = "heattype";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -115,8 +115,8 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 		return findByProperty(HEATTYPE, heattype);
 	}
 
-	public List<HeatsourceInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<HeatsourceInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

@@ -33,7 +33,7 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 			.getLogger(DistrictInfoDAO.class);
 	// property constants
 	public static final String DSTNAME = "dstname";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -104,8 +104,8 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DSTNAME, dstname);
 	}
 
-	public List<DistrictInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<DistrictInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

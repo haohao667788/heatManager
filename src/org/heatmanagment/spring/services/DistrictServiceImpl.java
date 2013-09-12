@@ -21,7 +21,7 @@ public class DistrictServiceImpl implements DistrictService {
 		DistrictInfo temp = new DistrictInfo();
 		temp.setDstid(id);
 		temp.setDstname(name);
-		temp.setComm(comm);
+		temp.setDesp(comm);
 		this.dao.attachDirty(temp);
 	}
 

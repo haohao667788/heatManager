@@ -49,10 +49,10 @@ public class LoginInfo implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "LOGIN_ID", allocationSize = 1, sequenceName = "LOGIN_ID")
+	@SequenceGenerator(name = "LOGIN_ID",allocationSize = 1, sequenceName = "LOGIN_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "LOGIN_ID")
-	@Column(name = "LGINID", unique = true, nullable = false, precision = 10, scale = 0)
+	@Column(name = "LGINID", unique = true, nullable = false, precision = 15, scale = 0)
 	public Long getLginid() {
 		return this.lginid;
 	}
@@ -62,7 +62,7 @@ public class LoginInfo implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "STFNUMBER")
+	@JoinColumn(name = "STFID")
 	public StaffInfo getStaffInfo() {
 		return this.staffInfo;
 	}

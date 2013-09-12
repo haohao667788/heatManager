@@ -17,31 +17,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * HeatsourceInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "HEATSOURCE_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class HeatsourceInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2919833848912560071L;
 	private Long srcid;
 	private DistrictInfo districtInfo;
 	private ClassInfo classInfo;
 	private String srcname;
 	private String srcaddress;
 	private String heattype;
-	@JsonProperty("desp")
-	private String comm;
+	private String desp;
 	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
 
@@ -58,14 +49,14 @@ public class HeatsourceInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public HeatsourceInfo(DistrictInfo districtInfo, ClassInfo classInfo,
-			String srcname, String srcaddress, String heattype, String comm,
+			String srcname, String srcaddress, String heattype, String desp,
 			Set<BuildingInfo> buildingInfos, Set<MachinesetInfo> machinesetInfos) {
 		this.districtInfo = districtInfo;
 		this.classInfo = classInfo;
 		this.srcname = srcname;
 		this.srcaddress = srcaddress;
 		this.heattype = heattype;
-		this.comm = comm;
+		this.desp = desp;
 		this.buildingInfos = buildingInfos;
 		this.machinesetInfos = machinesetInfos;
 	}
@@ -130,16 +121,16 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.heattype = heattype;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "heatsourceInfo")
 	public Set<BuildingInfo> getBuildingInfos() {
 		return this.buildingInfos;
 	}
@@ -148,7 +139,7 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.buildingInfos = buildingInfos;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "heatsourceInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "heatsourceInfo")
 	public Set<MachinesetInfo> getMachinesetInfos() {
 		return this.machinesetInfos;
 	}

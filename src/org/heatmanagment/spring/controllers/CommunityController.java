@@ -31,7 +31,7 @@ public class CommunityController {
 		this.mapper = new ObjectMapper();
 	}
 
-	@RequestMapping("/shequ/update")
+	@RequestMapping(value = "/shequ/update")
 	@ResponseBody
 	public String saveOrUpdate(@RequestParam(required = false) Long cmtid,
 			@RequestParam String cmtname, @RequestParam String briefname,
@@ -46,6 +46,15 @@ public class CommunityController {
 		 */
 		String filePath = null;
 		if (!file.isEmpty()) {
+			// upload the file
+			if (cmtid != null) {
+				// user want to upload a new version of pic
+				CommunityInfo temp = this.communityService.findById(cmtid);
+				String tempPath = temp.getPicaddress();
+				if (tempPath != null && !tempPath.equals("")) {
+					this.fileUploader.deleteFile(tempPath);
+				}
+			}
 			filePath = this.fileUploader.upload(file, "community", cmtname);
 		}
 
@@ -77,7 +86,7 @@ public class CommunityController {
 		return outCome;
 	}
 
-	@RequestMapping("/shequ/del")
+	@RequestMapping(value = "/shequ/del")
 	@ResponseBody
 	public String delete(@RequestParam Long id) {
 		this.communityService.deleteCommunity(id);

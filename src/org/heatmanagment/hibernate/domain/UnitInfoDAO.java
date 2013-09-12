@@ -35,7 +35,7 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 	public static final String UNTNAME = "untname";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -114,8 +114,8 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 		return findByProperty(PICADDRESS, picaddress);
 	}
 
-	public List<UnitInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<UnitInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

@@ -24,6 +24,11 @@ public class BuildingServiceImpl implements BuildingService {
 	}
 
 	@Override
+	public BuildingInfo findById(Long id) {
+		return this.dao.findById(id);
+	}
+
+	@Override
 	public void saveOrUpdateBuilding(Long id, String name, String address,
 			Long cmtid, Long srcid, String heattype, String gis,
 			String picaddress, String comm) {
@@ -33,7 +38,7 @@ public class BuildingServiceImpl implements BuildingService {
 		bld.setBldaddress(address);
 		bld.setHeattype(heattype);
 		bld.setGis(gis);
-		bld.setComm(comm);
+		bld.setDesp(comm);
 		bld.setPicaddress(picaddress);
 
 		if (cmtid != null) {
@@ -64,7 +69,7 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<HeatsourceInfo> inquireHeatSrc() {
-		//null
+		// null
 		return null;
 	}
 

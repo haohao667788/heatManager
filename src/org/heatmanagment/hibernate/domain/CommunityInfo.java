@@ -16,35 +16,25 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * CommunityInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "COMMUNITY_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = "CMTNAME"))
-@JsonAutoDetect
 public class CommunityInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8551536507060841087L;
 	private Long cmtid;
 	private String cmtname;
 	private String briefname;
 	private String cmtaddress;
 	private String gis;
 	private String picaddress;
-
-	@JsonProperty("desp")
-	private String comm;
-	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
-	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
+	private String desp;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
+	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
+	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
 	// Constructors
 
@@ -54,18 +44,18 @@ public class CommunityInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public CommunityInfo(String cmtname, String briefname, String cmtaddress,
-			String gis, String picaddress, String comm,
-			Set<UnitInfo> unitInfos, Set<BuildingInfo> buildingInfos,
-			Set<UsersInfo> usersInfos) {
+			String gis, String picaddress, String desp,
+			Set<UsersInfo> usersInfos, Set<BuildingInfo> buildingInfos,
+			Set<UnitInfo> unitInfos) {
 		this.cmtname = cmtname;
 		this.briefname = briefname;
 		this.cmtaddress = cmtaddress;
 		this.gis = gis;
 		this.picaddress = picaddress;
-		this.comm = comm;
-		this.unitInfos = unitInfos;
-		this.buildingInfos = buildingInfos;
+		this.desp = desp;
 		this.usersInfos = usersInfos;
+		this.buildingInfos = buildingInfos;
+		this.unitInfos = unitInfos;
 	}
 
 	// Property accessors
@@ -126,25 +116,25 @@ public class CommunityInfo implements java.io.Serializable {
 		this.picaddress = picaddress;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
-	public Set<UnitInfo> getUnitInfos() {
-		return this.unitInfos;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "communityInfo")
+	public Set<UsersInfo> getUsersInfos() {
+		return this.usersInfos;
 	}
 
-	public void setUnitInfos(Set<UnitInfo> unitInfos) {
-		this.unitInfos = unitInfos;
+	public void setUsersInfos(Set<UsersInfo> usersInfos) {
+		this.usersInfos = usersInfos;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "communityInfo")
 	public Set<BuildingInfo> getBuildingInfos() {
 		return this.buildingInfos;
 	}
@@ -153,13 +143,13 @@ public class CommunityInfo implements java.io.Serializable {
 		this.buildingInfos = buildingInfos;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "communityInfo")
-	public Set<UsersInfo> getUsersInfos() {
-		return this.usersInfos;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "communityInfo")
+	public Set<UnitInfo> getUnitInfos() {
+		return this.unitInfos;
 	}
 
-	public void setUsersInfos(Set<UsersInfo> usersInfos) {
-		this.usersInfos = usersInfos;
+	public void setUnitInfos(Set<UnitInfo> unitInfos) {
+		this.unitInfos = unitInfos;
 	}
 
 }

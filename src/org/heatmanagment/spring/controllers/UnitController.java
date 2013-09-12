@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.heatmanagment.hibernate.domain.BuildingInfo;
 import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.UnitInfo;
+import org.heatmanagment.hibernate.util.FileUploader;
 import org.heatmanagment.spring.entity.SuccessOut;
 import org.heatmanagment.spring.entity.UnitOut;
 import org.heatmanagment.spring.services.BuildingService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Controller
 @RequestMapping("/data/level")
@@ -30,6 +32,9 @@ public class UnitController {
 
 	@Autowired
 	private BuildingService buildingService;
+
+	@Autowired
+	private FileUploader fileUploader;
 
 	private ObjectMapper mapper;
 
@@ -50,7 +55,49 @@ public class UnitController {
 			e.printStackTrace();
 		}
 		return outCome;
+	}
 
+	@RequestMapping("/danyuan/update")
+	@ResponseBody
+	public String saveOrUpdate(@RequestParam(required = false) Long untid,
+			@RequestParam String untname, @RequestParam Long mchid,
+			@RequestParam Long bldid, @RequestParam Long cmtid,
+			@RequestParam String gis,
+			@RequestParam(value = "picaddress") CommonsMultipartFile file,
+			@RequestParam String desp) {
+		SuccessOut out = new SuccessOut();
+		out.reset();
+
+		String filePath = null;
+		if (!file.isEmpty()) {
+			// upload the file
+			if (untid != null) {
+				// user want to upload a new version of pic
+				UnitInfo temp = this.unitService.findById(untid);
+				String tempPath = temp.getPicaddress();
+				if (tempPath != null && !tempPath.equals("")) {
+					this.fileUploader.deleteFile(tempPath);
+				}
+			}
+			filePath = this.fileUploader.upload(file, "unit", untname);
+		}
+
+		this.unitService.saveOrUpdateUnit(untid, untname, bldid, cmtid, mchid,
+				gis, filePath);
+		String outCome = null;
+		try {
+			outCome = this.mapper.writeValueAsString(out);
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				out.setSuccess(false);
+				out.setMessage(e.getMessage());
+				return this.mapper.writeValueAsString(out);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		return outCome;
 	}
 
 	@RequestMapping("/danyuan/list")

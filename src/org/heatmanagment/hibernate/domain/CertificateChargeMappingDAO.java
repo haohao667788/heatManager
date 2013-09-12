@@ -111,7 +111,7 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all CertificateChargeMapping instances with boundary");
 		try {
@@ -126,8 +126,7 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all CertificateChargeMapping with boundary failed",
-					re);
+			log.error("find all CertificateChargeMapping with boundary failed", re);
 			throw re;
 		}
 	}

@@ -26,14 +26,14 @@ public class JacksonTest {
 		DistrictInfo info = new DistrictInfo();
 		info.setDstid(new Long(199549511454l));
 		info.setDstname("tiantong");
-		info.setComm("no comment");
+		info.setDesp("no comment");
 		String temp;
 		try {
 			temp = this.mapper.writeValueAsString(info);
 			System.out.println(temp);
 			DistrictInfo t = this.mapper.readValue(temp, DistrictInfo.class);
 			System.out.println(t.getDstid() + " " + t.getDstname() + " "
-					+ t.getComm());
+					+ t.getDesp());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -49,7 +49,7 @@ public class JacksonTest {
 		DistrictInfo info = new DistrictInfo();
 		info.setDstid(103948956l);
 		info.setDstname("aaaa");
-		info.setComm("12456");
+		info.setDesp("12456");
 		List<DistrictInfo> infos = new ArrayList<DistrictInfo>();
 		infos.add(info);
 		DistrictOut out = new DistrictOut();
@@ -65,7 +65,7 @@ public class JacksonTest {
 			List<DistrictInfo> di = in.getData();
 			for (DistrictInfo t : di) {
 				System.out.println(t.getDstid() + " " + t.getDstname() + " "
-						+ t.getComm());
+						+ t.getDesp());
 			}
 
 		} catch (Exception e) {

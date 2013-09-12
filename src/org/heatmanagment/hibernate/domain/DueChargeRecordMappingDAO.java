@@ -17,30 +17,28 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * UserLog entities. Transaction control of the save(), update() and delete()
- * operations can directly support Spring container-managed transactions or they
- * can be augmented to handle user-managed Spring transactions. Each of these
- * methods provides additional information for how to configure it for the
- * desired type of transaction control.
+ * DueChargeRecordMapping entities. Transaction control of the save(), update()
+ * and delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.UserLog
+ * @see org.heatmanagment.hibernate.domain.DueChargeRecordMapping
  * @author MyEclipse Persistence Tools
  */
 
-public class UserLogDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(UserLogDAO.class);
+public class DueChargeRecordMappingDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory
+			.getLogger(DueChargeRecordMappingDAO.class);
+
 	// property constants
-	public static final String LOGTYPE = "logtype";
-	public static final String LOGTITLE = "logtitle";
-	public static final String LOGCONTENT = "logcontent";
-	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(UserLog transientInstance) {
-		log.debug("saving UserLog instance");
+	public void save(DueChargeRecordMapping transientInstance) {
+		log.debug("saving DueChargeRecordMapping instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -50,8 +48,8 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(UserLog persistentInstance) {
-		log.debug("deleting UserLog instance");
+	public void delete(DueChargeRecordMapping persistentInstance) {
+		log.debug("deleting DueChargeRecordMapping instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -61,11 +59,12 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public UserLog findById(java.lang.Long id) {
-		log.debug("getting UserLog instance with id: " + id);
+	public DueChargeRecordMapping findById(java.lang.Long id) {
+		log.debug("getting DueChargeRecordMapping instance with id: " + id);
 		try {
-			UserLog instance = (UserLog) getHibernateTemplate().get(
-					"org.heatmanagment.hibernate.domain.UserLog", id);
+			DueChargeRecordMapping instance = (DueChargeRecordMapping) getHibernateTemplate()
+					.get("org.heatmanagment.hibernate.domain.DueChargeRecordMapping",
+							id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -73,10 +72,11 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<UserLog> findByExample(UserLog instance) {
-		log.debug("finding UserLog instance by example");
+	public List<DueChargeRecordMapping> findByExample(
+			DueChargeRecordMapping instance) {
+		log.debug("finding DueChargeRecordMapping instance by example");
 		try {
-			List<UserLog> results = (List<UserLog>) getHibernateTemplate()
+			List<DueChargeRecordMapping> results = (List<DueChargeRecordMapping>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -88,10 +88,10 @@ public class UserLogDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding UserLog instance with property: " + propertyName
-				+ ", value: " + value);
+		log.debug("finding DueChargeRecordMapping instance with property: "
+				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from UserLog as model where model."
+			String queryString = "from DueChargeRecordMapping as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -100,26 +100,10 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<UserLog> findByLogtype(Object logtype) {
-		return findByProperty(LOGTYPE, logtype);
-	}
-
-	public List<UserLog> findByLogtitle(Object logtitle) {
-		return findByProperty(LOGTITLE, logtitle);
-	}
-
-	public List<UserLog> findByLogcontent(Object logcontent) {
-		return findByProperty(LOGCONTENT, logcontent);
-	}
-
-	public List<UserLog> findByDesp(Object desp) {
-		return findByProperty(DESP, desp);
-	}
-
 	public List findAll() {
-		log.debug("finding all UserLog instances");
+		log.debug("finding all DueChargeRecordMapping instances");
 		try {
-			String queryString = "from UserLog";
+			String queryString = "from DueChargeRecordMapping";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -128,29 +112,29 @@ public class UserLogDAO extends HibernateDaoSupport {
 	}
 	
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all UserLog instances with boundary");
+		log.debug("finding all DueChargeRecordMapping instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from UserLog";
+					String q = "from DueChargeRecordMapping";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all UserLog with boundary failed", re);
+			log.error("find all DueChargeRecordMapping with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public UserLog merge(UserLog detachedInstance) {
-		log.debug("merging UserLog instance");
+	public DueChargeRecordMapping merge(DueChargeRecordMapping detachedInstance) {
+		log.debug("merging DueChargeRecordMapping instance");
 		try {
-			UserLog result = (UserLog) getHibernateTemplate().merge(
-					detachedInstance);
+			DueChargeRecordMapping result = (DueChargeRecordMapping) getHibernateTemplate()
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -159,8 +143,8 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(UserLog instance) {
-		log.debug("attaching dirty UserLog instance");
+	public void attachDirty(DueChargeRecordMapping instance) {
+		log.debug("attaching dirty DueChargeRecordMapping instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -170,8 +154,8 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(UserLog instance) {
-		log.debug("attaching clean UserLog instance");
+	public void attachClean(DueChargeRecordMapping instance) {
+		log.debug("attaching clean DueChargeRecordMapping instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -181,7 +165,9 @@ public class UserLogDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static UserLogDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (UserLogDAO) ctx.getBean("UserLogDAO");
+	public static DueChargeRecordMappingDAO getFromApplicationContext(
+			ApplicationContext ctx) {
+		return (DueChargeRecordMappingDAO) ctx
+				.getBean("DueChargeRecordMappingDAO");
 	}
 }

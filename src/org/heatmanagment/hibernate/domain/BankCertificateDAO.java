@@ -140,7 +140,7 @@ public class BankCertificateDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all BankCertificate instances with boundary");
 		try {

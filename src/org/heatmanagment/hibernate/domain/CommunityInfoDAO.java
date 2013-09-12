@@ -27,7 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @see org.heatmanagment.hibernate.domain.CommunityInfo
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+
 public class CommunityInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(CommunityInfoDAO.class);
@@ -37,7 +37,7 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 	public static final String CMTADDRESS = "cmtaddress";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -124,8 +124,8 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 		return findByProperty(PICADDRESS, picaddress);
 	}
 
-	public List<CommunityInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<CommunityInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {
