@@ -18,31 +18,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * ProjectInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "PROJECT_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class ProjectInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3734107519050624325L;
 	private Long pjtid;
 	private DistrictInfo districtInfo;
 	private CountyInfo countyInfo;
+	private String pjtnum;
 	private String pjtname;
 	private String middle;
+	private String departmentname;
 	private Timestamp startDate;
-	@JsonProperty("desp")
-	private String comm;
+	private String desp;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
@@ -52,20 +45,24 @@ public class ProjectInfo implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public ProjectInfo(String pjtname) {
+	public ProjectInfo(String pjtnum, String pjtname) {
+		this.pjtnum = pjtnum;
 		this.pjtname = pjtname;
 	}
 
 	/** full constructor */
 	public ProjectInfo(DistrictInfo districtInfo, CountyInfo countyInfo,
-			String pjtname, String middle, Timestamp startDate, String comm,
+			String pjtnum, String pjtname, String middle,
+			String departmentname, Timestamp startDate, String desp,
 			Set<UsersInfo> usersInfos) {
 		this.districtInfo = districtInfo;
 		this.countyInfo = countyInfo;
+		this.pjtnum = pjtnum;
 		this.pjtname = pjtname;
 		this.middle = middle;
+		this.departmentname = departmentname;
 		this.startDate = startDate;
-		this.comm = comm;
+		this.desp = desp;
 		this.usersInfos = usersInfos;
 	}
 
@@ -102,6 +99,15 @@ public class ProjectInfo implements java.io.Serializable {
 		this.countyInfo = countyInfo;
 	}
 
+	@Column(name = "PJTNUM", nullable = true, length = 20)
+	public String getPjtnum() {
+		return this.pjtnum;
+	}
+
+	public void setPjtnum(String pjtnum) {
+		this.pjtnum = pjtnum;
+	}
+
 	@Column(name = "PJTNAME", nullable = true, length = 40)
 	public String getPjtname() {
 		return this.pjtname;
@@ -120,6 +126,15 @@ public class ProjectInfo implements java.io.Serializable {
 		this.middle = middle;
 	}
 
+	@Column(name = "DEPARTMENTNAME", length = 20)
+	public String getDepartmentname() {
+		return this.departmentname;
+	}
+
+	public void setDepartmentname(String departmentname) {
+		this.departmentname = departmentname;
+	}
+
 	@Column(name = "START_DATE", length = 7)
 	public Timestamp getStartDate() {
 		return this.startDate;
@@ -129,16 +144,16 @@ public class ProjectInfo implements java.io.Serializable {
 		this.startDate = startDate;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "projectInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "projectInfo")
 	public Set<UsersInfo> getUsersInfos() {
 		return this.usersInfos;
 	}

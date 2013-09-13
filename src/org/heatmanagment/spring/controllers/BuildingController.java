@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.heatmanagment.hibernate.domain.BuildingInfo;
 import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.HeatsourceInfo;
+import org.heatmanagment.hibernate.util.FileUploader;
 import org.heatmanagment.spring.entity.BuildingOut;
 import org.heatmanagment.spring.entity.SuccessOut;
 import org.heatmanagment.spring.services.BuildingService;
@@ -34,6 +35,9 @@ public class BuildingController {
 	@Autowired
 	private HeatsourceService heatsourceService;
 
+	@Autowired
+	private FileUploader fileUploader;
+
 	private ObjectMapper mapper;
 
 	public BuildingController() {
@@ -43,16 +47,44 @@ public class BuildingController {
 	@RequestMapping("/loudong/update")
 	@ResponseBody
 	public String saveOrUpdate(@RequestParam(required = false) Long bldid,
-			@RequestParam String bldname, @RequestParam Long cmtid,
-			@RequestParam Long srcid, @RequestParam String heattype,
-			@RequestParam String gis,
+			@RequestParam String bldname, @RequestParam String bldaddress,
+			@RequestParam Long cmtid, @RequestParam Long srcid,
+			@RequestParam String heattype, @RequestParam String gis,
 			@RequestParam(value = "picaddress") CommonsMultipartFile file,
 			@RequestParam String desp) {
 		SuccessOut out = new SuccessOut();
 		out.reset();
 
-		return "";
+		String filePath = null;
+		if (!file.isEmpty()) {
+			// upload the file
+			if (bldid != null) {
+				// user want to upload a new version of pic
+				BuildingInfo temp = this.buildingService.findById(bldid);
+				String tempPath = temp.getPicaddress();
+				if (tempPath != null && !tempPath.equals("")) {
+					this.fileUploader.deleteFile(tempPath);
+				}
+			}
+			filePath = this.fileUploader.upload(file, "building", bldname);
+		}
 
+		this.buildingService.saveOrUpdateBuilding(bldid, bldname, bldaddress,
+				cmtid, srcid, heattype, gis, filePath, desp);
+		String outCome = null;
+		try {
+			outCome = this.mapper.writeValueAsString(out);
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				out.setSuccess(false);
+				out.setMessage(e.getMessage());
+				return this.mapper.writeValueAsString(out);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		return outCome;
 	}
 
 	@RequestMapping("/loudong/del")

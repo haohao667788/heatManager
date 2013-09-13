@@ -15,26 +15,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * ClassInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "CLASS_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class ClassInfo implements java.io.Serializable {
 
 	// Fields
 
 	private Long clsid;
 	private String clsname;
-
-	@JsonProperty("desp")
-	private String comm;
-	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
+	private String desp;
 	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
+	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
 
 	// Constructors
 
@@ -43,13 +37,13 @@ public class ClassInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ClassInfo(String clsname, String comm,
-			Set<HeatsourceInfo> heatsourceInfos,
-			Set<MachinesetInfo> machinesetInfos) {
+	public ClassInfo(String clsname, String desp,
+			Set<MachinesetInfo> machinesetInfos,
+			Set<HeatsourceInfo> heatsourceInfos) {
 		this.clsname = clsname;
-		this.comm = comm;
-		this.heatsourceInfos = heatsourceInfos;
+		this.desp = desp;
 		this.machinesetInfos = machinesetInfos;
+		this.heatsourceInfos = heatsourceInfos;
 	}
 
 	// Property accessors
@@ -74,31 +68,31 @@ public class ClassInfo implements java.io.Serializable {
 		this.clsname = clsname;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "classInfo")
-	public Set<HeatsourceInfo> getHeatsourceInfos() {
-		return this.heatsourceInfos;
-	}
-
-	public void setHeatsourceInfos(Set<HeatsourceInfo> heatsourceInfos) {
-		this.heatsourceInfos = heatsourceInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "classInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "classInfo")
 	public Set<MachinesetInfo> getMachinesetInfos() {
 		return this.machinesetInfos;
 	}
 
 	public void setMachinesetInfos(Set<MachinesetInfo> machinesetInfos) {
 		this.machinesetInfos = machinesetInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "classInfo")
+	public Set<HeatsourceInfo> getHeatsourceInfos() {
+		return this.heatsourceInfos;
+	}
+
+	public void setHeatsourceInfos(Set<HeatsourceInfo> heatsourceInfos) {
+		this.heatsourceInfos = heatsourceInfos;
 	}
 
 }

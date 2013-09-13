@@ -15,28 +15,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * DistrictInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "DISTRICT_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class DistrictInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6965770015156663789L;
 	private Long dstid;
 	private String dstname;
-
-	@JsonProperty("desp")
-	private String comm;
+	private String desp;
 	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
 	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 
@@ -52,10 +42,10 @@ public class DistrictInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public DistrictInfo(String dstname, String comm,
+	public DistrictInfo(String dstname, String desp,
 			Set<HeatsourceInfo> heatsourceInfos, Set<ProjectInfo> projectInfos) {
 		this.dstname = dstname;
-		this.comm = comm;
+		this.desp = desp;
 		this.heatsourceInfos = heatsourceInfos;
 		this.projectInfos = projectInfos;
 	}
@@ -82,13 +72,13 @@ public class DistrictInfo implements java.io.Serializable {
 		this.dstname = dstname;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")

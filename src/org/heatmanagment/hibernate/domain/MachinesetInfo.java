@@ -26,15 +26,12 @@ public class MachinesetInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2825784415706550352L;
 	private Long mchid;
 	private HeatsourceInfo heatsourceInfo;
 	private ClassInfo classInfo;
 	private String mchname;
 	private String gis;
+	private String desp;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
@@ -51,12 +48,13 @@ public class MachinesetInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public MachinesetInfo(HeatsourceInfo heatsourceInfo, ClassInfo classInfo,
-			String mchname, String gis, Set<UsersInfo> usersInfos,
+			String mchname, String gis, String desp, Set<UsersInfo> usersInfos,
 			Set<UnitInfo> unitInfos) {
 		this.heatsourceInfo = heatsourceInfo;
 		this.classInfo = classInfo;
 		this.mchname = mchname;
 		this.gis = gis;
+		this.desp = desp;
 		this.usersInfos = usersInfos;
 		this.unitInfos = unitInfos;
 	}
@@ -112,7 +110,16 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.gis = gis;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machinesetInfo")
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
+	}
+
+	public void setDesp(String desp) {
+		this.desp = desp;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "machinesetInfo")
 	public Set<UsersInfo> getUsersInfos() {
 		return this.usersInfos;
 	}
@@ -121,7 +128,7 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.usersInfos = usersInfos;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machinesetInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "machinesetInfo")
 	public Set<UnitInfo> getUnitInfos() {
 		return this.unitInfos;
 	}

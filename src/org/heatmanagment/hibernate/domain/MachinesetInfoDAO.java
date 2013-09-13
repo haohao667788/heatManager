@@ -34,6 +34,7 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 	// property constants
 	public static final String MCHNAME = "mchname";
 	public static final String GIS = "gis";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -109,6 +110,10 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 		return findByProperty(GIS, gis);
 	}
 
+	public List<MachinesetInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
+	}
+
 	public List findAll() {
 		log.debug("finding all MachinesetInfo instances");
 		try {
@@ -119,7 +124,7 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all MachinesetInfo instances with boundary");
 		try {

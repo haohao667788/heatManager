@@ -26,7 +26,7 @@ public class CountyController {
 		this.mapper = new ObjectMapper();
 	}
 
-	@RequestMapping("/quxian/list")
+	@RequestMapping(value = "/quxian/list")
 	@ResponseBody
 	public String listCity(
 			@RequestParam(required = false, defaultValue = "0") Integer start,
@@ -53,11 +53,11 @@ public class CountyController {
 		return outCome;
 	}
 
-	@RequestMapping("/quxian/update")
+	@RequestMapping(value = "/quxian/update")
 	@ResponseBody
-	public String saveOrUpdate(@RequestParam Long ctyid,
+	public String saveOrUpdate(@RequestParam(required = false) Long ctyid,
 			@RequestParam String townname, @RequestParam String cityname,
-			@RequestParam String desp) {
+			@RequestParam(required = false) String desp) {
 		this.countyService.saveOrUpdateCounty(ctyid, townname, cityname, desp);
 		SuccessOut out = new SuccessOut();
 		out.reset();
@@ -66,7 +66,6 @@ public class CountyController {
 			outCome = this.mapper.writeValueAsString(out);
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 		return outCome;
 	}

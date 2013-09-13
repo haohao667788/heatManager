@@ -33,9 +33,11 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(ProjectInfoDAO.class);
 	// property constants
+	public static final String PJTNUM = "pjtnum";
 	public static final String PJTNAME = "pjtname";
 	public static final String MIDDLE = "middle";
-	public static final String COMM = "comm";
+	public static final String DEPARTMENTNAME = "departmentname";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -102,6 +104,10 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List<ProjectInfo> findByPjtnum(Object pjtnum) {
+		return findByProperty(PJTNUM, pjtnum);
+	}
+
 	public List<ProjectInfo> findByPjtname(Object pjtname) {
 		return findByProperty(PJTNAME, pjtname);
 	}
@@ -110,8 +116,12 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 		return findByProperty(MIDDLE, middle);
 	}
 
-	public List<ProjectInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<ProjectInfo> findByDepartmentname(Object departmentname) {
+		return findByProperty(DEPARTMENTNAME, departmentname);
+	}
+
+	public List<ProjectInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

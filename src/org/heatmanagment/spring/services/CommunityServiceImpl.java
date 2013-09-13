@@ -19,6 +19,11 @@ public class CommunityServiceImpl implements CommunityService {
 	private CommunityInfoDAO dao;
 
 	@Override
+	public CommunityInfo findById(Long id) {
+		return this.dao.findById(id);
+	}
+
+	@Override
 	public void saveOrUpdateCommunity(Long id, String name, String briefName,
 			String address, String comm, String gis, String pic) {
 		CommunityInfo cmt = new CommunityInfo();
@@ -26,7 +31,7 @@ public class CommunityServiceImpl implements CommunityService {
 		cmt.setCmtname(name);
 		cmt.setBriefname(briefName);
 		cmt.setCmtaddress(address);
-		cmt.setComm(comm);
+		cmt.setDesp(comm);
 		cmt.setGis(gis);
 		cmt.setPicaddress(pic);
 		this.dao.attachDirty(cmt);
@@ -48,5 +53,4 @@ public class CommunityServiceImpl implements CommunityService {
 	public List<CommunityInfo> findAll() {
 		return this.dao.findAll();
 	}
-
 }

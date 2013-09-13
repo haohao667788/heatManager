@@ -41,7 +41,7 @@ public class FeeInfoDAO extends HibernateDaoSupport {
 	public static final String HEATBASE = "heatbase";
 	public static final String HEATRATE = "heatrate";
 	public static final String HOUSETYPE = "housetype";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -152,8 +152,8 @@ public class FeeInfoDAO extends HibernateDaoSupport {
 		return findByProperty(HOUSETYPE, housetype);
 	}
 
-	public List<FeeInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<FeeInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

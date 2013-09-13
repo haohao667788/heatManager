@@ -16,30 +16,20 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * CountyInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "COUNTY_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"TOWNNAME", "CITYNAME" }))
-@JsonAutoDetect
 public class CountyInfo implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2173647951354440512L;
 	private Long ctyid;
 	private String townname;
 	private String cityname;
-
-	@JsonProperty("desp")
-	private String comm;
+	private String desp;
 	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 
 	// Constructors
@@ -55,11 +45,11 @@ public class CountyInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public CountyInfo(String townname, String cityname, String comm,
+	public CountyInfo(String townname, String cityname, String desp,
 			Set<ProjectInfo> projectInfos) {
 		this.townname = townname;
 		this.cityname = cityname;
-		this.comm = comm;
+		this.desp = desp;
 		this.projectInfos = projectInfos;
 	}
 
@@ -94,16 +84,16 @@ public class CountyInfo implements java.io.Serializable {
 		this.cityname = cityname;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "countyInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "countyInfo")
 	public Set<ProjectInfo> getProjectInfos() {
 		return this.projectInfos;
 	}

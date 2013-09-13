@@ -23,7 +23,7 @@ public class CountyServiceImpl implements CountyService {
 		cty.setCtyid(id);
 		cty.setTownname(townname);
 		cty.setCityname(cityname);
-		cty.setComm(comm);
+		cty.setDesp(comm);
 		this.dao.attachDirty(cty);
 	}
 

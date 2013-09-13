@@ -16,59 +16,59 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * AccountrangeInfo entity. @author MyEclipse Persistence Tools
+ * DealInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "ACCOUNTRANGE_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
-		"USRID", "FINACERANGE" }))
-public class AccountrangeInfo implements java.io.Serializable {
+@Table(name = "DEAL_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"USRID", "DEALNAME" }))
+public class DealInfo implements java.io.Serializable {
 
 	// Fields
 
-	private String accrangeid;
+	private Long dealid;
 	private UsersInfo usersInfo;
 	private Double curbalance;
 	private Double curcharge;
 	private Double curmoney;
 	private Timestamp lastdate;
-	private String finacerange;
-	private String donefinacerange;
+	private String dealname;
+	private String desp;
 
 	// Constructors
 
 	/** default constructor */
-	public AccountrangeInfo() {
+	public DealInfo() {
 	}
 
 	/** minimal constructor */
-	public AccountrangeInfo(UsersInfo usersInfo) {
+	public DealInfo(UsersInfo usersInfo, String dealname) {
 		this.usersInfo = usersInfo;
+		this.dealname = dealname;
 	}
 
 	/** full constructor */
-	public AccountrangeInfo(UsersInfo usersInfo, Double curbalance,
-			Double curcharge, Double curmoney, Timestamp lastdate,
-			String finacerange, String donefinacerange) {
+	public DealInfo(UsersInfo usersInfo, Double curbalance, Double curcharge,
+			Double curmoney, Timestamp lastdate, String dealname, String desp) {
 		this.usersInfo = usersInfo;
 		this.curbalance = curbalance;
 		this.curcharge = curcharge;
 		this.curmoney = curmoney;
 		this.lastdate = lastdate;
-		this.finacerange = finacerange;
-		this.donefinacerange = donefinacerange;
+		this.dealname = dealname;
+		this.desp = desp;
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "ACCRANGE_ID", allocationSize = 1, sequenceName = "ACCRANGE_ID")
+	@SequenceGenerator(name = "DEAL_ID", allocationSize = 1, sequenceName = "DEAL_ID")
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "ACCRANGE_ID")
-	@Column(name = "ACCRANGEID", unique = true, nullable = false, length = 20)
-	public String getAccrangeid() {
-		return this.accrangeid;
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "DEAL_ID")
+	@Column(name = "DEALID", unique = true, nullable = false, precision = 15, scale = 0)
+	public Long getDealid() {
+		return this.dealid;
 	}
 
-	public void setAccrangeid(String accrangeid) {
-		this.accrangeid = accrangeid;
+	public void setDealid(Long dealid) {
+		this.dealid = dealid;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -117,22 +117,22 @@ public class AccountrangeInfo implements java.io.Serializable {
 		this.lastdate = lastdate;
 	}
 
-	@Column(name = "FINACERANGE", length = 20)
-	public String getFinacerange() {
-		return this.finacerange;
+	@Column(name = "DEALNAME", nullable = true, length = 20)
+	public String getDealname() {
+		return this.dealname;
 	}
 
-	public void setFinacerange(String finacerange) {
-		this.finacerange = finacerange;
+	public void setDealname(String dealname) {
+		this.dealname = dealname;
 	}
 
-	@Column(name = "DONEFINACERANGE", length = 20)
-	public String getDonefinacerange() {
-		return this.donefinacerange;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setDonefinacerange(String donefinacerange) {
-		this.donefinacerange = donefinacerange;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
 }

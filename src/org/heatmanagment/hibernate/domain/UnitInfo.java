@@ -18,16 +18,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * UnitInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "UNIT_INFO", schema = "HEATMGR", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"CMTID", "BLDID", "UNTNAME" }))
-@JsonAutoDetect
 public class UnitInfo implements java.io.Serializable {
 
 	// Fields
@@ -39,8 +35,7 @@ public class UnitInfo implements java.io.Serializable {
 	private String untname;
 	private String gis;
 	private String picaddress;
-	@JsonProperty("desp")
-	private String comm;
+	private String desp;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
@@ -52,14 +47,14 @@ public class UnitInfo implements java.io.Serializable {
 	/** full constructor */
 	public UnitInfo(MachinesetInfo machinesetInfo, BuildingInfo buildingInfo,
 			CommunityInfo communityInfo, String untname, String gis,
-			String picaddress, String comm, Set<UsersInfo> usersInfos) {
+			String picaddress, String desp, Set<UsersInfo> usersInfos) {
 		this.machinesetInfo = machinesetInfo;
 		this.buildingInfo = buildingInfo;
 		this.communityInfo = communityInfo;
 		this.untname = untname;
 		this.gis = gis;
 		this.picaddress = picaddress;
-		this.comm = comm;
+		this.desp = desp;
 		this.usersInfos = usersInfos;
 	}
 
@@ -133,16 +128,16 @@ public class UnitInfo implements java.io.Serializable {
 		this.picaddress = picaddress;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "DESP", length = 2000)
+	public String getDesp() {
+		return this.desp;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "unitInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "unitInfo")
 	public Set<UsersInfo> getUsersInfos() {
 		return this.usersInfos;
 	}

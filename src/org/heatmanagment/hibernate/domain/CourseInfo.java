@@ -11,15 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * CourseInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "COURSE_INFO", schema = "HEATMGR")
-@JsonAutoDetect
 public class CourseInfo implements java.io.Serializable {
 
 	// Fields
@@ -27,8 +23,7 @@ public class CourseInfo implements java.io.Serializable {
 	private Long crsid;
 	private String crsname;
 	private String desp;
-	@JsonProperty("desp")
-	private String comm;
+	private String chgyear;
 	private Set<BankInfo> bankInfos = new HashSet<BankInfo>(0);
 
 	// Constructors
@@ -38,17 +33,17 @@ public class CourseInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public CourseInfo(String crsname, String desp, String comm,
+	public CourseInfo(String crsname, String desp, String chgyear,
 			Set<BankInfo> bankInfos) {
 		this.crsname = crsname;
 		this.desp = desp;
-		this.comm = comm;
+		this.chgyear = chgyear;
 		this.bankInfos = bankInfos;
 	}
 
 	// Property accessors
 	@Id
-	// @GeneratedValue
+	@GeneratedValue
 	@Column(name = "CRSID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getCrsid() {
 		return this.crsid;
@@ -76,16 +71,16 @@ public class CourseInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
-	@Column(name = "COMM", length = 2000)
-	public String getComm() {
-		return this.comm;
+	@Column(name = "CHGYEAR", length = 20)
+	public String getChgyear() {
+		return this.chgyear;
 	}
 
-	public void setComm(String comm) {
-		this.comm = comm;
+	public void setChgyear(String chgyear) {
+		this.chgyear = chgyear;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "courseInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "courseInfo")
 	public Set<BankInfo> getBankInfos() {
 		return this.bankInfos;
 	}

@@ -34,9 +34,12 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 			.getLogger(StaffInfoDAO.class);
 	// property constants
 	public static final String STFNAME = "stfname";
-	public static final String CONTACTNUMBER = "contactnumber";
+	public static final String STFNUMBER = "stfnumber";
+	public static final String PHONE = "phone";
 	public static final String LOGINNAME = "loginname";
 	public static final String PWD = "pwd";
+	public static final String DEPARTMENT = "department";
+	public static final String VERIFYTYPE = "verifytype";
 
 	protected void initDao() {
 		// do nothing
@@ -64,7 +67,7 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public StaffInfo findById(java.lang.String id) {
+	public StaffInfo findById(java.lang.Long id) {
 		log.debug("getting StaffInfo instance with id: " + id);
 		try {
 			StaffInfo instance = (StaffInfo) getHibernateTemplate().get(
@@ -107,8 +110,12 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 		return findByProperty(STFNAME, stfname);
 	}
 
-	public List<StaffInfo> findByContactnumber(Object contactnumber) {
-		return findByProperty(CONTACTNUMBER, contactnumber);
+	public List<StaffInfo> findByStfnumber(Object stfnumber) {
+		return findByProperty(STFNUMBER, stfnumber);
+	}
+
+	public List<StaffInfo> findByPhone(Object phone) {
+		return findByProperty(PHONE, phone);
 	}
 
 	public List<StaffInfo> findByLoginname(Object loginname) {
@@ -117,6 +124,14 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 
 	public List<StaffInfo> findByPwd(Object pwd) {
 		return findByProperty(PWD, pwd);
+	}
+
+	public List<StaffInfo> findByDepartment(Object department) {
+		return findByProperty(DEPARTMENT, department);
+	}
+
+	public List<StaffInfo> findByVerifytype(Object verifytype) {
+		return findByProperty(VERIFYTYPE, verifytype);
 	}
 
 	public List findAll() {

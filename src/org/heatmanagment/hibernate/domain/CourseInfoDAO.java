@@ -1,19 +1,11 @@
 package org.heatmanagment.hibernate.domain;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
-
-import javax.management.RuntimeErrorException;
-
-import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -34,7 +26,7 @@ public class CourseInfoDAO extends HibernateDaoSupport {
 	// property constants
 	public static final String CRSNAME = "crsname";
 	public static final String DESP = "desp";
-	public static final String COMM = "comm";
+	public static final String CHGYEAR = "chgyear";
 
 	protected void initDao() {
 		// do nothing
@@ -109,8 +101,8 @@ public class CourseInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
-	public List<CourseInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<CourseInfo> findByChgyear(Object chgyear) {
+		return findByProperty(CHGYEAR, chgyear);
 	}
 
 	public List findAll() {
@@ -120,25 +112,6 @@ public class CourseInfoDAO extends HibernateDaoSupport {
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			throw re;
-		}
-	}
-
-	public List findPage(final int start, final int limit) {
-		log.debug("finding all CourseInfo instances with boundary");
-		try {
-			return getHibernateTemplate().executeFind(new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session)
-						throws HibernateException, SQLException {
-					String q = "from CourseInfo";
-					Query query = session.createQuery(q).setFirstResult(start)
-							.setMaxResults(limit);
-					return query.list();
-				}
-			});
-		} catch (RuntimeErrorException re) {
-			log.error("find all CourseInfo with boundary failed", re);
 			throw re;
 		}
 	}

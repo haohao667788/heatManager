@@ -3,6 +3,7 @@ package org.heatmanagment.hibernate.domain;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.management.RuntimeErrorException;
 
@@ -38,10 +39,8 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 	public static final String CHECKNUM = "checknum";
 	public static final String RCDPIC = "rcdpic";
 	public static final String CHGYEAR = "chgyear";
-	public static final String CHARGERID = "chargerid";
 	public static final String FINANCECHECKER = "financechecker";
-	public static final String CID = "cid";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -132,20 +131,12 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 		return findByProperty(CHGYEAR, chgyear);
 	}
 
-	public List<ChargeRecord> findByChargerid(Object chargerid) {
-		return findByProperty(CHARGERID, chargerid);
-	}
-
 	public List<ChargeRecord> findByFinancechecker(Object financechecker) {
 		return findByProperty(FINANCECHECKER, financechecker);
 	}
 
-	public List<ChargeRecord> findByCid(Object cid) {
-		return findByProperty(CID, cid);
-	}
-
-	public List<ChargeRecord> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<ChargeRecord> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {
@@ -158,7 +149,7 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all ChargeRecord instances with boundary");
 		try {

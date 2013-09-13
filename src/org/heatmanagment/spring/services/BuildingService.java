@@ -14,6 +14,8 @@ public interface BuildingService {
 
 	List<BuildingInfo> findByCmtid(Long id);
 
+	BuildingInfo findById(Long id);
+
 	void saveOrUpdateBuilding(Long id, String name, String address, Long cmtid,
 			Long srcid, String heattype, String gis, String picaddress,
 			String comm);

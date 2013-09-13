@@ -26,9 +26,11 @@ create sequence cty_id
        
 create table county_info (
        ctyid number(10)
-       ,ctyname varchar2(20) not null
+       ,ctyname varchar2(20)
+       ,cityname varchar2(20)
        ,comm varchar2(2000)
        ,primary key (ctyid)
+       ,unique (ctyname,cityname)
 );
 
        
@@ -167,16 +169,17 @@ create sequence unt_id
        
 create table unit_info (
        untid number(10)
-       ,cmtname varchar2(20)
-       ,bldname varchar2(20)
+       ,cmtid number(10)
+       ,bldid number(10)
        ,untname varchar2(20)
        ,mchid number(10)
        ,gis varchar2(2000)
        ,picaddress varchar2(100)
        ,comm varchar2(2000)
        ,primary key (untid)
-       ,unique (cmtname,bldname,untname)
-       ,foreign key (cmtname,bldname) references building_info(cmtname,bldname)
+       ,unique (cmtid,bldid,untname)
+       ,foreign key (cmtid) references community_info(cmtid)
+       ,foreign key (bldid) references building_info(bldid)
        ,foreign key (mchid) references machineset_info(mchid)
 );
 

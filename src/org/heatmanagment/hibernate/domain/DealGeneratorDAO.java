@@ -18,32 +18,28 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * AccountrangeInfo entities. Transaction control of the save(), update() and
+ * DealGenerator entities. Transaction control of the save(), update() and
  * delete() operations can directly support Spring container-managed
  * transactions or they can be augmented to handle user-managed Spring
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.AccountrangeInfo
+ * @see org.heatmanagment.hibernate.domain.DealGenerator
  * @author MyEclipse Persistence Tools
  */
 
-public class AccountrangeInfoDAO extends HibernateDaoSupport {
+public class DealGeneratorDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
-			.getLogger(AccountrangeInfoDAO.class);
+			.getLogger(DealGeneratorDAO.class);
 	// property constants
-	public static final String CURBALANCE = "curbalance";
-	public static final String CURCHARGE = "curcharge";
-	public static final String CURMONEY = "curmoney";
-	public static final String FINACERANGE = "finacerange";
-	public static final String DONEFINACERANGE = "donefinacerange";
+	public static final String DEALNAME = "dealname";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(AccountrangeInfo transientInstance) {
-		log.debug("saving AccountrangeInfo instance");
+	public void save(DealGenerator transientInstance) {
+		log.debug("saving DealGenerator instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -53,8 +49,8 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(AccountrangeInfo persistentInstance) {
-		log.debug("deleting AccountrangeInfo instance");
+	public void delete(DealGenerator persistentInstance) {
+		log.debug("deleting DealGenerator instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -64,12 +60,11 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public AccountrangeInfo findById(java.lang.String id) {
-		log.debug("getting AccountrangeInfo instance with id: " + id);
+	public DealGenerator findById(java.lang.Long id) {
+		log.debug("getting DealGenerator instance with id: " + id);
 		try {
-			AccountrangeInfo instance = (AccountrangeInfo) getHibernateTemplate()
-					.get("org.heatmanagment.hibernate.domain.AccountrangeInfo",
-							id);
+			DealGenerator instance = (DealGenerator) getHibernateTemplate()
+					.get("org.heatmanagment.hibernate.domain.DealGenerator", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -77,10 +72,10 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<AccountrangeInfo> findByExample(AccountrangeInfo instance) {
-		log.debug("finding AccountrangeInfo instance by example");
+	public List<DealGenerator> findByExample(DealGenerator instance) {
+		log.debug("finding DealGenerator instance by example");
 		try {
-			List<AccountrangeInfo> results = (List<AccountrangeInfo>) getHibernateTemplate()
+			List<DealGenerator> results = (List<DealGenerator>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -92,10 +87,10 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding AccountrangeInfo instance with property: "
+		log.debug("finding DealGenerator instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from AccountrangeInfo as model where model."
+			String queryString = "from DealGenerator as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -104,60 +99,44 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<AccountrangeInfo> findByCurbalance(Object curbalance) {
-		return findByProperty(CURBALANCE, curbalance);
-	}
-
-	public List<AccountrangeInfo> findByCurcharge(Object curcharge) {
-		return findByProperty(CURCHARGE, curcharge);
-	}
-
-	public List<AccountrangeInfo> findByCurmoney(Object curmoney) {
-		return findByProperty(CURMONEY, curmoney);
-	}
-
-	public List<AccountrangeInfo> findByFinacerange(Object finacerange) {
-		return findByProperty(FINACERANGE, finacerange);
-	}
-
-	public List<AccountrangeInfo> findByDonefinacerange(Object donefinacerange) {
-		return findByProperty(DONEFINACERANGE, donefinacerange);
+	public List<DealGenerator> findByDealname(Object dealname) {
+		return findByProperty(DEALNAME, dealname);
 	}
 
 	public List findAll() {
-		log.debug("finding all AccountrangeInfo instances");
+		log.debug("finding all DealGenerator instances");
 		try {
-			String queryString = "from AccountrangeInfo";
+			String queryString = "from DealGenerator";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all AccountrangeInfo instances with boundary");
+		log.debug("finding all DealGenerator instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from AccountrangeInfo";
+					String q = "from DealGenerator";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all AccountrangeInfo with boundary failed", re);
+			log.error("find all DealGenerator with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public AccountrangeInfo merge(AccountrangeInfo detachedInstance) {
-		log.debug("merging AccountrangeInfo instance");
+	public DealGenerator merge(DealGenerator detachedInstance) {
+		log.debug("merging DealGenerator instance");
 		try {
-			AccountrangeInfo result = (AccountrangeInfo) getHibernateTemplate()
+			DealGenerator result = (DealGenerator) getHibernateTemplate()
 					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -167,8 +146,8 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(AccountrangeInfo instance) {
-		log.debug("attaching dirty AccountrangeInfo instance");
+	public void attachDirty(DealGenerator instance) {
+		log.debug("attaching dirty DealGenerator instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -178,8 +157,8 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(AccountrangeInfo instance) {
-		log.debug("attaching clean AccountrangeInfo instance");
+	public void attachClean(DealGenerator instance) {
+		log.debug("attaching clean DealGenerator instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -189,8 +168,8 @@ public class AccountrangeInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static AccountrangeInfoDAO getFromApplicationContext(
+	public static DealGeneratorDAO getFromApplicationContext(
 			ApplicationContext ctx) {
-		return (AccountrangeInfoDAO) ctx.getBean("AccountrangeInfoDAO");
+		return (DealGeneratorDAO) ctx.getBean("DealGeneratorDAO");
 	}
 }

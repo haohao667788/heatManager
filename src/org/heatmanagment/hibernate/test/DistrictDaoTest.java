@@ -28,7 +28,7 @@ public class DistrictDaoTest {
 		DistrictInfo instance = new DistrictInfo();
 		String name = "天通苑";
 		instance.setDstname(name);
-		instance.setComm("no comment");
+		instance.setDesp("no comment");
 		this.dao.attachDirty(instance);
 
 		Long id = null;
@@ -36,7 +36,7 @@ public class DistrictDaoTest {
 		for (DistrictInfo info : infos) {
 			id = info.getDstid();
 			System.out.println(info.getDstid() + " " + info.getDstname() + " "
-					+ info.getComm());
+					+ info.getDesp());
 		}
 	}
 
@@ -53,7 +53,7 @@ public class DistrictDaoTest {
 		for (DistrictInfo info : infos) {
 			id = info.getDstid();
 			System.out.println(info.getDstid() + " " + info.getDstname() + " "
-					+ info.getComm());
+					+ info.getDesp());
 		}
 
 		in2.setDstid(id);

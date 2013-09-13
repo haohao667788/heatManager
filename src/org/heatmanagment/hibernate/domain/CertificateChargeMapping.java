@@ -40,7 +40,7 @@ public class CertificateChargeMapping implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "CCMAPPING_ID", allocationSize = 1, sequenceName = "CCMAPPING_ID")
+	@SequenceGenerator(name = "CCMAPPING_ID",allocationSize = 1, sequenceName = "CCMAPPING_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CCMAPPING_ID")
 	@Column(name = "CCMAPPINGID", unique = true, nullable = false, precision = 10, scale = 0)

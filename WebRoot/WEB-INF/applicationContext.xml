@@ -22,13 +22,15 @@
             http://www.springframework.org/schema/mvc
             http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
+	<!-- Open up annotation attributes -->
+	<mvc:annotation-driven />
+
+
 	<context:component-scan base-package="org.heatmanagment">
 	</context:component-scan>
 
 	<context:annotation-config />
 
-	<!-- Open up annotation attributes -->
-	<mvc:annotation-driven />
 
 	<!-- Transaction Manager configuration -->
 	<bean
@@ -55,25 +57,6 @@
 	<mvc:resources
 		location="/"
 		mapping="*.html" />
-
-	<!-- Request and Response message converter -->
-	<bean
-		id="stringHttpMessageConverter"
-		class="org.springframework.http.converter.StringHttpMessageConverter">
-	</bean>
-	<bean
-		id="jsonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
-
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<ref bean="stringHttpMessageConverter" />
-				<ref bean="jsonHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
 
 	<bean
 		id="dataSource"
@@ -154,9 +137,6 @@
 					org.heatmanagment.hibernate.domain.ClassInfo
 				</value>
 				<value>
-					org.heatmanagment.hibernate.domain.AccountrangeInfo
-				</value>
-				<value>
 					org.heatmanagment.hibernate.domain.FeeInfo
 				</value>
 				<value>
@@ -171,7 +151,18 @@
 				<value>
 					org.heatmanagment.hibernate.domain.BankInfo
 				</value>
-			</list>
+				<value>
+					org.heatmanagment.hibernate.domain.DueChargeRecordMapping
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.DealInfo
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.DueCharge
+				</value>
+				<value>
+					org.heatmanagment.hibernate.domain.DealGenerator
+				</value></list>
 		</property>
 	</bean>
 
@@ -293,13 +284,6 @@
 		</property>
 	</bean>
 	<bean
-		id="AccountrangeInfoDAO"
-		class="org.heatmanagment.hibernate.domain.AccountrangeInfoDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean
 		id="FeeInfoDAO"
 		class="org.heatmanagment.hibernate.domain.FeeInfoDAO">
 		<property name="sessionFactory">
@@ -334,4 +318,31 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-</beans>
+	<bean
+		id="DueChargeRecordMappingDAO"
+		class="org.heatmanagment.hibernate.domain.DueChargeRecordMappingDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="DealInfoDAO"
+		class="org.heatmanagment.hibernate.domain.DealInfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="DueChargeDAO"
+		class="org.heatmanagment.hibernate.domain.DueChargeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="DealGeneratorDAO"
+		class="org.heatmanagment.hibernate.domain.DealGeneratorDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean></beans>

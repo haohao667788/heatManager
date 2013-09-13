@@ -27,7 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @see org.heatmanagment.hibernate.domain.BuildingInfo
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+
 public class BuildingInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(BuildingInfoDAO.class);
@@ -37,7 +37,7 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 	public static final String HEATTYPE = "heattype";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -124,8 +124,8 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		return findByProperty(PICADDRESS, picaddress);
 	}
 
-	public List<BuildingInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<BuildingInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {
@@ -138,7 +138,7 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all BuildingInfo instances with boundary");
 		try {

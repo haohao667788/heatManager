@@ -25,6 +25,11 @@ public class UnitServiceImpl implements UnitService {
 	}
 
 	@Override
+	public UnitInfo findById(Long id) {
+		return this.dao.findById(id);
+	}
+
+	@Override
 	public void saveOrUpdateUnit(Long id, String name, Long bldid, Long cmtid,
 			Long mchid, String gis, String picaddress) {
 		UnitInfo unt = new UnitInfo();
@@ -57,4 +62,5 @@ public class UnitServiceImpl implements UnitService {
 		unt.setUntid(id);
 		this.dao.delete(unt);
 	}
+
 }

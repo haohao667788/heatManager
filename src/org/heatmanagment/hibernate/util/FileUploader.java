@@ -50,4 +50,9 @@ public class FileUploader {
 		}
 		return filePath;
 	}
+
+	public void deleteFile(String path) {
+		File file = new File(path);
+		file.delete();
+	}
 }

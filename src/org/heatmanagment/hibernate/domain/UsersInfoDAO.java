@@ -43,7 +43,7 @@ public class UsersInfoDAO extends HibernateDaoSupport {
 	public static final String IDPIC = "idpic";
 	public static final String HOUSEIDPIC = "houseidpic";
 	public static final String HOUSEPIC = "housepic";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -150,8 +150,8 @@ public class UsersInfoDAO extends HibernateDaoSupport {
 		return findByProperty(HOUSEPIC, housepic);
 	}
 
-	public List<UsersInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<UsersInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {

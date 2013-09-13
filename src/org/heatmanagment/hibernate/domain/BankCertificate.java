@@ -33,12 +33,13 @@ public class BankCertificate implements java.io.Serializable {
 	private String ctfnumber;
 	private Double money;
 	private String undertaker;
-	private Timestamp cdate;
+	private Timestamp ctfdate;
 	private Timestamp importdate;
 	private String importer;
 	private Long relatednum;
 	private Set<CertificateChargeMapping> certificateChargeMappings = new HashSet<CertificateChargeMapping>(
 			0);
+	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
 
 	// Constructors
 
@@ -48,26 +49,28 @@ public class BankCertificate implements java.io.Serializable {
 
 	/** full constructor */
 	public BankCertificate(BankInfo bankInfo, String ctftype, String ctfnumber,
-			Double money, String undertaker, Timestamp cdate,
+			Double money, String undertaker, Timestamp ctfdate,
 			Timestamp importdate, String importer, Long relatednum,
-			Set<CertificateChargeMapping> certificateChargeMappings) {
+			Set<CertificateChargeMapping> certificateChargeMappings,
+			Set<ChargeRecord> chargeRecords) {
 		this.bankInfo = bankInfo;
 		this.ctftype = ctftype;
 		this.ctfnumber = ctfnumber;
 		this.money = money;
 		this.undertaker = undertaker;
-		this.cdate = cdate;
+		this.ctfdate = ctfdate;
 		this.importdate = importdate;
 		this.importer = importer;
 		this.relatednum = relatednum;
 		this.certificateChargeMappings = certificateChargeMappings;
+		this.chargeRecords = chargeRecords;
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "CERTIFICATE_ID", allocationSize = 1, sequenceName = "CERTIFICATE_ID")
+	@SequenceGenerator(name = "CERTIFICATE_ID",allocationSize = 1, sequenceName = "CERTIFICATE_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CERTIFICATE_ID")
-	@Column(name = "CTFID", unique = true, nullable = false, precision = 10, scale = 0)
+	@Column(name = "CTFID", unique = true, nullable = false, precision = 15, scale = 0)
 	public Long getCtfid() {
 		return this.ctfid;
 	}
@@ -122,13 +125,13 @@ public class BankCertificate implements java.io.Serializable {
 		this.undertaker = undertaker;
 	}
 
-	@Column(name = "CDATE", length = 7)
-	public Timestamp getCdate() {
-		return this.cdate;
+	@Column(name = "CTFDATE", length = 7)
+	public Timestamp getCtfdate() {
+		return this.ctfdate;
 	}
 
-	public void setCdate(Timestamp cdate) {
-		this.cdate = cdate;
+	public void setCtfdate(Timestamp ctfdate) {
+		this.ctfdate = ctfdate;
 	}
 
 	@Column(name = "IMPORTDATE", length = 7)
@@ -158,7 +161,7 @@ public class BankCertificate implements java.io.Serializable {
 		this.relatednum = relatednum;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bankCertificate")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bankCertificate")
 	public Set<CertificateChargeMapping> getCertificateChargeMappings() {
 		return this.certificateChargeMappings;
 	}
@@ -166,6 +169,15 @@ public class BankCertificate implements java.io.Serializable {
 	public void setCertificateChargeMappings(
 			Set<CertificateChargeMapping> certificateChargeMappings) {
 		this.certificateChargeMappings = certificateChargeMappings;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bankCertificate")
+	public Set<ChargeRecord> getChargeRecords() {
+		return this.chargeRecords;
+	}
+
+	public void setChargeRecords(Set<ChargeRecord> chargeRecords) {
+		this.chargeRecords = chargeRecords;
 	}
 
 }

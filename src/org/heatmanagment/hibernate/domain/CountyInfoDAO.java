@@ -34,7 +34,7 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 	// property constants
 	public static final String TOWNNAME = "townname";
 	public static final String CITYNAME = "cityname";
-	public static final String COMM = "comm";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -109,8 +109,8 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 		return findByProperty(CITYNAME, cityname);
 	}
 
-	public List<CountyInfo> findByComm(Object comm) {
-		return findByProperty(COMM, comm);
+	public List<CountyInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {
@@ -123,7 +123,7 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all CountyInfo instances with boundary");
 		try {
@@ -142,6 +142,7 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+
 	public CountyInfo merge(CountyInfo detachedInstance) {
 		log.debug("merging CountyInfo instance");
 		try {

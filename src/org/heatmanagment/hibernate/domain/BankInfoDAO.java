@@ -32,7 +32,10 @@ public class BankInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(BankInfoDAO.class);
 	// property constants
+	public static final String BNKNUM = "bnknum";
 	public static final String BNKNAME = "bnkname";
+	public static final String ACCOUNTNUM = "accountnum";
+	public static final String DESP = "desp";
 
 	protected void initDao() {
 		// do nothing
@@ -99,8 +102,20 @@ public class BankInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List<BankInfo> findByBnknum(Object bnknum) {
+		return findByProperty(BNKNUM, bnknum);
+	}
+
 	public List<BankInfo> findByBnkname(Object bnkname) {
 		return findByProperty(BNKNAME, bnkname);
+	}
+
+	public List<BankInfo> findByAccountnum(Object accountnum) {
+		return findByProperty(ACCOUNTNUM, accountnum);
+	}
+
+	public List<BankInfo> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
 	}
 
 	public List findAll() {
@@ -113,7 +128,7 @@ public class BankInfoDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all BankInfo instances with boundary");
 		try {

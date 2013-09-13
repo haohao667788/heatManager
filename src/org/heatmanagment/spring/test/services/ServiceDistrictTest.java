@@ -42,7 +42,7 @@ public class ServiceDistrictTest {
 		for (DistrictInfo info : infos) {
 			id = info.getDstid();
 			assertEquals("name must be equal", name, info.getDstname());
-			assertEquals("comm must be equal", comm, info.getComm());
+			assertEquals("comm must be equal", comm, info.getDesp());
 		}
 
 		// test update
@@ -51,7 +51,7 @@ public class ServiceDistrictTest {
 		assertEquals("There can only be one record", 1, temp.size());
 		for (DistrictInfo i : temp) {
 			assertEquals("name1 must be equal", name1, i.getDstname());
-			assertEquals("comm1 must be equal", comm1, i.getComm());
+			assertEquals("comm1 must be equal", comm1, i.getDesp());
 		}
 	}
 }
