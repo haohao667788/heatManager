@@ -2,14 +2,14 @@
  * 流水tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.fareConfirm");
+Ext.namespace("Heat.fareflow");
 
-Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.fareflow.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.fareConfirm.BasicForm.superclass.constructor.call(this, {
-            url: '/static/data/farespace/fareConfirm/update'+debug,
+        Heat.fareflow.BasicForm.superclass.constructor.call(this, {
+            url: '/static/data/fare/fareflow/update'+debug,
             width: 600,
             labelAlign: 'right',
             labelWidth: 80,
@@ -49,7 +49,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryShequ"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryShequ"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -67,7 +67,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryLoudong"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryLoudong"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -85,7 +85,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryDanyuan"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryDanyuan"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -115,7 +115,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryUnit"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/queryUnit"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -230,13 +230,13 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.fareConfirm.BasicWin = Ext.extend(Ext.Window, {
+Heat.fareflow.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.fareConfirm.BasicForm();
-        Heat.fareConfirm.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.fareflow.BasicForm();
+        Heat.fareflow.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -303,14 +303,14 @@ Heat.fareConfirm.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+Heat.fareflow.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     flowWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.flowWin = new Heat.fareConfirm.BasicWin();
+        this.flowWin = new Heat.fareflow.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/static/data/fare/fareflow/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -331,7 +331,7 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 ]
             })
         });
-        Heat.fareConfirm.BasicGrid.superclass.constructor.call(this, {
+        Heat.fareflow.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
@@ -457,7 +457,7 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/static/data/farespace/fareConfirm/list'+debug,
+                url: '/static/data/fare/fareflow/list'+debug,
                 params: {idToDel: id},
                 success: function(response) {
                     store.reload();

@@ -17,3 +17,11 @@
 .search {
     background: url("../image/search.png") no-repeat;
 }
+
+.fare_icon {
+    background: url("../image/dollar.png") no-repeat;
+}
+
+.account_icon {
+    background: url("../image/account.png") no-repeat;
+}

@@ -1,0 +1,13 @@
+{
+    "success": true,
+    "message": "",
+    "data": {
+        "usrid": 1,
+        "accrangeid": "1234",
+        "finacerange": "2013",
+        "curbalance": 100,
+        "curcharge": 120,
+        "curmoney": 0,
+        "lastdate": "2013-01-01"
+    }
+}

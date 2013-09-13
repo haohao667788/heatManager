@@ -25,6 +25,24 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
+                hiddenName: 'ctyid',
+                mode: 'local',
+                width: 160,
+                fieldLabel: '所属行政区',
+                triggerAction: 'all',
+                valueField: 'value',
+                displayField: 'text',
+                allowBlank: false,
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'text'],
+                    data: [['A', 'A'],
+                        ['B', 'B'],
+                        ['C', 'C'],
+                        ['D', 'D'],
+                        ['临修', '临修']]
+                })
+            }), new Ext.form.ComboBox({
                 hiddenName: 'dstid',
                 mode: 'local',
                 width: 160,
@@ -195,6 +213,8 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 fields: [
                     {name: 'pjtid', type: 'int'},
                     {name: 'pjtname', type: 'string'},
+                    {name: 'ctyid', type: 'int'},
+                    {name: 'townname', type: 'string'},
                     {name: 'dstid', type: 'int'},
                     {name: 'dstname', type: 'string'},
                     {name: 'start_date', type: 'string'},
@@ -215,6 +235,10 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 header: "项目名称",
                 dataIndex: 'pjtname',
                 width: 3
+            }, {
+                header: "所属行政区",
+                dataIndex: 'townname',
+                width: 1
             }, {
                 header: "所属大区",
                 dataIndex: 'dstname',

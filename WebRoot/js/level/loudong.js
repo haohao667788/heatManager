@@ -216,13 +216,38 @@ Heat.loudong.BasicWin = Ext.extend(Ext.Window, {
     }
 });
 
+Heat.loudong.PicWin = Ext.extend(Ext.Window, {
+    form: null,
+    constructor: function(cfg) {
+        cfg = cfg || {};
+        Ext.apply(this, cfg);
+        this.form = new Heat.loudong.BasicForm();
+        Heat.loudong.PicWin.superclass.constructor.call(this, {
+            title: '楼栋平面图',
+            width: 800,
+            height: 400,
+            autoScroll: true,
+            closeAction: 'hide',
+            modal: true,
+            html: '<img src="image/loading.gif">',
+            listeners: {
+                show: function(win) {
+                    win.el.dom.getElementsByTagName("img")[0].src = win.pic;
+                }
+            }
+        });
+    }
+});
+
 
 Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     loudongWin: null,
+    picWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         this.loudongWin = new Heat.loudong.BasicWin();
+        this.picWin = new Heat.loudong.PicWin();
         var store = new Ext.data.Store({
             proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/list"+debug}),
             reader: new Ext.data.JsonReader({
@@ -385,7 +410,10 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     }, {
                         text: "显示楼栋平面图",
                         handler: function() {
-                            console.log(rowIndex);
+                            var record = grid.getStore().getAt(rowIndex),
+                                pic = record.get('picaddress');
+                            grid.picWin.pic = pic;
+                            grid.picWin.show();
                         }
                     }]);
                     menu.showAt(e.getPoint());

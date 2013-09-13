@@ -1,0 +1,22 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "id": 1,
+        "userId": 1,
+        "userName": "张三",
+        "loginTime": "2013-04-05 12:09:09",
+        "ip": "127.0.0.1",
+        "loginStatus": "成功",
+        "failReason": ""
+    }, {
+        "id": 2,
+        "userId": 1,
+        "userName": "张三",
+        "loginTime": "2013-04-05 12:09:09",
+        "ip": "127.0.0.1",
+        "loginStatus": "成功",
+        "failReason": ""
+    }]
+}

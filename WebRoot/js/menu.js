@@ -116,11 +116,15 @@ Heat.menu = new Ext.tree.TreePanel({
             leaf: false,
             children: [{
                 text: '收费流水',
-                ns: 'fareFlow',
+                ns: 'fareflow',
                 leaf: true
             }, {
                 text: '用户管理',
                 ns: 'user',
+                leaf: true
+            }, {
+                text: '计费信息',
+                ns: 'farecount',
                 leaf: true
             }]
         }, {
@@ -139,12 +143,16 @@ Heat.menu = new Ext.tree.TreePanel({
             text: '财务工作台',
             leaf: false,
             children: [{
-                text: '银行信息管理',
-                ns: 'bankInfo',
+                text: '银行信息',
+                ns: 'bank',
                 leaf: true
             }, {
-                text: '财务凭证查询',
-                ns: 'financeTicket',
+                text: '科目信息',
+                ns: 'course',
+                leaf: true
+            }, {
+                text: '银行凭证查询',
+                ns: 'bankTicket',
                 leaf: true
             }]
         }, {
@@ -173,7 +181,11 @@ Heat.menu = new Ext.tree.TreePanel({
 
 Heat.menu.on("click", function(node) {
     var ns = node.attributes.ns,
-        tab = Heat.tabs.add({
+        o_tab = Heat.tabs.getComponent(ns);
+
+    if (!o_tab) {
+        var tab = Heat.tabs.add({
+            id: ns,
             title: node.text,
             //iconCls: 'fwxtabpanelicon',
             border: 0,
@@ -182,5 +194,8 @@ Heat.menu.on("click", function(node) {
             layout: 'fit',
             items: [new Heat[ns].BasicGrid]
         });
-    Heat.tabs.setActiveTab(tab);
+        Heat.tabs.setActiveTab(tab);
+    } else {
+        Heat.tabs.setActiveTab(ns);
+    }
 });

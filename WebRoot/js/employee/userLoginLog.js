@@ -9,10 +9,10 @@ Heat.userLoginLog.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: ""}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/employee/userLoginLog/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
-                root: 'root',
+                root: 'data',
                 fields: [
                     {name: 'id', type: 'int'},
                     {name: 'userId', type: 'int'},
@@ -21,7 +21,6 @@ Heat.userLoginLog.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'ip', type: 'string'},
                     {name: 'loginStatus', type: 'string'},
                     {name: 'failReason', type: 'string'},
-                    {name: 'duration', type: 'string'}
                 ]
             })
         });
@@ -56,10 +55,6 @@ Heat.userLoginLog.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 header: "失败原因",
                 dataIndex: "failReason",
                 width: 2
-            }, {
-                header: "在线时长",
-                dataIndex: "duration",
-                width: 1.5
             }],
 
             bbar: new Ext.PagingToolbar({
@@ -76,7 +71,12 @@ Heat.userLoginLog.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             frame: true,
             loadMask: true,
-            collapsible: false
+            collapsible: false,
+            listeners: {
+                render: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         });
     },
 

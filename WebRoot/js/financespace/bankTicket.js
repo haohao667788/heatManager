@@ -1,15 +1,15 @@
 /**
- * 流水tab
+ * 银行凭证tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.fareConfirm");
+Ext.namespace("Heat.bankTicket");
 
-Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.bankTicket.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.fareConfirm.BasicForm.superclass.constructor.call(this, {
-            url: '/static/data/farespace/fareConfirm/update'+debug,
+        Heat.bankTicket.BasicForm.superclass.constructor.call(this, {
+            url: '/heatManager/data/fare/bankTicket/update'+debug,
             width: 600,
             labelAlign: 'right',
             labelWidth: 80,
@@ -33,7 +33,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         allowBlank: false
                     }, {
                         xtype: 'textfield',
-                        fieldLabel: '流水类型',
+                        fieldLabel: '银行凭证类型',
                         name: 'usrtype',
                         width: 160,
                         allowBlank: false
@@ -49,7 +49,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryShequ"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/bankTicket/queryShequ"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -67,7 +67,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryLoudong"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/bankTicket/queryLoudong"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -85,7 +85,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryDanyuan"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/bankTicket/queryDanyuan"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -93,14 +93,14 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         })
                     }), {
                         xtype: 'textfield',
-                        fieldLabel: '流水地址',
-                        name: 'usraddress',
+                        fieldLabel: '银行凭证地址',
+                        name: 'address',
                         width: 160,
                         allowBlank: false
                     }, {
                         xtype: 'textfield',
                         fieldLabel: '联系方式',
-                        name: 'communicate',
+                        name: 'phone',
                         width: 160,
                         allowBlank: false
                     }, new Ext.form.ComboBox({
@@ -115,7 +115,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         editable: false,
                         store: new Ext.data.Store({
                             autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/queryUnit"+debug}),
+                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/bankTicket/queryUnit"+debug}),
                             reader: new Ext.data.ArrayReader({}, [
                                 {name: 'value'},
                                 {name: 'text'}
@@ -130,14 +130,14 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         fieldLabel: '开户时间',
                         editable: false,
                         format: 'Y-m-d',
-                        name: 'kaihuDate',
+                        name: 'startdate',
                         width: 160
                     }, {
                         xtype: 'datefield',
                         fieldLabel: '合同签订时间',
                         editable: false,
                         format: 'Y-m-d',
-                        name: 'contractDate',
+                        name: 'contractdate',
                         width: 160
                     }, {
                         xtype: 'textfield',
@@ -148,7 +148,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }, {
                         xtype: 'textfield',
                         fieldLabel: '合同版本',
-                        name: 'contractversion',
+                        name: 'contractver',
                         width: 160,
                         allowBlank: false
                     }, {
@@ -172,7 +172,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }, {
                         xtype: 'fileuploadfield',
                         fieldLabel: '房产证影像',
-                        name: 'fangchanpic',
+                        name: 'houseidpic',
                         width: 160,
                         buttonText: '',
                         buttonCfg: {
@@ -181,7 +181,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }, {
                         xtype: 'fileuploadfield',
                         fieldLabel: '户型图纸影像',
-                        name: 'huxingpic',
+                        name: 'housepic',
                         width: 160,
                         buttonText: '',
                         buttonCfg: {
@@ -230,13 +230,13 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.fareConfirm.BasicWin = Ext.extend(Ext.Window, {
+Heat.bankTicket.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.fareConfirm.BasicForm();
-        Heat.fareConfirm.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.bankTicket.BasicForm();
+        Heat.bankTicket.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -303,103 +303,104 @@ Heat.fareConfirm.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    flowWin: null,
+Heat.bankTicket.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    bankTicketWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.flowWin = new Heat.fareConfirm.BasicWin();
+        this.bankTicketWin = new Heat.bankTicket.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/static/data/farespace/fareConfirm/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/bankTicket/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'flowid', type: 'int'},
-                    {name: 'accountid', type: 'int'},
-                    {name: 'time', type: 'string'},
-                    {name: 'fare', type: 'float'},
-                    {name: 'method', type: 'string'},
-                    {name: 'methodNo', type: 'int'},
-                    {name: 'pic', type: 'string'},
-                    {name: 'zhangqi', type: 'string'},
-                    {name: 'dueFareNo', type: 'string'},
-                    {name: 'farepeople', type: 'string'},
-                    {name: 'checkpeople', type: 'string'},
-                    {name: 'banknote', type: 'string'},
-                    {name: 'checkTime', type: 'string'}
+                    {name: 'cftid', type: 'int'},
+                    {name: 'bnkid', type: 'int'},
+                    {name: 'bnkname', type: 'string'},
+                    {name: 'crsid', type: 'int'},
+                    {name: 'crsname', type: 'string'},
+                    {name: 'ctftype', type: 'string'},
+                    {name: 'ctfnumber', type: 'string'},
+                    {name: 'money', type: 'float'},
+                    {name: 'undertake', type: 'string'},
+                    {name: 'cdate', type: 'string'},
+                    {name: 'importdate', type: 'string'},
+                    {name: 'importer', type: 'string'},
+                    {name: 'relatednum', type: 'string'},
+                    {name: 'relatedcount', type: 'int'}
                 ]
             })
         });
-        Heat.fareConfirm.BasicGrid.superclass.constructor.call(this, {
+        Heat.bankTicket.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "流水号",
-                dataIndex: 'flowid',
+                header: "记录编号",
+                dataIndex: 'cftid',
                 width: 80
             }, {
-                header: "账号",
-                dataIndex: 'accountid',
-                width: 100
-            }, {
-                header: "时间",
-                dataIndex: 'time',
+                header: "银行编号",
+                dataIndex: 'bnkid',
                 width: 80
+            }, {
+                header: "银行名称",
+                dataIndex: 'bnkname',
+                width: 120
+            }, {
+                header: "科目编号",
+                dataIndex: 'crsid',
+                width: 80
+            }, {
+                header: "科目名称",
+                dataIndex: 'crsname',
+                width: 120
+            }, {
+                header: "银行凭证类型",
+                dataIndex: 'ctftype',
+                width: 160
+            }, {
+                header: "凭证编号",
+                dataIndex: 'cdate',
+                width: 120
             }, {
                 header: "金额",
-                dataIndex: 'fare',
+                dataIndex: 'money',
                 width: 80
             }, {
-                header: "缴费方式",
-                dataIndex: 'method',
-                width: 160
-            }, {
-                header: "支票号码",
-                dataIndex: 'methodNo',
-                width: 160
-            }, {
-                header: "缴费所属帐期",
-                dataIndex: 'zhangqi',
-                width: 160
-            }, {
-                header: "应缴记录编号",
-                dataIndex: 'dueFareNo',
-                width: 160
-            }, {
-                header: "收费员",
-                dataIndex: 'farepeople',
+                header: "承办人",
+                dataIndex: 'undertake',
                 width: 120
             }, {
-                header: "财务收款核对员",
-                dataIndex: 'checkpeople',
-                width: 120
-            }, {
-                header: "银行凭证号",
-                dataIndex: 'banknote',
+                header: "凭证时间",
+                dataIndex: 'startdate',
                 width: 100
             }, {
-                header: "收费核对确认时间",
-                dataIndex: "checkTime",
-                width: 160
+                header: "录入时间",
+                dataIndex: "cdate",
+                width: 100
+            }, {
+                header: "录入人",
+                dataIndex: "importer",
+                width: 100
             }],
 
-//            tbar: [{
-//                text: "添加流水",
-//                iconCls: "add_icon",
-//                handler: this.onAddClick,
-//                scope: this
-//            }, '-', {
-//                text: "修改流水",
-//                iconCls: "mod_icon",
-//                handler: this.onModClick,
-//                scope: this
-//            }, '-', {
-//                text: "删除流水",
-//                iconCls: "del_icon",
-//                handler: this.onDelClick,
-//                scope: this
-//            }],
+            tbar: [{
+                text: "添加银行凭证",
+                iconCls: "add_icon",
+                handler: this.onAddClick,
+                scope: this
+            }, '-', {
+                text: "修改银行凭证",
+                iconCls: "mod_icon",
+                handler: this.onModClick,
+                scope: this
+            }, '-', {
+                text: "删除银行凭证",
+                iconCls: "del_icon",
+                handler: this.onDelClick,
+                scope: this
+            }],
 
             bbar: new Ext.PagingToolbar({
                 pageSize: 20,
@@ -423,20 +424,20 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
 
-        this.flowWin.on("submitcomplete", this.refresh, this);
+        this.bankTicketWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.flowWin.setTitle("新增流水");
-        this.flowWin.show();
+        this.bankTicketWin.setTitle("新增银行凭证");
+        this.bankTicketWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.flowWin.setTitle("修改流水");
-            this.flowWin.show();
-            this.flowWin.load(selected);
+            this.bankTicketWin.setTitle("修改银行凭证");
+            this.bankTicketWin.show();
+            this.bankTicketWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
@@ -457,8 +458,8 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/static/data/farespace/fareConfirm/list'+debug,
-                params: {idToDel: id},
+                url: '/heatManager/data/fare/bankTicket/del'+debug,
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }
@@ -467,7 +468,7 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
-        this.flowWin.hide();
+        this.bankTicketWin.hide();
         this.getStore().reload();
     },
 

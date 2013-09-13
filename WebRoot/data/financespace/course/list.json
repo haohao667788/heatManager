@@ -1,0 +1,16 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "crsid": 1,
+        "crsname": "科目1",
+        "year": "2013",
+        "comm": "test"
+    }, {
+        "crsid": 2,
+        "crsname": "科目2",
+        "year": "2013",
+        "comm": "test"
+    }]
+}

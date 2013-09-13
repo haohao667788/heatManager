@@ -1,15 +1,15 @@
 /**
- * 员工tab
+ * 科目tab
  * @author Teddy Bear
  */
-Ext.namespace("Heat.employee");
+Ext.namespace("Heat.bank");
 
-Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
+Heat.bank.BasicForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        Heat.employee.BasicForm.superclass.constructor.call(this, {
-            url: "/heatManager/data/employee/employee/update"+debug,
+        Heat.bank.BasicForm.superclass.constructor.call(this, {
+            url: '/heatManager/data/financespace/bank/update'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
@@ -18,30 +18,24 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
             fileUpload: true,
             items: [{
                 xtype: 'hidden',
-                name: 'stfid'
+                name: 'bnkid'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '员工姓名',
-                name: 'stfname',
+                fieldLabel: '银行名称',
+                name: 'bnkname',
                 width: 160,
                 allowBlank: false
             }, {
                 xtype: 'textfield',
-                fieldLabel: '员工工号',
-                name: 'stfnumber',
-                width: 160,
-                allowBlank: false
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '联系方式',
-                name: 'contactnumber',
+                fieldLabel: '账号',
+                name: 'accid',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
-                hiddenName: 'groupid',
+                hiddenName: 'crsid',
                 mode: 'local',
                 width: 160,
-                fieldLabel: '所属部门',
+                fieldLabel: '所属科目',
                 triggerAction: 'all',
                 valueField: 'value',
                 displayField: 'text',
@@ -49,53 +43,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/employee/employee/queryDep"+debug}),
-                    reader: new Ext.data.ArrayReader({}, [
-                        {name: 'value'},
-                        {name: 'text'}
-                    ])
-                })
-            }), {
-                xtype: 'textfield',
-                fieldLabel: '登录名',
-                name: 'loginname',
-                width: 160
-            }, {
-                xtype: 'textfield',
-                inputType: 'password',
-                fieldLabel: '密码',
-                name: 'pwd',
-                width: 160
-            }, new Ext.form.ComboBox({
-                hiddenName: 'authMethod',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '鉴权方式',
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.SimpleStore({
-                    fields: ['value', 'text'],
-                    data: [
-                        [0, '普通'],
-                        [1, 'U盾']
-                    ]
-                })
-            }), new Ext.form.ComboBox({
-                hiddenName: 'groupid',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '所属部门',
-                triggerAction: 'all',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.Store({
-                    autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/employee/employee/queryGroup"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/queryCrs'+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -144,13 +92,13 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
 });
 
 
-Heat.employee.BasicWin = Ext.extend(Ext.Window, {
+Heat.bank.BasicWin = Ext.extend(Ext.Window, {
     form: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.form = new Heat.employee.BasicForm();
-        Heat.employee.BasicWin.superclass.constructor.call(this, {
+        this.form = new Heat.bank.BasicForm();
+        Heat.bank.BasicWin.superclass.constructor.call(this, {
             items: this.form,
             buttons: [{
                 text: '提交',
@@ -217,90 +165,63 @@ Heat.employee.BasicWin = Ext.extend(Ext.Window, {
 });
 
 
-Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
-    employeeWin: null,
+Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
+    bankWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
-        this.employeeWin = new Heat.employee.BasicWin();
+        this.bankWin = new Heat.bank.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/employee/employee/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/list'+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'stfid', type: 'int'},
-                    {name: 'stfname', type: 'string'},
-                    {name: 'stfnumber', type: 'string'},
-                    {name: 'contactnumber', type: 'string'},
-                    {name: 'department', type: 'string'},
-                    {name: 'authMethod', type: 'int'},
-                    {name: 'groupid', type: 'int'},
-                    {name: 'groupname', type: 'string'},
-                    {name: 'loginname', type: 'string'},
-                    {name: 'pwd', type: 'string'},
-                    {name: 'createTime', type: 'string'},
-                    {name: 'lastLoginTime', type: 'string'}
+                    {name: 'bnkid', type: 'int'},
+                    {name: 'bnkname', type: 'string'},
+                    {name: 'accid', type: 'string'},
+                    {name: 'crsid', type: 'int'},
+                    {name: 'crsname', type: 'string'}
                 ]
             })
         });
-        Heat.employee.BasicGrid.superclass.constructor.call(this, {
+        Heat.bank.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
             columns: [{
-                header: "员工编号",
-                dataIndex: 'stfid',
+                header: "银行编号",
+                dataIndex: 'bnkid',
+                width: 1
+            }, {
+                header: "银行名称",
+                dataIndex: 'bnkname',
                 width: 2
             }, {
-                header: "员工姓名",
-                dataIndex: 'stfname',
+                header: "账号",
+                dataIndex: 'accid',
+                width: 1
+            }, {
+                header: "科目编号",
+                dataIndex: 'crsid',
+                width: 1
+            }, {
+                header: "科目名称",
+                dataIndex: 'crsname',
                 width: 2
-            }, {
-                header: "员工工号",
-                dataIndex: 'stfnumber',
-                width: 2
-            }, {
-                header: "联系方式",
-                dataIndex: 'contactnumber',
-                width: 3
-            }, {
-                header: "所属部门",
-                dataIndex: 'department',
-                width: 3
-            }, {
-                header: "登录名",
-                dataIndex: 'loginname',
-                width: 2
-            }, {
-                header: "密码",
-                dataIndex: "pwd",
-                width: 2
-            }, {
-                header: "所属权限组",
-                dataIndex: "groupname",
-                width: 2
-            }, {
-                header: "添加时间",
-                dataIndex: "createTime",
-                width: 2
-            }, {
-                header: "上次登录时间",
-                dataIndex: 'lastLoginTime',
-                width: 4
             }],
 
             tbar: [{
-                text: "添加员工",
+                text: "添加银行",
                 iconCls: "add_icon",
                 handler: this.onAddClick,
                 scope: this
             }, '-', {
-                text: "修改员工",
+                text: "修改银行",
                 iconCls: "mod_icon",
                 handler: this.onModClick,
                 scope: this
             }, '-', {
-                text: "删除员工",
+                text: "删除银行",
                 iconCls: "del_icon",
                 handler: this.onDelClick,
                 scope: this
@@ -328,20 +249,20 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
 
-        this.employeeWin.on("submitcomplete", this.refresh, this);
+        this.bankWin.on("submitcomplete", this.refresh, this);
     },
 
     onAddClick: function() {
-        this.employeeWin.setTitle("新增员工");
-        this.employeeWin.show();
+        this.bankWin.setTitle("新增银行");
+        this.bankWin.show();
     },
 
     onModClick: function() {
         try {
             var selected = this.getSelected();
-            this.employeeWin.setTitle("修改员工");
-            this.employeeWin.show();
-            this.employeeWin.load(selected);
+            this.bankWin.setTitle("修改银行");
+            this.bankWin.show();
+            this.bankWin.load(selected);
         } catch(error) {
             Ext.Msg.alert('系统提示', error.message);
         }
@@ -362,7 +283,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: "/heatManager/data/employee/employee/del"+debug,
+                url: '/heatManager/data/financespace/bank/del'+debug,
                 params: {id: id},
                 success: function(response) {
                     store.reload();
@@ -372,6 +293,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
+        this.shequWin.hide();
         this.getStore().reload();
     },
 

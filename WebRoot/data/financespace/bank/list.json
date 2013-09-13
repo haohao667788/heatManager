@@ -1,0 +1,18 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "bnkid": 1,
+        "bnkname": "招商银行",
+        "accid": "26178267126",
+        "crsid": 1,
+        "crsname": "科目1"
+    }, {
+        "bnkid": 2,
+        "bnkname": "中国银行",
+        "accid": "26178267126",
+        "crsid": 1,
+        "crsname": "科目1"
+    }]
+}

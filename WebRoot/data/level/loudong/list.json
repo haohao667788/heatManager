@@ -15,7 +15,7 @@
         "bldaddress": "XX路XX区XX栋",
         "desp": "这是楼栋1",
         "gis": "1.34 234.3",
-        "picaddress": "/pic/level/loudong/1.png"
+        "picaddress": "/pic/pic1.jpg"
     }, {
         "bldid": 2,
         "bldname": "楼栋2",
@@ -29,6 +29,6 @@
         "bldaddress": "XX路XX区XX栋",
         "desp": "这是楼栋2",
         "gis": "1.34 234.3",
-        "picaddress": "/pic/level/loudong/2.png"
+        "picaddress": "/pic/pic2.jpg"
     }]
 }

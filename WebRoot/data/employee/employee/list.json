@@ -1,0 +1,32 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "stfid": 1,
+        "stfname": "张三",
+        "stfnumber": "100345",
+        "contactnumber": "13121276129",
+        "department": "部门1",
+        "groupid": 1,
+        "groupname": "管理员",
+        "loginname": "admin",
+        "authMethod": 0,
+        "pwd": "ok",
+        "createTime": "2013-04-23",
+        "lastLoginTime": "2013-04-56 21:09:09"
+    }, {
+        "stfid": 2,
+        "stfname": "李四",
+        "stfnumber": "100355",
+        "contactnumber": "13128766612",
+        "department": "部门1",
+        "groupid": 1,
+        "groupname": "用户1",
+        "loginname": "admin88",
+        "authMethod": 0,
+        "pwd": "ok88",
+        "createTime": "2013-04-23",
+        "lastLoginTime": "2013-04-56 21:09:09"
+    }]
+}
