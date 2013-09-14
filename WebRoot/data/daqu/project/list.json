@@ -3,16 +3,24 @@
     "message": "",
     "totalProperty": 20,
     "data": [{
+        "pjtid": 1,
+        "pjtname": "项目1",
+        "ctyid": 1,
+        "townname": "行政区1",
         "dstid": 1,
         "dstname": "大区1",
-        "ctyid": 1,
-        "ctyname": "行政区1",
-        "desp": "这是大区1"
+        "start_date": "2013-09-09",
+        "middle": "是",
+        "desp": ""
     }, {
-        "dstid": 2,
-        "dstname": "大区2",
+        "pjtid": 2,
+        "pjtname": "项目2",
         "ctyid": 1,
-        "ctyname": "行政区1",
-        "desp": "这是大区2"
+        "townname": "行政区1",
+        "dstid": 1,
+        "dstname": "大区1",
+        "start_date": "2013-09-01",
+        "middle": "是",
+        "desp": ""
     }]
 }

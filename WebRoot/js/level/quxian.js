@@ -68,6 +68,7 @@ Heat.quxian.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     //当表单提交成功后，触发complete事件(win由于监听了complete事件能通过得到响应)
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });
@@ -251,7 +252,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     deleteRecord: function(btn) {
         var store = this.getStore();
         var record = this.getSelected();
-        var id = record.get('id');
+        var id = record.get('ctyid');
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: "/heatManager/data/level/quxian/del"+debug,
@@ -264,6 +265,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
+        this.quxianWin.hide();
         this.getStore().reload();
     },
 

@@ -1,0 +1,14 @@
+{
+    "success": "true",
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "stfid": 1,
+        "stfname": "张三",
+        "stfnumber": "100876"
+    }, {
+        "stfid": 2,
+        "stfname": "李四",
+        "stfnumber": "100976"
+    }]
+}

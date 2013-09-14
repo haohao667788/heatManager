@@ -244,13 +244,117 @@ Heat.project.BasicWin = Ext.extend(Ext.Window, {
     }
 });
 
-Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
+/** -- 项目分配窗口 -- **/
+Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
+        Heat.project.BasicForm.superclass.constructor.call(this, {
+            width: 486,
+            labelAlign: 'right',
+            labelWidth: 80,
+            frame: true,
+            bodyStyle: 'padding: 5px 0 0 0',
+            border: 0,
+            items: [{
+                layout: 'column',
+                items: [{
+                    columnWidth:.5,
+                    layout: 'form',
+                    items: [
+                        new Ext.form.ComboBox({
+                            hiddenName: 'employee',
+                            mode: 'local',
+                            width: 140,
+                            fieldLabel: '查询员工',
+                            triggerAction: 'query',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            store: new Ext.data.Store({
+                                autoLoad: true,
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/queryEmployee"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            })
+                        })
+                    ]
+                }, {
+                    columnWidth:.5,
+                    layout: 'form',
+                    items: [{
+                        xtype: 'button',
+                        text: "点击添加",
+                        handler: function() {
+
+                        }
+                    }]
+                }]
+            }]
+        });
+    }
+});
+
+Heat.project.EmployeeGrid = Ext.extend(Ext.grid.GridPanel, {
+    constructor: function(cfg) {
+        cfg = cfg || {};
+        Ext.apply(this, cfg);
+        Heat.project.EmployeeGrid.superclass.constructor.call(this, {
+            store: new Ext.data.Store({
+                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/relateEmp"+debug}),
+                reader: new Ext.data.JsonReader({
+                    totalProperty: 'totalProperty',
+                    root: 'root',
+                    fields: [
+                        {name: 'stfid', type: 'int'},
+                        {name: 'stfname', type: 'string'},
+                        {name: 'stfnumber', type: 'string'}
+                    ]
+                })
+            }),
+
+            columns: [{
+                header: "员工编号",
+                dataIndex: 'stfid',
+                width: 1
+            }, {
+                header: "员工名字",
+                dataIndex: 'stfname',
+                width: 3
+            }, {
+                header: "员工工号",
+                dataIndex: 'stfnumber',
+                width: 1
+            }],
+
+            viewConfig: {
+                forceFit: true
+            },
+
+            border: 0,
+            frame: true,
+            loadMask: true,
+            collapsible: false,
+            width: 486,
+            height: 300
+        });
+    }
+});
+
+Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
+    form: null,
+    grid: null,
+    constructor: function(cfg) {
+        cfg = cfg || {};
+        Ext.apply(this, cfg);
+        this.form = new Heat.project.QueryForm();
+        this.grid = new Heat.project.EmployeeGrid();
         Heat.project.EmployeeWin.superclass.constructor.call(this, {
             items: [
-
+                this.form,
+                this.grid
             ],
 
             listeners: {
@@ -281,7 +385,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
-                root: 'root',
+                root: 'data',
                 fields: [
                     {name: 'pjtid', type: 'int'},
                     {name: 'pjtname', type: 'string'},
