@@ -71,7 +71,7 @@ Heat.src.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 triggerAction: 'all',
                 valueField: 'value',
                 displayField: 'text',
-                allowBlank: true,
+                allowBlank: false,
                 editable: false,
                 width: 160,
                 store: new Ext.data.SimpleStore({
