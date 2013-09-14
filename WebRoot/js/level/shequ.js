@@ -25,41 +25,7 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'cmtname',
                 width: 160,
                 allowBlank: false
-            }, new Ext.form.ComboBox({
-                hiddenName: 'pjtid',
-                mode: 'local',
-                width: 160,
-                fieldLabel: '所属项目',
-                triggerAction: 'query',
-                valueField: 'value',
-                displayField: 'text',
-                allowBlank: false,
-                editable: false,
-                store: new Ext.data.Store({
-                    autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/shequ/queryProject"+debug}),
-                    reader: new Ext.data.ArrayReader({}, [
-                        {name: 'value'},
-                        {name: 'text'}
-                    ])
-                }),
-                listeners: {
-                    change: function(combo, value) {
-                        var flag = false;
-                        combo.getStore().each(function(record, index, total) {
-                            var text = record.get("text"),
-                                val = record.get("value");
-                            if (val == value || val == text) {
-                                flag = true;
-                                return false;
-                            }
-                        });
-                        if (!flag) {
-                            combo.markInvalid("请选择对应记录");
-                        }
-                    }
-                }
-            }), {
+            }, {
                 xtype: 'textfield',
                 fieldLabel: '简称',
                 name: 'briefname',
@@ -100,38 +66,24 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     //提交表单数据
     formSubmit: function() {
-        var isInvalid = false,
-            form = this.getForm(),
-            fields = ["pjtid"];
-        Ext.each(fields, function(field) {
-            var $f = $(form.findField(field).el.dom);
-            if ($f.hasClass("x-form-invalid")) {
-                isInvalid = true;
-                return false;
+        this.getForm().submit({
+            clientValidation: true,
+            waitMsg:'数据保存中...',
+            success: this.submitcomplete.createDelegate(this),
+            failure: function(form, action) {
+                switch (action.failureType) {
+                    case Ext.form.Action.CLIENT_INVALID:
+                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
+                        break;
+                    case Ext.form.Action.CONNECT_FAILURE:
+                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
+                        break;
+                    case Ext.form.Action.SERVER_INVALID:
+                        Ext.Msg.alert('系统提示', action.result.msg);
+                        break;
+                }
             }
         });
-        if (isInvalid) {
-            Ext.Msg.alert("系统提示", "请正确填写表单");
-        } else {
-            this.getForm().submit({
-                clientValidation: true,
-                waitMsg:'数据保存中...',
-                success: this.submitcomplete.createDelegate(this),
-                failure: function(form, action) {
-                    switch (action.failureType) {
-                        case Ext.form.Action.CLIENT_INVALID:
-                            Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                            break;
-                        case Ext.form.Action.CONNECT_FAILURE:
-                            Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                            break;
-                        case Ext.form.Action.SERVER_INVALID:
-                            Ext.Msg.alert('系统提示', action.result.msg);
-                            break;
-                    }
-                }
-            });
-        }
     },
 
     reset: function() {
@@ -143,7 +95,6 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
         this.fireEvent('submitcomplete');
     }
 });
-
 
 Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
     form: null,
@@ -256,8 +207,6 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 fields: [
                     {name: 'cmtid', type: 'int'},
                     {name: 'cmtname', type: 'string'},
-                    {name: 'pjtid', type: 'int'},
-                    {name: 'pjtname', type: 'string'},
                     {name: 'briefname', type: 'string'},
                     {name: 'cmtaddress', type: 'string'},
                     {name: 'desp', type: 'string'},
@@ -277,10 +226,6 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 header: "社区名称",
                 dataIndex: 'cmtname',
                 width: 2
-            }, {
-                header: "所属项目",
-                dataIndex: 'pjtname',
-                width: 1
             }, {
                 header: "简称",
                 dataIndex: 'briefname',
