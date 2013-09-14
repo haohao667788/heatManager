@@ -9,7 +9,7 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.danyuan.BasicForm.superclass.constructor.call(this, {
-            url: '/heatManager/data/level/danyuan/list'+debug,
+            url: '/heatManager/data/level/danyuan/update'+debug,
             width: 300,
             labelAlign: 'right',
             labelWidth: 80,
