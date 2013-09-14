@@ -303,8 +303,6 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'bldname', type: 'string'},
                     {name: 'cmtid', type: 'int'},
                     {name: 'cmtname', type: 'string'},
-                    {name: 'pjtid', type: 'int'},
-                    {name: 'pjtname', type: 'string'},
                     {name: 'mchid', type: 'int'},
                     {name: 'mchname', type: 'string'},
                     {name: 'heattype', type: 'string'},
@@ -333,10 +331,6 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }, {
                 header: "所属社区",
                 dataIndex: 'cmtname',
-                width: 1
-            }, {
-                header: "所属项目",
-                dataIndex: 'pjtname',
                 width: 1
             }, {
                 header: "所属机组",
