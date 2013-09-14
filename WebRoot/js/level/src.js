@@ -42,7 +42,7 @@ Heat.src.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/heat/queryDaqu"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/queryDaqu"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -73,6 +73,7 @@ Heat.src.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 displayField: 'text',
                 allowBlank: true,
                 editable: false,
+                width: 160,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
                     data: [
