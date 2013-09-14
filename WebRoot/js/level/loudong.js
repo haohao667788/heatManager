@@ -424,23 +424,34 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                                 bldid = record.get('bldid'),
                                 bldname = record.get('bldname'),
                                 newGrid = new Heat.danyuan.BasicGrid,
-                                ns = "";
+                                ns = "danyuan",
+                                o_tab = Heat.tabs.getComponent(ns);
 
-                            newGrid.cmtid = cmtid;
-                            newGrid.cmtname = cmtname;
-                            newGrid.bldid = bldid;
-                            newGrid.bldname = bldname;
-                            var tab = Heat.tabs.add({
-                                title: "单元管理",
-                                //iconCls: 'fwxtabpanelicon',
-                                border: 0,
-                                autoWidth: true,
-                                closable: true,
-                                layout: 'fit',
-                                items: [newGrid]
-                            });
-                            Heat.tabs.setActiveTab(tab);
-
+                            if (!o_tab) {
+                                newGrid.cmtid = cmtid;
+                                newGrid.cmtname = cmtname;
+                                newGrid.bldid = bldid;
+                                newGrid.bldname = bldname;
+                                var tab = Heat.tabs.add({
+                                    id: ns,
+                                    title: "单元管理",
+                                    //iconCls: 'fwxtabpanelicon',
+                                    border: 0,
+                                    autoWidth: true,
+                                    closable: true,
+                                    layout: 'fit',
+                                    items: [newGrid]
+                                });
+                                Heat.tabs.setActiveTab(tab);
+                            } else {
+                                var g = o_tab.items.items[0];
+                                g.cmtid = cmtid;
+                                g.cmtname = cmtname;
+                                g.bldid = bldid;
+                                g.bldname = bldname;
+                                g.onShow();
+                                Heat.tabs.setActiveTab(ns);
+                            }
                         }
                     }, {
                         text: "显示楼栋平面图",
