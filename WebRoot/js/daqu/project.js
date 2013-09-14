@@ -286,8 +286,34 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                     items: [{
                         xtype: 'button',
                         text: "点击添加",
-                        handler: function() {
-
+                        handler: function(btn) {
+                            var form = btn.ownerCt.ownerCt.ownerCt,
+                                basicForm = form.getForm(),
+                                staff = basicForm.findField("staff"),
+                                sid = staff.getValue();
+                            if ($(staff.el.dom).hasClass("x-form-invalid") || sid == "") {
+                                Ext.Msg.alert("系统提示", "请选择对应的员工");
+                            } else {
+                                Ext.Ajax.request({
+                                    url: "/heatManager/data/daqu/project/assignPjt"+debug,
+                                    params: {pjtid: form.self.pid, usrid: sid},
+                                    success: function(res) {
+                                        if (!res) {
+                                            Ext.Msg.alert("系统提示", "服务器请求失败");
+                                        } else {
+                                            var response = Ext.decode(res.responseText);
+                                            if (response.success) {
+                                                form.self.refreshStaff();
+                                            } else {
+                                                Ext.Msg.alert("系统提示", response.message);
+                                            }
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.Msg.alert("系统提示", "服务器请求失败");
+                                    }
+                                });
+                            }
                         }
                     }]
                 }]
@@ -343,6 +369,10 @@ Heat.project.EmployeeGrid = Ext.extend(Ext.grid.GridPanel, {
             width: 486,
             height: 300
         });
+    },
+
+    refreshStaff: function() {
+        this.getStore().reload();
     }
 });
 
@@ -380,6 +410,10 @@ Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
                 }
             }
         });
+    },
+
+    refreshStaff: function() {
+        this.grid.refreshStaff();
     },
 
     onResetClick: function() {
