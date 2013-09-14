@@ -1,0 +1,20 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "rcdid": 1,
+        "usrid": 1,
+        "rcdtime": "2013-03-03",
+        "money": 120.3,
+        "chgtype": "0",
+        "checknum": "12345",
+        "dealname": "2013-03",
+        "rcdpic": "",
+        "chgid": "1,2,3",
+        "stfname": "张三",
+        "financechecker": "李四",
+        "ctfnumber": "122222",
+        "chargeverifytime": "2013-09-09"
+    }]
+}

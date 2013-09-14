@@ -176,7 +176,8 @@ Heat.loudong.BasicWin = Ext.extend(Ext.Window, {
             title: '修改记录',
             width: 500,
             buttonAlign: 'center',
-            closeAction: 'hide'
+            closeAction: 'hide',
+            modal: true
         });
 
         this.addEvents('submitcomplete');
@@ -238,7 +239,6 @@ Heat.loudong.PicWin = Ext.extend(Ext.Window, {
         });
     }
 });
-
 
 Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     loudongWin: null,

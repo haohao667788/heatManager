@@ -1,5 +1,5 @@
 /**
- * 用户tab
+ * 用户查询tab
  * @author Teddy Bear
  */
 Ext.namespace("Heat.userlist");
@@ -9,185 +9,321 @@ Heat.userlist.BasicForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.userlist.BasicForm.superclass.constructor.call(this, {
-            url: '/heatManager/data/farespace/userlist/update'+debug,
-            width: 600,
+            url: '/heatManager/data/fare/user/update'+debug,
+            width: 588,
+            height: 520,
             labelAlign: 'right',
             labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             fileUpload: true,
-
             items: [{
                 xtype: 'hidden',
                 name: 'usrid'
             }, {
-                layout: 'column',
+                xtype: 'fieldset',
+                title: '基础信息',
+                collapsible: false,
                 items: [{
-                    columnWidth:.5,
-                    layout: 'form',
+                    layout: 'column',
                     items: [{
-                        xtype: 'textfield',
-                        fieldLabel: '户主姓名',
-                        name: 'usrname',
-                        width: 160,
-                        allowBlank: false
+                        columnWidth:.5,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '户主姓名',
+                            name: 'usrname',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '用户类型',
+                            name: 'usrtype',
+                            width: 160,
+                            allowBlank: false
+                        }, new Ext.form.ComboBox({
+                            hiddenName: 'cmtid',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '所在社区',
+                            triggerAction: 'all',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.Store({
+                                autoLoad: true,
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryShequ"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            })
+                        }), new Ext.form.ComboBox({
+                            hiddenName: 'bldid',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '所在楼栋',
+                            triggerAction: 'all',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.Store({
+                                autoLoad: true,
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryLoudong"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            })
+                        }), new Ext.form.ComboBox({
+                            hiddenName: 'untid',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '所在单元',
+                            triggerAction: 'all',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.Store({
+                                autoLoad: true,
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryDanyuan"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            })
+                        }), {
+                            xtype: 'textfield',
+                            fieldLabel: '用户地址',
+                            name: 'address',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '联系方式',
+                            name: 'phone',
+                            width: 160,
+                            allowBlank: false
+                        }, new Ext.form.ComboBox({
+                            hiddenName: 'mchid',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '所属机组',
+                            triggerAction: 'all',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.Store({
+                                autoLoad: true,
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryUnit"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            })
+                        })]
                     }, {
-                        xtype: 'textfield',
-                        fieldLabel: '用户类型',
-                        name: 'usrtype',
-                        width: 160,
-                        allowBlank: false
-                    }, new Ext.form.ComboBox({
-                        hiddenName: 'cmtid',
-                        mode: 'local',
-                        width: 160,
-                        fieldLabel: '所在社区',
-                        triggerAction: 'all',
-                        valueField: 'value',
-                        displayField: 'text',
-                        allowBlank: false,
-                        editable: false,
-                        store: new Ext.data.Store({
-                            autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryShequ"+debug}),
-                            reader: new Ext.data.ArrayReader({}, [
-                                {name: 'value'},
-                                {name: 'text'}
-                            ])
-                        })
-                    }), new Ext.form.ComboBox({
-                        hiddenName: 'bldid',
-                        mode: 'local',
-                        width: 160,
-                        fieldLabel: '所在楼栋',
-                        triggerAction: 'all',
-                        valueField: 'value',
-                        displayField: 'text',
-                        allowBlank: false,
-                        editable: false,
-                        store: new Ext.data.Store({
-                            autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryLoudong"+debug}),
-                            reader: new Ext.data.ArrayReader({}, [
-                                {name: 'value'},
-                                {name: 'text'}
-                            ])
-                        })
-                    }), new Ext.form.ComboBox({
-                        hiddenName: 'untid',
-                        mode: 'local',
-                        width: 160,
-                        fieldLabel: '所在单元',
-                        triggerAction: 'all',
-                        valueField: 'value',
-                        displayField: 'text',
-                        allowBlank: false,
-                        editable: false,
-                        store: new Ext.data.Store({
-                            autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryDanyuan"+debug}),
-                            reader: new Ext.data.ArrayReader({}, [
-                                {name: 'value'},
-                                {name: 'text'}
-                            ])
-                        })
-                    }), {
-                        xtype: 'textfield',
-                        fieldLabel: '用户地址',
-                        name: 'usraddress',
-                        width: 160,
-                        allowBlank: false
-                    }, {
-                        xtype: 'textfield',
-                        fieldLabel: '联系方式',
-                        name: 'communicate',
-                        width: 160,
-                        allowBlank: false
-                    }, new Ext.form.ComboBox({
-                        hiddenName: 'mchid',
-                        mode: 'local',
-                        width: 160,
-                        fieldLabel: '所属机组',
-                        triggerAction: 'all',
-                        valueField: 'value',
-                        displayField: 'text',
-                        allowBlank: false,
-                        editable: false,
-                        store: new Ext.data.Store({
-                            autoLoad: true,
-                            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/queryUnit"+debug}),
-                            reader: new Ext.data.ArrayReader({}, [
-                                {name: 'value'},
-                                {name: 'text'}
-                            ])
-                        })
-                    })]
-                }, {
-                    columnWidth:.5,
-                    layout: 'form',
-                    items: [{
-                        xtype: 'datefield',
-                        fieldLabel: '开户时间',
-                        editable: false,
-                        format: 'Y-m-d',
-                        name: 'kaihuDate',
-                        width: 160
-                    }, {
-                        xtype: 'datefield',
-                        fieldLabel: '合同签订时间',
-                        editable: false,
-                        format: 'Y-m-d',
-                        name: 'contractDate',
-                        width: 160
-                    }, {
-                        xtype: 'textfield',
-                        fieldLabel: '合同类型',
-                        name: 'contracttype',
-                        width: 160,
-                        allowBlank: false
-                    }, {
-                        xtype: 'textfield',
-                        fieldLabel: '合同版本',
-                        name: 'contractversion',
-                        width: 160,
-                        allowBlank: false
-                    }, {
-                        xtype: 'fileuploadfield',
-                        fieldLabel: '合同影像',
-                        name: 'contractpic',
-                        width: 160,
-                        buttonText: '',
-                        buttonCfg: {
-                            iconCls: 'upload_icon'
-                        }
-                    }, {
-                        xtype: 'fileuploadfield',
-                        fieldLabel: '身份证影像',
-                        name: 'idpic',
-                        width: 160,
-                        buttonText: '',
-                        buttonCfg: {
-                            iconCls: 'upload_icon'
-                        }
-                    }, {
-                        xtype: 'fileuploadfield',
-                        fieldLabel: '房产证影像',
-                        name: 'fangchanpic',
-                        width: 160,
-                        buttonText: '',
-                        buttonCfg: {
-                            iconCls: 'upload_icon'
-                        }
-                    }, {
-                        xtype: 'fileuploadfield',
-                        fieldLabel: '户型图纸影像',
-                        name: 'huxingpic',
-                        width: 160,
-                        buttonText: '',
-                        buttonCfg: {
-                            iconCls: 'upload_icon'
-                        }
+                        columnWidth:.5,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'datefield',
+                            fieldLabel: '开户时间',
+                            editable: false,
+                            format: 'Y-m-d',
+                            name: 'startdate',
+                            width: 160
+                        }, {
+                            xtype: 'datefield',
+                            fieldLabel: '合同签订时间',
+                            editable: false,
+                            format: 'Y-m-d',
+                            name: 'contractdate',
+                            width: 160
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '合同类型',
+                            name: 'contracttype',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '合同版本',
+                            name: 'contractver',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'fileuploadfield',
+                            fieldLabel: '合同影像',
+                            name: 'contractpic',
+                            width: 160,
+                            buttonText: '',
+                            buttonCfg: {
+                                iconCls: 'upload_icon'
+                            }
+                        }, {
+                            xtype: 'fileuploadfield',
+                            fieldLabel: '身份证影像',
+                            name: 'idpic',
+                            width: 160,
+                            buttonText: '',
+                            buttonCfg: {
+                                iconCls: 'upload_icon'
+                            }
+                        }, {
+                            xtype: 'fileuploadfield',
+                            fieldLabel: '房产证影像',
+                            name: 'houseidpic',
+                            width: 160,
+                            buttonText: '',
+                            buttonCfg: {
+                                iconCls: 'upload_icon'
+                            }
+                        }, {
+                            xtype: 'fileuploadfield',
+                            fieldLabel: '户型图纸影像',
+                            name: 'housepic',
+                            width: 160,
+                            buttonText: '',
+                            buttonCfg: {
+                                iconCls: 'upload_icon'
+                            }
+                        }]
                     }]
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: '计费信息',
+                collapsible: false,
+                items: [{
+                    layout: 'column',
+                    items: [{
+                        columnWidth:.5,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '建筑面积',
+                            name: 'area',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '套内面积',
+                            name: 'realarea',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '计费面积',
+                            name: 'feearea',
+                            width: 160,
+                            allowBlank: false
+                        }, new Ext.form.ComboBox({
+                            hiddenName: 'feetype',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '计费方式',
+                            triggerAction: 'all',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.SimpleStore({
+                                fields: ['value', 'text'],
+                                data: [
+                                    [0, '按建筑面积'],
+                                    [1, '按套内面积'],
+                                    [2, '热计量费率']
+                                ]
+                            }),
+                            listeners: {
+                                select: function(combo) {
+                                    var form = combo.ownerCt.ownerCt.ownerCt.ownerCt,
+                                        basicForm = form.getForm(),
+                                        heatbase = basicForm.findField("heatbase"),
+                                        heatrate = basicForm.findField("heatrate"),
+                                        type = combo.getValue();
+                                    if (type == 2 || type == "热计量费率") {
+                                        heatbase.enable();
+                                        heatrate.enable();
+                                    } else {
+                                        heatbase.disable();
+                                        heatrate.disable();
+                                    }
+
+                                }
+                            }
+                        }), {
+                            xtype: 'textfield',
+                            fieldLabel: '费率',
+                            name: 'feerate',
+                            width: 160,
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '折扣',
+                            name: 'discount',
+                            width: 160,
+                            allowBlank: false
+                        }]
+                    }, {
+                        columnWidth:.5,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '减免额',
+                            name: 'reducefee',
+                            width: 160,
+                            allowBlank: false
+                        }, new Ext.form.ComboBox({
+                            hiddenName: 'heatstate',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '供热状态',
+                            triggerAction: 'all',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.SimpleStore({
+                                fields: ['value', 'text'],
+                                data: [
+                                    [0, '开通'],
+                                    [1, '关停'],
+                                    [2, '限制温度']
+                                ]
+                            })
+                        }), {
+                            xtype: 'textfield',
+                            fieldLabel: '热计量基数',
+                            name: 'heatbase',
+                            width: 160,
+                            allowBlank: false,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '热计量费率',
+                            name: 'heatrate',
+                            width: 160,
+                            allowBlank: false,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '户型',
+                            name: 'housetype',
+                            width: 160,
+                            allowBlank: false
+                        }]
+                    }]
+                }, {
+                    xtype: 'textarea',
+                    fieldLabel: '备注',
+                    name: 'desp',
+                    width: 438,
+                    height: 50
                 }]
             }]
         });
@@ -302,15 +438,38 @@ Heat.userlist.BasicWin = Ext.extend(Ext.Window, {
     }
 });
 
-
 Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     userlistWin: null,
+    expander: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         this.userlistWin = new Heat.userlist.BasicWin();
+        this.expander = new Ext.grid.RowExpander({
+            tpl: new Ext.Template(
+                '<table style="margin-top:10px;padding-top:10px;width:100%;border-top:2px solid #999;" border=0 cellpadding=0 cellspacing=0>',
+                '<tr><td width="25%">所属机组：{mchname}</td>',
+                '<td width="25%">开户时间：{startdate}</td>',
+                '<td width="25%">合同签订时间：{contractdate}</td>',
+                '<td width="25%">合同类型：{contracttype}</td></tr>',
+                '<tr><td width="25%">合同版本：{contractver}</td>',
+                '<td width="25%">建筑面积：{area}</td>',
+                '<td width="25%">套内面积：{realarea}</td>',
+                '<td width="25%">计费面积：{feearea}</td></tr>',
+                '<tr><td width="25%">计费方式：{feetype}</td>',
+                '<td width="25%">费率（元/平米）：{feerate}</td>',
+                '<td width="25%">折扣：{discount}</td>',
+                '<td width="25%">减免额：{reducefee}</td></tr>',
+                '<tr><td width="25%">供热状态：{heatstate}</td>',
+                '<td width="25%">热计量基数：{heatbase}</td>',
+                '<td width="25%">热计量费率：{heatrate}</td>',
+                '<td width="25%">户型：{housetype}</td></tr>',
+                '<tr><td width="100%">备注：{desp}</td></tr>',
+                '</table>'
+            )
+        });
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/userlist/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -325,93 +484,89 @@ Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'untname', type: 'string'},
                     {name: 'mchid', type: 'int'},
                     {name: 'mchname', type: 'string'},
-                    {name: 'usraddress', type: 'string'},
+                    {name: 'address', type: 'string'},
                     {name: 'usrname', type: 'string'},
-                    {name: 'communicate', type: 'string'},
-                    {name: 'kaihuDate', type: 'string'},
-                    {name: 'contractDate', type: 'string'},
+                    {name: 'phone', type: 'string'},
+                    {name: 'startdate', type: 'string'},
+                    {name: 'contractdate', type: 'string'},
                     {name: 'contracttype', type: 'string'},
-                    {name: 'contractversion', type: 'string'},
+                    {name: 'contractver', type: 'string'},
                     {name: 'contractpic', type: 'string'},
                     {name: 'idpic', type: 'string'},
-                    {name: 'fangchanpic', type: 'string'},
-                    {name: 'huxingpic', type: 'string'}
+                    {name: 'houseidpic', type: 'string'},
+                    {name: 'housepic', type: 'string'},
+                    {name: 'feeid', type: 'int'},
+                    {name: 'usrid', type: 'int'},
+                    {name: 'area', type: 'float'},
+                    {name: 'realarea', type: 'float'},
+                    {name: 'feearea', type: 'float'},
+                    {name: 'feetype', type: 'string'},
+                    {name: 'feerate', type: 'float'},
+                    {name: 'discount', type: 'float'},
+                    {name: 'reducefee', type: 'float'},
+                    {name: 'heatstate', type: 'string'},
+                    {name: 'heatbase', type: 'float'},
+                    {name: 'heatrate', type: 'float'},
+                    {name: 'housetype', type: 'string'},
+                    {name: 'desp', type: 'string'}
                 ]
             })
         });
         Heat.userlist.BasicGrid.superclass.constructor.call(this, {
             store: store,
 
-            columns: [{
-                header: "用户编号",
-                dataIndex: 'usrid',
-                width: 80
-            }, {
-                header: "户主姓名",
-                dataIndex: 'usrname',
-                width: 100
-            }, {
-                header: "用户类型",
-                dataIndex: 'usrtype',
-                width: 80
-            }, {
-                header: "所在社区",
-                dataIndex: 'cmtname',
-                width: 160
-            }, {
-                header: "所在楼栋",
-                dataIndex: 'bldname',
-                width: 160
-            }, {
-                header: "所在单元",
-                dataIndex: 'untname',
-                width: 160
-            }, {
-                header: "用户地址",
-                dataIndex: 'usraddress',
-                width: 160
-            }, {
-                header: "联系方式",
-                dataIndex: 'communicate',
-                width: 120
-            }, {
-                header: "所属机组",
-                dataIndex: 'mchname',
-                width: 120
-            }, {
-                header: "开户时间",
-                dataIndex: 'kaihuDate',
-                width: 100
-            }, {
-                header: "合同签订时间",
-                dataIndex: "contractDate",
-                width: 100
-            }, {
-                header: "合同类型",
-                dataIndex: "contracttype",
-                width: 100
-            }, {
-                header: "合同版本",
-                dataIndex: "contractversion",
-                width: 80
-            }],
+            columns: [
+                this.expander,
+                {
+                    header: "用户编号",
+                    dataIndex: 'usrid',
+                    width: 80
+                }, {
+                    header: "户主姓名",
+                    dataIndex: 'usrname',
+                    width: 100
+                }, {
+                    header: "用户类型",
+                    dataIndex: 'usrtype',
+                    width: 80
+                }, {
+                    header: "所在社区",
+                    dataIndex: 'cmtname',
+                    width: 160
+                }, {
+                    header: "所在楼栋",
+                    dataIndex: 'bldname',
+                    width: 160
+                }, {
+                    header: "所在单元",
+                    dataIndex: 'untname',
+                    width: 160
+                }, {
+                    header: "用户地址",
+                    dataIndex: 'address',
+                    width: 160
+                }, {
+                    header: "联系方式",
+                    dataIndex: 'phone',
+                    width: 120
+                }],
 
-            tbar: [{
-                text: "添加用户",
-                iconCls: "add_icon",
-                handler: this.onAddClick,
-                scope: this
-            }, '-', {
-                text: "修改用户",
-                iconCls: "mod_icon",
-                handler: this.onModClick,
-                scope: this
-            }, '-', {
-                text: "删除用户",
-                iconCls: "del_icon",
-                handler: this.onDelClick,
-                scope: this
-            }],
+//            tbar: [{
+//                text: "添加用户",
+//                iconCls: "add_icon",
+//                handler: this.onAddClick,
+//                scope: this
+//            }, '-', {
+//                text: "修改用户",
+//                iconCls: "mod_icon",
+//                handler: this.onModClick,
+//                scope: this
+//            }, '-', {
+//                text: "删除用户",
+//                iconCls: "del_icon",
+//                handler: this.onDelClick,
+//                scope: this
+//            }],
 
             bbar: new Ext.PagingToolbar({
                 pageSize: 20,
@@ -422,12 +577,12 @@ Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }),
 
             viewConfig: {
-                forceFit: false
+                forceFit: true
             },
 
             frame: true,
             loadMask: true,
-            collapsible: false,
+            plugins: this.expander,
             listeners: {
                 render: function(grid) {
                     grid.getStore().load();
@@ -500,7 +655,7 @@ Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/data/farespace/userlist/del'+debug,
+                url: '/heatManager/data/fare/user/del'+debug,
                 params: {id: id},
                 success: function(response) {
                     store.reload();

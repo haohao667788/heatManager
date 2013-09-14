@@ -4,14 +4,16 @@
     "totalProperty": 20,
     "data": [{
         "bnkid": 1,
+        "bnknum": 1212,
         "bnkname": "招商银行",
-        "accid": "26178267126",
+        "accountnum": "26178267126",
         "crsid": 1,
         "crsname": "科目1"
     }, {
         "bnkid": 2,
+        "bnknum": 1213,
         "bnkname": "中国银行",
-        "accid": "26178267126",
+        "accountnum": "26178267126Y",
         "crsid": 1,
         "crsname": "科目1"
     }]

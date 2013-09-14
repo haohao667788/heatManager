@@ -1,3 +1,7 @@
 .x-form-check-wrap {
     padding-left: 2px;
 }
+
+.x-grid3-row-expander {
+    cursor: pointer;
+}

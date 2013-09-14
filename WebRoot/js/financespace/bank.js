@@ -21,6 +21,12 @@ Heat.bank.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'bnkid'
             }, {
                 xtype: 'textfield',
+                fieldLabel: '银行编号',
+                name: 'bnknum',
+                width: 160,
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
                 fieldLabel: '银行名称',
                 name: 'bnkname',
                 width: 160,
@@ -28,7 +34,7 @@ Heat.bank.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }, {
                 xtype: 'textfield',
                 fieldLabel: '账号',
-                name: 'accid',
+                name: 'accountnum',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
@@ -178,8 +184,9 @@ Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 root: 'data',
                 fields: [
                     {name: 'bnkid', type: 'int'},
+                    {name: 'bnknum', type: 'string'},
                     {name: 'bnkname', type: 'string'},
-                    {name: 'accid', type: 'string'},
+                    {name: 'accountnum', type: 'string'},
                     {name: 'crsid', type: 'int'},
                     {name: 'crsname', type: 'string'}
                 ]
@@ -190,7 +197,7 @@ Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "银行编号",
-                dataIndex: 'bnkid',
+                dataIndex: 'bnknum',
                 width: 1
             }, {
                 header: "银行名称",
@@ -198,12 +205,8 @@ Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "账号",
-                dataIndex: 'accid',
-                width: 1
-            }, {
-                header: "科目编号",
-                dataIndex: 'crsid',
-                width: 1
+                dataIndex: 'accountnum',
+                width: 2
             }, {
                 header: "科目名称",
                 dataIndex: 'crsname',
