@@ -268,7 +268,12 @@ Heat.mch.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             frame: true,
             loadMask: true,
-            collapsible: false
+            collapsible: false,
+            listeners: {
+                render: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         });
 
         this.mchWin.on("submitcomplete", this.refresh, this);
