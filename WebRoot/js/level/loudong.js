@@ -509,7 +509,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         var id = record.get('bldid');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/level/loudong/del'+debug,
+                url: '/heatManager/data/level/loudong/del'+debug,
                 params: {id: id},
                 success: function(response) {
                     store.reload();
