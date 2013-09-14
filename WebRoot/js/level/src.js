@@ -172,7 +172,8 @@ Heat.src.BasicWin = Ext.extend(Ext.Window, {
             title: '修改记录',
             width: 300,
             buttonAlign: 'center',
-            closeAction: 'hide'
+            closeAction: 'hide',
+            modal: true
         });
 
         this.addEvents('submitcomplete');
