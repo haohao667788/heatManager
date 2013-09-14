@@ -423,7 +423,8 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                                 cmtname = record.get('cmtname'),
                                 bldid = record.get('bldid'),
                                 bldname = record.get('bldname'),
-                                newGrid = new Heat.danyuan.BasicGrid;
+                                newGrid = new Heat.danyuan.BasicGrid,
+                                ns = "";
 
                             newGrid.cmtid = cmtid;
                             newGrid.cmtname = cmtname;
