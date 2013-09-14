@@ -60,6 +60,12 @@ Heat.danyuan.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }
                 }
             }), {
+                xtype: 'textfield',
+                fieldLabel: 'GIS',
+                name: 'gis',
+                width: 160,
+                allowBlank: false
+            }, {
                 xtype: 'fileuploadfield',
                 fieldLabel: '单元平面图',
                 name: 'picaddress',
