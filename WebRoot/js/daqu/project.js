@@ -294,6 +294,10 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                 }]
             }]
         });
+    },
+
+    reset: function() {
+        //this.getForm().findField("")
     }
 });
 
@@ -370,6 +374,10 @@ Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
             closeAction: 'hide',
             modal: true
         });
+    },
+
+    onResetClick: function() {
+        this.form.reset();
     }
 });
 
