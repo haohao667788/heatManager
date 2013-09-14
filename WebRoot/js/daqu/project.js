@@ -263,7 +263,7 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                     layout: 'form',
                     items: [
                         new Ext.form.ComboBox({
-                            hiddenName: 'employee',
+                            hiddenName: 'staff',
                             mode: 'local',
                             width: 140,
                             fieldLabel: '查询员工',
@@ -272,8 +272,7 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                             displayField: 'text',
                             allowBlank: false,
                             store: new Ext.data.Store({
-                                autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/queryEmployee"+debug}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/queryStaff"+debug}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
@@ -296,8 +295,8 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
         });
     },
 
-    reset: function() {
-        //this.getForm().findField("")
+    getStaff: function(pid) {
+        this.getForm().findField("staff").getStore().load({params: {pjtid: pid}});
     }
 });
 
@@ -354,7 +353,9 @@ Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         this.form = new Heat.project.QueryForm();
+        this.form.self = this;
         this.grid = new Heat.project.EmployeeGrid();
+        this.grid.self = this;
         Heat.project.EmployeeWin.superclass.constructor.call(this, {
             items: [
                 this.form,
@@ -372,7 +373,12 @@ Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
             width: 500,
             buttonAlign: 'center',
             closeAction: 'hide',
-            modal: true
+            modal: true,
+            listeners: {
+                show: function(win) {
+                    win.form.getStaff(win.pid);
+                }
+            }
         });
     },
 

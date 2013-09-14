@@ -35,11 +35,10 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属社区',
-                triggerAction: 'all',
+                triggerAction: 'query',
                 valueField: 'value',
                 displayField: 'text',
                 allowBlank: false,
-                editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
                     proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug}),
@@ -47,25 +46,56 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         {name: 'value'},
                         {name: 'text'}
                     ])
-                })
+                }),
+                listeners: {
+                    change: function(combo, value) {
+                        var flag = false;
+                        combo.getStore().each(function(record, index, total) {
+                            var text = record.get("text"),
+                                val = record.get("value");
+                            if (val == value || val == text) {
+                                flag = true;
+                                return false;
+                            }
+                        });
+                        if (!flag) {
+                            combo.markInvalid("请选择对应记录");
+                        }
+                    }
+                }
             }), new Ext.form.ComboBox({
-                hiddenName: 'srcid',
+                hiddenName: 'mchid',
                 mode: 'local',
                 width: 160,
-                fieldLabel: '所属热源',
-                triggerAction: 'all',
+                fieldLabel: '所属机组',
+                triggerAction: 'query',
                 valueField: 'value',
                 displayField: 'text',
                 allowBlank: false,
-                editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryHeat"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryMch"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
                     ])
-                })
+                }),
+                listeners: {
+                    change: function(combo, value) {
+                        var flag = false;
+                        combo.getStore().each(function(record, index, total) {
+                            var text = record.get("text"),
+                                val = record.get("value");
+                            if (val == value || val == text) {
+                                flag = true;
+                                return false;
+                            }
+                        });
+                        if (!flag) {
+                            combo.markInvalid("请选择对应记录");
+                        }
+                    }
+                }
             }), new Ext.form.ComboBox({
                 hiddenName: 'heattype',
                 mode: 'local',
@@ -113,27 +143,42 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     //提交表单数据
     formSubmit: function() {
-        this.getForm().submit({
-            clientValidation: true,
-            waitMsg:'数据保存中...',
-            success: this.submitcomplete.createDelegate(this),
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                        break;
-                    case Ext.form.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                        break;
-                    case Ext.form.Action.SERVER_INVALID:
-                        Ext.Msg.alert('系统提示', action.result.msg);
-                        break;
-                }
+        var isInvalid = false,
+            form = this.getForm(),
+            fields = ["cmtid", "mchid"];
+        Ext.each(fields, function(field) {
+            var $f = $(form.findField(field).el.dom);
+            if ($f.hasClass("x-form-invalid")) {
+                isInvalid = true;
+                return false;
             }
         });
+        if (isInvalid) {
+            Ext.Msg.alert("系统提示", "请正确填写表单");
+        } else {
+            this.getForm().submit({
+                clientValidation: true,
+                waitMsg:'数据保存中...',
+                success: this.submitcomplete.createDelegate(this),
+                failure: function(form, action) {
+                    switch (action.failureType) {
+                        case Ext.form.Action.CLIENT_INVALID:
+                            Ext.Msg.alert('系统提示', '请先填写完所有必填项');
+                            break;
+                        case Ext.form.Action.CONNECT_FAILURE:
+                            Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
+                            break;
+                        case Ext.form.Action.SERVER_INVALID:
+                            Ext.Msg.alert('系统提示', action.result.msg);
+                            break;
+                    }
+                }
+            });
+        }
     },
 
     reset: function() {
+        this.getForm().clearInvalid();
         this.getForm().reset();
     },
 
@@ -260,8 +305,8 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'cmtname', type: 'string'},
                     {name: 'pjtid', type: 'int'},
                     {name: 'pjtname', type: 'string'},
-                    {name: 'srcid', type: 'int'},
-                    {name: 'srcname', type: 'string'},
+                    {name: 'mchid', type: 'int'},
+                    {name: 'mchname', type: 'string'},
                     {name: 'heattype', type: 'string'},
                     {name: 'bldaddress', type: 'string'},
                     {name: 'desp', type: 'string'},
@@ -294,8 +339,8 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 dataIndex: 'pjtname',
                 width: 1
             }, {
-                header: "所属热源",
-                dataIndex: 'srcid',
+                header: "所属机组",
+                dataIndex: 'mchname',
                 width: 1
             }, {
                 header: "供热类型",
@@ -366,18 +411,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             loadMask: true,
             collapsible: false,
             listeners: {
-                render: function(grid) {
-                    var store = grid.getStore(),
-                        tbar = grid.getTopToolbar(),
-                        filters = tbar.findByType("combo");
-                    if (grid.cmtid) {
-                        store.setBaseParam("cmtid", grid.cmtid);
-                        filters[0].setValue(grid.cmtname);
-                    } else {
-                        filters[0].setValue("全部社区");
-                    }
-                    grid.getStore().load();
-                },
+                render: this.onShow,
                 rowcontextmenu: function(grid, rowIndex, e) {
                     e.preventDefault();
                     if (rowIndex < 0) return;
@@ -422,6 +456,20 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         });
 
         this.loudongWin.on("submitcomplete", this.refresh, this);
+    },
+
+    onShow: function() {
+        var grid = this,
+            store = grid.getStore(),
+            tbar = grid.getTopToolbar(),
+            filters = tbar.findByType("combo");
+        if (grid.cmtid) {
+            store.setBaseParam("cmtid", grid.cmtid);
+            filters[0].setValue(grid.cmtname);
+        } else {
+            filters[0].setValue("全部社区");
+        }
+        grid.getStore().load();
     },
 
     onAddClick: function() {
@@ -482,6 +530,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
+        this.loudongWin.hide();
         this.getStore().reload();
     },
 

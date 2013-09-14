@@ -289,21 +289,31 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                             var record = grid.getStore().getAt(rowIndex),
                                 cmtid = record.get('cmtid'),
                                 cmtname = record.get('cmtname'),
-                                newGrid = new Heat.loudong.BasicGrid;
+                                newGrid = new Heat.loudong.BasicGrid,
+                                ns = "loudong",
+                                o_tab = Heat.tabs.getComponent(ns);
 
-                            newGrid.cmtid = cmtid;
-                            newGrid.cmtname = cmtname;
-                            var tab = Heat.tabs.add({
-                                title: "楼栋管理",
-                                //iconCls: 'fwxtabpanelicon',
-                                border: 0,
-                                autoWidth: true,
-                                closable: true,
-                                layout: 'fit',
-                                items: [newGrid]
-                            });
-                            Heat.tabs.setActiveTab(tab);
-
+                            if (!o_tab) {
+                                newGrid.cmtid = cmtid;
+                                newGrid.cmtname = cmtname;
+                                var tab = Heat.tabs.add({
+                                    id: ns,
+                                    title: "楼栋管理",
+                                    //iconCls: 'fwxtabpanelicon',
+                                    border: 0,
+                                    autoWidth: true,
+                                    closable: true,
+                                    layout: 'fit',
+                                    items: [newGrid]
+                                });
+                                Heat.tabs.setActiveTab(tab);
+                            } else {
+                                var g = o_tab.items.items[0];
+                                g.cmtid = cmtid;
+                                g.cmtname = cmtname;
+                                g.onShow();
+                                Heat.tabs.setActiveTab(ns);
+                            }
                         }
                     }, {
                         text: "显示社区平面图",

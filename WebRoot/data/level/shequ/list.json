@@ -5,8 +5,6 @@
     "data": [{
         "cmtid": 1,
         "cmtname": "社区1",
-        "pjtid": 1,
-        "pjtname": "项目1",
         "briefname": "区1",
         "cmtaddress": "XX路XX区",
         "desp": "这是项目1",
@@ -15,8 +13,6 @@
     }, {
         "cmtid": 2,
         "cmtname": "社区2",
-        "pjtid": 2,
-        "pjtname": "项目2",
         "briefname": "区2",
         "cmtaddress": "XX路XX区",
         "desp": "这是项目2",
