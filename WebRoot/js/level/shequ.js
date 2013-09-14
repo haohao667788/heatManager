@@ -30,7 +30,7 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属项目',
-                triggerAction: 'all',
+                triggerAction: 'query',
                 valueField: 'value',
                 displayField: 'text',
                 allowBlank: false,
@@ -42,7 +42,23 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         {name: 'value'},
                         {name: 'text'}
                     ])
-                })
+                }),
+                listeners: {
+                    change: function(combo, value) {
+                        var flag = false;
+                        combo.getStore().each(function(record, index, total) {
+                            var text = record.get("text"),
+                                val = record.get("value");
+                            if (val == value || val == text) {
+                                flag = true;
+                                return false;
+                            }
+                        });
+                        if (!flag) {
+                            combo.markInvalid("请选择对应记录");
+                        }
+                    }
+                }
             }), {
                 xtype: 'textfield',
                 fieldLabel: '简称',
@@ -84,24 +100,38 @@ Heat.shequ.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     //提交表单数据
     formSubmit: function() {
-        this.getForm().submit({
-            clientValidation: true,
-            waitMsg:'数据保存中...',
-            success: this.submitcomplete.createDelegate(this),
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                        break;
-                    case Ext.form.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                        break;
-                    case Ext.form.Action.SERVER_INVALID:
-                        Ext.Msg.alert('系统提示', action.result.msg);
-                        break;
-                }
+        var isInvalid = false,
+            form = this.getForm(),
+            fields = ["pjtid"];
+        Ext.each(fields, function(field) {
+            var $f = $(form.findField(field).el.dom);
+            if ($f.hasClass("x-form-invalid")) {
+                isInvalid = true;
+                return false;
             }
         });
+        if (isInvalid) {
+            Ext.Msg.alert("系统提示", "请正确填写表单");
+        } else {
+            this.getForm().submit({
+                clientValidation: true,
+                waitMsg:'数据保存中...',
+                success: this.submitcomplete.createDelegate(this),
+                failure: function(form, action) {
+                    switch (action.failureType) {
+                        case Ext.form.Action.CLIENT_INVALID:
+                            Ext.Msg.alert('系统提示', '请先填写完所有必填项');
+                            break;
+                        case Ext.form.Action.CONNECT_FAILURE:
+                            Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
+                            break;
+                        case Ext.form.Action.SERVER_INVALID:
+                            Ext.Msg.alert('系统提示', action.result.msg);
+                            break;
+                    }
+                }
+            });
+        }
     },
 
     reset: function() {
@@ -187,13 +217,37 @@ Heat.shequ.BasicWin = Ext.extend(Ext.Window, {
     }
 });
 
+Heat.shequ.PicWin = Ext.extend(Ext.Window, {
+    form: null,
+    constructor: function(cfg) {
+        cfg = cfg || {};
+        Ext.apply(this, cfg);
+        this.form = new Heat.shequ.BasicForm();
+        Heat.loudong.PicWin.superclass.constructor.call(this, {
+            title: '楼栋平面图',
+            width: 800,
+            height: 400,
+            autoScroll: true,
+            closeAction: 'hide',
+            modal: true,
+            html: '<img src="image/loading.gif">',
+            listeners: {
+                show: function(win) {
+                    win.el.dom.getElementsByTagName("img")[0].src = win.pic;
+                }
+            }
+        });
+    }
+});
 
 Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     shequWin: null,
+    picWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         this.shequWin = new Heat.shequ.BasicWin();
+        this.picWin = new Heat.shequ.PicWin();
         var store = new Ext.data.Store({
             proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/shequ/list"+debug}),
             reader: new Ext.data.JsonReader({
@@ -309,7 +363,10 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     }, {
                         text: "显示社区平面图",
                         handler: function() {
-                            console.log(rowIndex);
+                            var record = grid.getStore().getAt(rowIndex),
+                                pic = record.get('picaddress');
+                            grid.picWin.pic = pic;
+                            grid.picWin.show();
                         }
                     }]);
                     menu.showAt(e.getPoint());
@@ -348,10 +405,10 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     deleteRecord: function(btn) {
         var store = this.getStore();
         var record = this.getSelected();
-        var id = record.get('id');
+        var id = record.get('cmtid');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/level/shequ/del'+debug,
+                url: '/heatManager/data/level/shequ/del'+debug,
                 params: {id: id},
                 success: function(response) {
                     store.reload();
