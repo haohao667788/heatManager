@@ -33,4 +33,5 @@ public interface DistrictService {
 
 	List<DistrictInfo> findAll();
 
+	Long count();
 }

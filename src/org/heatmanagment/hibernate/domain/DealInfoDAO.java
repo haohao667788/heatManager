@@ -32,11 +32,11 @@ public class DealInfoDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(DealInfoDAO.class);
 	// property constants
-	public static final String CURBALANCE = "curbalance";
-	public static final String CURCHARGE = "curcharge";
-	public static final String CURMONEY = "curmoney";
+	public static final String BALANCE = "balance";
+	public static final String MONEY = "money";
 	public static final String DEALNAME = "dealname";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -103,16 +103,12 @@ public class DealInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DealInfo> findByCurbalance(Object curbalance) {
-		return findByProperty(CURBALANCE, curbalance);
+	public List<DealInfo> findByBalance(Object balance) {
+		return findByProperty(BALANCE, balance);
 	}
 
-	public List<DealInfo> findByCurcharge(Object curcharge) {
-		return findByProperty(CURCHARGE, curcharge);
-	}
-
-	public List<DealInfo> findByCurmoney(Object curmoney) {
-		return findByProperty(CURMONEY, curmoney);
+	public List<DealInfo> findByMoney(Object money) {
+		return findByProperty(MONEY, money);
 	}
 
 	public List<DealInfo> findByDealname(Object dealname) {
@@ -123,17 +119,21 @@ public class DealInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<DealInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all DealInfo instances");
 		try {
-			String queryString = "from DealInfo";
+			String queryString = "from DealInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all DealInfo instances with boundary");
 		try {
@@ -141,9 +141,10 @@ public class DealInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from DealInfo";
+					String q = "from DealInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -151,6 +152,13 @@ public class DealInfoDAO extends HibernateDaoSupport {
 			log.error("find all DealInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		DealInfo deal = new DealInfo();
+		deal.setDealid(id);
+		deal.setIsvalid(false);
+		attachDirty(deal);
 	}
 
 	public DealInfo merge(DealInfo detachedInstance) {

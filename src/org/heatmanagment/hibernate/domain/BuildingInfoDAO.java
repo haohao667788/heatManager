@@ -33,11 +33,12 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 			.getLogger(BuildingInfoDAO.class);
 	// property constants
 	public static final String BLDNAME = "bldname";
-	public static final String BLDADDRESS = "bldaddress";
+	public static final String ADDRESS = "address";
 	public static final String HEATTYPE = "heattype";
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -63,6 +64,20 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 			log.error("delete failed", re);
 			throw re;
 		}
+	}
+
+	public Long count() {
+		log.debug("count BuildingInfos");
+		String hql = "select count(*) from BuildingInfo  where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
+	}
+
+	public Long countByCmt(Long cmtid) {
+		log.debug("count BuildingInfos by cmtid");
+		String sql = "select count(*) from building_info where cmtid=" + cmtid;
+		Query query = getHibernateTemplate().getSessionFactory().openSession()
+				.createSQLQuery(sql);
+		return new Long(query.list().size());
 	}
 
 	public BuildingInfo findById(java.lang.Long id) {
@@ -108,8 +123,8 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		return findByProperty(BLDNAME, bldname);
 	}
 
-	public List<BuildingInfo> findByBldaddress(Object bldaddress) {
-		return findByProperty(BLDADDRESS, bldaddress);
+	public List<BuildingInfo> findByAddress(Object address) {
+		return findByProperty(ADDRESS, address);
 	}
 
 	public List<BuildingInfo> findByHeattype(Object heattype) {
@@ -128,17 +143,52 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<BuildingInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all BuildingInfo instances");
 		try {
-			String queryString = "from BuildingInfo";
+			String queryString = "from BuildingInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List findAllByCmtId(Long id) {
+		log.debug("finding all BuildingInfo instances by cmtId");
+		try {
+			String sql = "select * from building_info where isvalid=1 and cmtid="
+					+ id;
+			Query query = getHibernateTemplate().getSessionFactory()
+					.openSession().createSQLQuery(sql);
+			return query.list();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public List findPageByCmtid(Long id, Long start, Long limit) {
+		log.debug("finding all BuildingInfo instances");
+		try {
+			String sql = "select * from building_info where isvalid=1 and cmtid="
+					+ id;
+			Query query = getHibernateTemplate().getSessionFactory()
+					.openSession().createSQLQuery(sql)
+					.setFirstResult(start.intValue())
+					.setMaxResults(limit.intValue());
+			return query.list();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all BuildingInfo instances with boundary");
 		try {
@@ -146,9 +196,10 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from BuildingInfo";
+					String q = "from BuildingInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -156,6 +207,13 @@ public class BuildingInfoDAO extends HibernateDaoSupport {
 			log.error("find all BuildingInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		BuildingInfo bld = new BuildingInfo();
+		bld.setBldid(id);
+		bld.setIsvalid(false);
+		attachDirty(bld);
 	}
 
 	public BuildingInfo merge(BuildingInfo detachedInstance) {

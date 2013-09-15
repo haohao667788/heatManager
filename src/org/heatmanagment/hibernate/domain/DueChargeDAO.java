@@ -33,11 +33,14 @@ public class DueChargeDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(DueChargeDAO.class);
 	// property constants
+	public static final String CHARGE = "charge";
 	public static final String DEALNAME = "dealname";
-	public static final String DEALMONTH = "dealmonth";
 	public static final String CHGTYPE = "chgtype";
-	public static final String CHGNUMBER = "chgnumber";
-	public static final String REALCHGNUMBER = "realchgnumber";
+	public static final String AREA = "area";
+	public static final String RATE = "rate";
+	public static final String REDUCECHG = "reducechg";
+	public static final String MONEY = "money";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -104,37 +107,49 @@ public class DueChargeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DueCharge> findByDealname(Object dealname) {
-		return findByProperty(DEALNAME, dealname);
+	public List<DueCharge> findByCharge(Object charge) {
+		return findByProperty(CHARGE, charge);
 	}
 
-	public List<DueCharge> findByDealmonth(Object dealmonth) {
-		return findByProperty(DEALMONTH, dealmonth);
+	public List<DueCharge> findByDealname(Object dealname) {
+		return findByProperty(DEALNAME, dealname);
 	}
 
 	public List<DueCharge> findByChgtype(Object chgtype) {
 		return findByProperty(CHGTYPE, chgtype);
 	}
 
-	public List<DueCharge> findByChgnumber(Object chgnumber) {
-		return findByProperty(CHGNUMBER, chgnumber);
+	public List<DueCharge> findByArea(Object area) {
+		return findByProperty(AREA, area);
 	}
 
-	public List<DueCharge> findByRealchgnumber(Object realchgnumber) {
-		return findByProperty(REALCHGNUMBER, realchgnumber);
+	public List<DueCharge> findByRate(Object rate) {
+		return findByProperty(RATE, rate);
+	}
+
+	public List<DueCharge> findByReducechg(Object reducechg) {
+		return findByProperty(REDUCECHG, reducechg);
+	}
+
+	public List<DueCharge> findByMoney(Object money) {
+		return findByProperty(MONEY, money);
+	}
+
+	public List<DueCharge> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
 	}
 
 	public List findAll() {
 		log.debug("finding all DueCharge instances");
 		try {
-			String queryString = "from DueCharge";
+			String queryString = "from DueCharge as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all DueCharge instances with boundary");
 		try {
@@ -142,9 +157,10 @@ public class DueChargeDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from DueCharge";
+					String q = "from DueCharge as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -152,6 +168,13 @@ public class DueChargeDAO extends HibernateDaoSupport {
 			log.error("find all DueCharge with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		DueCharge due = new DueCharge();
+		due.setChgid(id);
+		due.setIsvalid(false);
+		attachDirty(due);
 	}
 
 	public DueCharge merge(DueCharge detachedInstance) {

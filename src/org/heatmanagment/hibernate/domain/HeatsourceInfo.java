@@ -28,12 +28,11 @@ public class HeatsourceInfo implements java.io.Serializable {
 
 	private Long srcid;
 	private DistrictInfo districtInfo;
-	private ClassInfo classInfo;
 	private String srcname;
-	private String srcaddress;
+	private String address;
 	private String heattype;
 	private String desp;
-	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
+	private Boolean isvalid;
 	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
 
 	// Constructors
@@ -48,16 +47,15 @@ public class HeatsourceInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public HeatsourceInfo(DistrictInfo districtInfo, ClassInfo classInfo,
-			String srcname, String srcaddress, String heattype, String desp,
-			Set<BuildingInfo> buildingInfos, Set<MachinesetInfo> machinesetInfos) {
+	public HeatsourceInfo(DistrictInfo districtInfo, String srcname,
+			String address, String heattype, String desp, Boolean isvalid,
+			Set<MachinesetInfo> machinesetInfos) {
 		this.districtInfo = districtInfo;
-		this.classInfo = classInfo;
 		this.srcname = srcname;
-		this.srcaddress = srcaddress;
+		this.address = address;
 		this.heattype = heattype;
 		this.desp = desp;
-		this.buildingInfos = buildingInfos;
+		this.isvalid = isvalid;
 		this.machinesetInfos = machinesetInfos;
 	}
 
@@ -74,7 +72,7 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.srcid = srcid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "DSTID")
 	public DistrictInfo getDistrictInfo() {
 		return this.districtInfo;
@@ -84,17 +82,7 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.districtInfo = districtInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CLSID")
-	public ClassInfo getClassInfo() {
-		return this.classInfo;
-	}
-
-	public void setClassInfo(ClassInfo classInfo) {
-		this.classInfo = classInfo;
-	}
-
-	@Column(name = "SRCNAME", nullable = true, length = 20)
+	@Column(name = "SRCNAME", nullable = true, length = 200)
 	public String getSrcname() {
 		return this.srcname;
 	}
@@ -103,13 +91,13 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.srcname = srcname;
 	}
 
-	@Column(name = "SRCADDRESS", length = 200)
-	public String getSrcaddress() {
-		return this.srcaddress;
+	@Column(name = "ADDRESS", length = 200)
+	public String getAddress() {
+		return this.address;
 	}
 
-	public void setSrcaddress(String srcaddress) {
-		this.srcaddress = srcaddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	@Column(name = "HEATTYPE", length = 20)
@@ -130,13 +118,13 @@ public class HeatsourceInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "heatsourceInfo")
-	public Set<BuildingInfo> getBuildingInfos() {
-		return this.buildingInfos;
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
 	}
 
-	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
-		this.buildingInfos = buildingInfos;
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "heatsourceInfo")

@@ -37,8 +37,7 @@ public class BankCertificate implements java.io.Serializable {
 	private Timestamp importdate;
 	private String importer;
 	private Long relatednum;
-	private Set<CertificateChargeMapping> certificateChargeMappings = new HashSet<CertificateChargeMapping>(
-			0);
+	private Boolean isvalid;
 	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
 
 	// Constructors
@@ -51,8 +50,7 @@ public class BankCertificate implements java.io.Serializable {
 	public BankCertificate(BankInfo bankInfo, String ctftype, String ctfnumber,
 			Double money, String undertaker, Timestamp ctfdate,
 			Timestamp importdate, String importer, Long relatednum,
-			Set<CertificateChargeMapping> certificateChargeMappings,
-			Set<ChargeRecord> chargeRecords) {
+			Boolean isvalid, Set<ChargeRecord> chargeRecords) {
 		this.bankInfo = bankInfo;
 		this.ctftype = ctftype;
 		this.ctfnumber = ctfnumber;
@@ -62,7 +60,7 @@ public class BankCertificate implements java.io.Serializable {
 		this.importdate = importdate;
 		this.importer = importer;
 		this.relatednum = relatednum;
-		this.certificateChargeMappings = certificateChargeMappings;
+		this.isvalid = isvalid;
 		this.chargeRecords = chargeRecords;
 	}
 
@@ -161,14 +159,13 @@ public class BankCertificate implements java.io.Serializable {
 		this.relatednum = relatednum;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bankCertificate")
-	public Set<CertificateChargeMapping> getCertificateChargeMappings() {
-		return this.certificateChargeMappings;
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
 	}
 
-	public void setCertificateChargeMappings(
-			Set<CertificateChargeMapping> certificateChargeMappings) {
-		this.certificateChargeMappings = certificateChargeMappings;
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bankCertificate")

@@ -33,14 +33,14 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(ChargeRecordDAO.class);
 	// property constants
-	public static final String ACCRANGEID = "accrangeid";
 	public static final String MONEY = "money";
 	public static final String CHGTYPE = "chgtype";
 	public static final String CHECKNUM = "checknum";
 	public static final String RCDPIC = "rcdpic";
-	public static final String CHGYEAR = "chgyear";
+	public static final String DEALNAME = "dealname";
 	public static final String FINANCECHECKER = "financechecker";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -107,10 +107,6 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<ChargeRecord> findByAccrangeid(Object accrangeid) {
-		return findByProperty(ACCRANGEID, accrangeid);
-	}
-
 	public List<ChargeRecord> findByMoney(Object money) {
 		return findByProperty(MONEY, money);
 	}
@@ -127,8 +123,8 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 		return findByProperty(RCDPIC, rcdpic);
 	}
 
-	public List<ChargeRecord> findByChgyear(Object chgyear) {
-		return findByProperty(CHGYEAR, chgyear);
+	public List<ChargeRecord> findByDealname(Object dealname) {
+		return findByProperty(DEALNAME, dealname);
 	}
 
 	public List<ChargeRecord> findByFinancechecker(Object financechecker) {
@@ -139,17 +135,21 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<ChargeRecord> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all ChargeRecord instances");
 		try {
-			String queryString = "from ChargeRecord";
+			String queryString = "from ChargeRecord as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all ChargeRecord instances with boundary");
 		try {
@@ -157,9 +157,10 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from ChargeRecord";
+					String q = "from ChargeRecord as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -167,6 +168,13 @@ public class ChargeRecordDAO extends HibernateDaoSupport {
 			log.error("find all ChargeRecord with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		ChargeRecord rcd = new ChargeRecord();
+		rcd.setRcdid(id);
+		rcd.setIsvalid(false);
+		attachDirty(rcd);
 	}
 
 	public ChargeRecord merge(ChargeRecord detachedInstance) {

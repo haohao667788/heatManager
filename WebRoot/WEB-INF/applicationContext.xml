@@ -22,6 +22,8 @@
             http://www.springframework.org/schema/mvc
             http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
+	<bean class="org.heatmanagment.spring.util.UTF8StringBeanPostProcessor" />
+
 	<!-- Open up annotation attributes -->
 	<mvc:annotation-driven />
 
@@ -143,9 +145,6 @@
 					org.heatmanagment.hibernate.domain.BankCertificate
 				</value>
 				<value>
-					org.heatmanagment.hibernate.domain.CertificateChargeMapping
-				</value>
-				<value>
 					org.heatmanagment.hibernate.domain.CourseInfo
 				</value>
 				<value>
@@ -161,8 +160,13 @@
 					org.heatmanagment.hibernate.domain.DueCharge
 				</value>
 				<value>
-					org.heatmanagment.hibernate.domain.DealGenerator
-				</value></list>
+					org.heatmanagment.hibernate.domain.ClsStfMap
+				</value>
+				<value>org.heatmanagment.hibernate.domain.Config</value>
+				<value>
+					org.heatmanagment.hibernate.domain.PjtStfMap
+				</value>
+			</list>
 		</property>
 	</bean>
 
@@ -298,13 +302,6 @@
 		</property>
 	</bean>
 	<bean
-		id="CertificateChargeMappingDAO"
-		class="org.heatmanagment.hibernate.domain.CertificateChargeMappingDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean
 		id="CourseInfoDAO"
 		class="org.heatmanagment.hibernate.domain.CourseInfoDAO">
 		<property name="sessionFactory">
@@ -340,9 +337,24 @@
 		</property>
 	</bean>
 	<bean
-		id="DealGeneratorDAO"
-		class="org.heatmanagment.hibernate.domain.DealGeneratorDAO">
+		id="ClsStfMapDAO"
+		class="org.heatmanagment.hibernate.domain.ClsStfMapDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
-	</bean></beans>
+	</bean>
+	<bean
+		id="ConfigDAO"
+		class="org.heatmanagment.hibernate.domain.ConfigDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean
+		id="PjtStfMapDAO"
+		class="org.heatmanagment.hibernate.domain.PjtStfMapDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+</beans>

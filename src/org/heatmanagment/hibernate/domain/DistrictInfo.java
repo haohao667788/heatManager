@@ -9,11 +9,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-import static javax.persistence.GenerationType.SEQUENCE;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * DistrictInfo entity. @author MyEclipse Persistence Tools
@@ -27,8 +28,11 @@ public class DistrictInfo implements java.io.Serializable {
 	private Long dstid;
 	private String dstname;
 	private String desp;
-	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
+	private Boolean isvalid;
+	@JsonIgnore
 	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
+	@JsonIgnore
+	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
 
 	// Constructors
 
@@ -42,12 +46,13 @@ public class DistrictInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public DistrictInfo(String dstname, String desp,
-			Set<HeatsourceInfo> heatsourceInfos, Set<ProjectInfo> projectInfos) {
+	public DistrictInfo(String dstname, String desp, Boolean isvalid,
+			Set<ProjectInfo> projectInfos, Set<HeatsourceInfo> heatsourceInfos) {
 		this.dstname = dstname;
 		this.desp = desp;
-		this.heatsourceInfos = heatsourceInfos;
+		this.isvalid = isvalid;
 		this.projectInfos = projectInfos;
+		this.heatsourceInfos = heatsourceInfos;
 	}
 
 	// Property accessors
@@ -81,13 +86,13 @@ public class DistrictInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
-	public Set<HeatsourceInfo> getHeatsourceInfos() {
-		return this.heatsourceInfos;
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
 	}
 
-	public void setHeatsourceInfos(Set<HeatsourceInfo> heatsourceInfos) {
-		this.heatsourceInfos = heatsourceInfos;
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
@@ -97,6 +102,15 @@ public class DistrictInfo implements java.io.Serializable {
 
 	public void setProjectInfos(Set<ProjectInfo> projectInfos) {
 		this.projectInfos = projectInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "districtInfo")
+	public Set<HeatsourceInfo> getHeatsourceInfos() {
+		return this.heatsourceInfos;
+	}
+
+	public void setHeatsourceInfos(Set<HeatsourceInfo> heatsourceInfos) {
+		this.heatsourceInfos = heatsourceInfos;
 	}
 
 }

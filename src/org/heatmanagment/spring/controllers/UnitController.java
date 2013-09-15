@@ -3,11 +3,12 @@ package org.heatmanagment.spring.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.heatmanagment.hibernate.domain.BuildingInfo;
 import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.UnitInfo;
 import org.heatmanagment.hibernate.util.FileUploader;
+import org.heatmanagment.hibernate.util.MapperTool;
+import org.heatmanagment.hibernate.util.ResultHolder;
 import org.heatmanagment.spring.entity.SuccessOut;
 import org.heatmanagment.spring.entity.UnitOut;
 import org.heatmanagment.spring.services.BuildingService;
@@ -36,40 +37,31 @@ public class UnitController {
 	@Autowired
 	private FileUploader fileUploader;
 
-	private ObjectMapper mapper;
-
-	public UnitController() {
-		this.mapper = new ObjectMapper();
-	}
+	@Autowired
+	private MapperTool tool;
 
 	@RequestMapping("/danyuan/del")
 	@ResponseBody
 	public String delete(@RequestParam Long id) {
 		this.unitService.deleteUnit(id);
-		SuccessOut out = new SuccessOut();
-		out.reset();
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(out);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return outCome;
+		return this.tool.successRetort();
 	}
 
 	@RequestMapping("/danyuan/update")
 	@ResponseBody
-	public String saveOrUpdate(@RequestParam(required = false) Long untid,
-			@RequestParam String untname, @RequestParam Long mchid,
-			@RequestParam Long bldid, @RequestParam Long cmtid,
-			@RequestParam String gis,
-			@RequestParam(value = "picaddress") CommonsMultipartFile file,
-			@RequestParam String desp) {
+	public String saveOrUpdate(
+			@RequestParam(required = false) Long untid,
+			@RequestParam String untname,
+			@RequestParam Long bldid,
+			@RequestParam(required = false) Long cmtid,
+			@RequestParam(required = false) String gis,
+			@RequestParam(required = false, value = "picaddress") CommonsMultipartFile file,
+			@RequestParam(required = false) String desp) {
 		SuccessOut out = new SuccessOut();
 		out.reset();
 
 		String filePath = null;
-		if (!file.isEmpty()) {
+		if (file != null && !file.isEmpty()) {
 			// upload the file
 			if (untid != null) {
 				// user want to upload a new version of pic
@@ -79,25 +71,12 @@ public class UnitController {
 					this.fileUploader.deleteFile(tempPath);
 				}
 			}
-			filePath = this.fileUploader.upload(file, "unit", untname);
+			filePath = this.fileUploader.upload(file, "unit");
 		}
 
-		this.unitService.saveOrUpdateUnit(untid, untname, bldid, cmtid, mchid,
-				gis, filePath);
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(out);
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				out.setSuccess(false);
-				out.setMessage(e.getMessage());
-				return this.mapper.writeValueAsString(out);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		return outCome;
+		this.unitService.saveOrUpdateUnit(untid, untname, bldid, cmtid, gis,
+				filePath);
+		return this.tool.successRetort();
 	}
 
 	@RequestMapping("/danyuan/list")
@@ -105,6 +84,8 @@ public class UnitController {
 	public String inquireAll(
 			@RequestParam(required = false, defaultValue = "0") Integer start,
 			@RequestParam(required = false, defaultValue = "20") Integer limit) {
+		SuccessOut out = new SuccessOut();
+		out.reset();
 		if (start == null) {
 			start = new Integer(0);
 		}
@@ -112,91 +93,91 @@ public class UnitController {
 			limit = new Integer(20);
 		}
 		List<UnitInfo> infos = this.unitService.findPage(start, limit);
+		List<Object> data = new ArrayList<Object>();
 
-		UnitOut out = new UnitOut();
-		out.setSuccess(true);
-		out.setMessage("");
-		out.setData(infos);
-		out.setTotalProperty(infos.size());
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(out);
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (UnitInfo i : infos) {
+			UnitOut temp = new UnitOut();
+			temp.setUntid(i.getUntid());
+			temp.setUntname(i.getUntname());
+			temp.setGis(i.getGis());
+			temp.setDesp(i.getDesp());
+			temp.setPicaddress(i.getPicaddress());
+			CommunityInfo cmt;
+			BuildingInfo bld;
+			if ((cmt = i.getCommunityInfo()) != null) {
+				temp.setCmtid(cmt.getCmtid());
+				temp.setCmtname(cmt.getCmtname());
+			}
+			if ((bld = i.getBuildingInfo()) != null) {
+				temp.setBldid(bld.getBldid());
+				temp.setBldname(bld.getBldname());
+			}
+			data.add(temp);
 		}
-		return outCome;
+		out.setData(data);
+		out.setTotalProperty(this.unitService.count());
+		return this.tool.result(out);
 	}
 
 	@RequestMapping("/danyuan/queryShequ")
 	@ResponseBody
 	public String inquireCmt() {
-		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+		ResultHolder holder = new ResultHolder();
 		List<CommunityInfo> cmt = this.communityService.findAll();
 
-		ArrayList<Object> begin = new ArrayList<Object>();
-		begin.add(new Long(0));
-		begin.add("全部社区");
-		data.add(begin);
+		holder.add(0l, "全部社区");
 
 		for (CommunityInfo i : cmt) {
-			ArrayList<Object> temp = new ArrayList<Object>(2);
-			temp.add(i.getCmtid());
-			temp.add(i.getCmtname());
-			data.add(temp);
+			holder.add(i.getCmtid(), i.getCmtname());
 		}
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return outCome;
+		return this.tool.result(holder.getData());
 	}
 
 	@RequestMapping("/danyuan/queryLoudong")
 	@ResponseBody
-	public String inquireBld(@RequestParam Long query) {
+	public String inquireBld(@RequestParam(required = false) String query,
+			@RequestParam(required = false) Long cmtid) {
 
+		ResultHolder holder = new ResultHolder();
 		/**
 		 * if query is 0, return all the building info. else return the selected
 		 * ones.
 		 */
-		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-		if (query.equals(0)) {
+		if (query == null) {
 			List<BuildingInfo> bld = this.buildingService.findAll();
-
-			ArrayList<Object> begin = new ArrayList<Object>();
-			begin.add(new Long(0));
-			begin.add("全部楼栋");
-			data.add(begin);
-
 			for (BuildingInfo i : bld) {
-				ArrayList<Object> temp = new ArrayList<Object>(2);
-				temp.add(i.getBldid());
-				temp.add(i.getBldname());
-				data.add(temp);
+				holder.add(i.getBldid(), i.getBldname());
 			}
-		} else {
-			List<BuildingInfo> bld = this.buildingService.findByCmtid(query);
-			for (BuildingInfo i : bld) {
-				ArrayList<Object> temp = new ArrayList<Object>(2);
-				temp.add(i.getBldid());
-				temp.add(i.getBldname());
-				data.add(temp);
+		} else if (query.equals("true")) {
+			if (cmtid == null || cmtid == 0) {
+				List<BuildingInfo> bld = this.buildingService.findAll();
+
+				holder.add(0l, "全部楼栋");
+				for (BuildingInfo i : bld) {
+					holder.add(i.getBldid(), i.getBldname());
+				}
+			} else {
+				List<BuildingInfo> bld = this.buildingService
+						.findAllByCmtId(cmtid);
+				return "[[6,\"fda\"]]";
+				// for (BuildingInfo i : bld) {
+				// holder.add(i.getBldid(), i.getBldname());
+				// }
 			}
 		}
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return outCome;
+		return this.tool.result(holder.getData());
 	}
 
-	/**
-	 * @RequestMapping("/danyuan/queryMachine")
-	 * @ResponseBody
-	 */
+	@RequestMapping("/danyuan/queryDanyuan")
+	@ResponseBody
+	public String queryUnt(@RequestParam Long bldid) {
 
+		ResultHolder holder = new ResultHolder();
+
+		List<UnitInfo> unt = this.unitService.findByBldid(bldid);
+		for (UnitInfo i : unt) {
+			holder.add(i.getUntid(), i.getUntname());
+		}
+		return this.tool.result(holder.getData());
+	}
 }

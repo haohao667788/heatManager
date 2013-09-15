@@ -44,8 +44,7 @@ public class CommunityInfoDAOTest {
 		String name = "创新苑";
 		String brief = "创新";
 		String address = "创新中路399弄";
-		CommunityInfo info = new CommunityInfo(name, brief, address, "", "",
-				"", null, null, null);
+		CommunityInfo info = null;
 		this.dao.save(info);
 
 		List<CommunityInfo> infos = this.dao.findByCmtname(name);

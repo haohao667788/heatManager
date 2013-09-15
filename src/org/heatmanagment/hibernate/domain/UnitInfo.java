@@ -29,13 +29,13 @@ public class UnitInfo implements java.io.Serializable {
 	// Fields
 
 	private Long untid;
-	private MachinesetInfo machinesetInfo;
 	private BuildingInfo buildingInfo;
 	private CommunityInfo communityInfo;
 	private String untname;
 	private String gis;
 	private String picaddress;
 	private String desp;
+	private Boolean isvalid;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
@@ -45,16 +45,16 @@ public class UnitInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public UnitInfo(MachinesetInfo machinesetInfo, BuildingInfo buildingInfo,
-			CommunityInfo communityInfo, String untname, String gis,
-			String picaddress, String desp, Set<UsersInfo> usersInfos) {
-		this.machinesetInfo = machinesetInfo;
+	public UnitInfo(BuildingInfo buildingInfo, CommunityInfo communityInfo,
+			String untname, String gis, String picaddress, String desp,
+			Boolean isvalid, Set<UsersInfo> usersInfos) {
 		this.buildingInfo = buildingInfo;
 		this.communityInfo = communityInfo;
 		this.untname = untname;
 		this.gis = gis;
 		this.picaddress = picaddress;
 		this.desp = desp;
+		this.isvalid = isvalid;
 		this.usersInfos = usersInfos;
 	}
 
@@ -71,17 +71,7 @@ public class UnitInfo implements java.io.Serializable {
 		this.untid = untid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "MCHID")
-	public MachinesetInfo getMachinesetInfo() {
-		return this.machinesetInfo;
-	}
-
-	public void setMachinesetInfo(MachinesetInfo machinesetInfo) {
-		this.machinesetInfo = machinesetInfo;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "BLDID")
 	public BuildingInfo getBuildingInfo() {
 		return this.buildingInfo;
@@ -91,7 +81,7 @@ public class UnitInfo implements java.io.Serializable {
 		this.buildingInfo = buildingInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CMTID")
 	public CommunityInfo getCommunityInfo() {
 		return this.communityInfo;
@@ -101,7 +91,7 @@ public class UnitInfo implements java.io.Serializable {
 		this.communityInfo = communityInfo;
 	}
 
-	@Column(name = "UNTNAME", length = 20)
+	@Column(name = "UNTNAME", length = 200)
 	public String getUntname() {
 		return this.untname;
 	}
@@ -119,7 +109,7 @@ public class UnitInfo implements java.io.Serializable {
 		this.gis = gis;
 	}
 
-	@Column(name = "PICADDRESS", length = 100)
+	@Column(name = "PICADDRESS", length = 200)
 	public String getPicaddress() {
 		return this.picaddress;
 	}
@@ -135,6 +125,15 @@ public class UnitInfo implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "unitInfo")

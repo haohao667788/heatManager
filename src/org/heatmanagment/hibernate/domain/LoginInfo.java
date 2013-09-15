@@ -30,6 +30,7 @@ public class LoginInfo implements java.io.Serializable {
 	private String success;
 	private String failrsn;
 	private String oltime;
+	private Boolean isvalid;
 
 	// Constructors
 
@@ -39,13 +40,14 @@ public class LoginInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public LoginInfo(StaffInfo staffInfo, Timestamp logindate, String ip,
-			String success, String failrsn, String oltime) {
+			String success, String failrsn, String oltime, Boolean isvalid) {
 		this.staffInfo = staffInfo;
 		this.logindate = logindate;
 		this.ip = ip;
 		this.success = success;
 		this.failrsn = failrsn;
 		this.oltime = oltime;
+		this.isvalid = isvalid;
 	}
 
 	// Property accessors
@@ -114,6 +116,15 @@ public class LoginInfo implements java.io.Serializable {
 
 	public void setOltime(String oltime) {
 		this.oltime = oltime;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 }

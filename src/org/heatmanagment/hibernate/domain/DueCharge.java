@@ -29,12 +29,15 @@ public class DueCharge implements java.io.Serializable {
 
 	private Long chgid;
 	private UsersInfo usersInfo;
+	private Double charge;
 	private String dealname;
-	private String dealmonth;
 	private String chgtype;
-	private Double chgnumber;
-	private Double realchgnumber;
+	private Double area;
+	private Double rate;
+	private Double reducechg;
+	private Double money;
 	private Timestamp lastchgtime;
+	private Boolean isvalid;
 	private Set<DueChargeRecordMapping> dueChargeRecordMappings = new HashSet<DueChargeRecordMapping>(
 			0);
 
@@ -45,24 +48,26 @@ public class DueCharge implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public DueCharge(UsersInfo usersInfo, String dealname, String dealmonth) {
+	public DueCharge(UsersInfo usersInfo, String dealname) {
 		this.usersInfo = usersInfo;
 		this.dealname = dealname;
-		this.dealmonth = dealmonth;
 	}
 
 	/** full constructor */
-	public DueCharge(UsersInfo usersInfo, String dealname, String dealmonth,
-			String chgtype, Double chgnumber, Double realchgnumber,
-			Timestamp lastchgtime,
+	public DueCharge(UsersInfo usersInfo, Double charge, String dealname,
+			String chgtype, Double area, Double rate, Double reducechg,
+			Double money, Timestamp lastchgtime, Boolean isvalid,
 			Set<DueChargeRecordMapping> dueChargeRecordMappings) {
 		this.usersInfo = usersInfo;
+		this.charge = charge;
 		this.dealname = dealname;
-		this.dealmonth = dealmonth;
 		this.chgtype = chgtype;
-		this.chgnumber = chgnumber;
-		this.realchgnumber = realchgnumber;
+		this.area = area;
+		this.rate = rate;
+		this.reducechg = reducechg;
+		this.money = money;
 		this.lastchgtime = lastchgtime;
+		this.isvalid = isvalid;
 		this.dueChargeRecordMappings = dueChargeRecordMappings;
 	}
 
@@ -79,7 +84,7 @@ public class DueCharge implements java.io.Serializable {
 		this.chgid = chgid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USRID", nullable = true)
 	public UsersInfo getUsersInfo() {
 		return this.usersInfo;
@@ -89,22 +94,22 @@ public class DueCharge implements java.io.Serializable {
 		this.usersInfo = usersInfo;
 	}
 
-	@Column(name = "DEALNAME", nullable = true, length = 20)
+	@Column(name = "CHARGE", precision = 8)
+	public Double getCharge() {
+		return this.charge;
+	}
+
+	public void setCharge(Double charge) {
+		this.charge = charge;
+	}
+
+	@Column(name = "DEALNAME", nullable = true, length = 200)
 	public String getDealname() {
 		return this.dealname;
 	}
 
 	public void setDealname(String dealname) {
 		this.dealname = dealname;
-	}
-
-	@Column(name = "DEALMONTH", nullable = true, length = 20)
-	public String getDealmonth() {
-		return this.dealmonth;
-	}
-
-	public void setDealmonth(String dealmonth) {
-		this.dealmonth = dealmonth;
 	}
 
 	@Column(name = "CHGTYPE", length = 20)
@@ -116,22 +121,40 @@ public class DueCharge implements java.io.Serializable {
 		this.chgtype = chgtype;
 	}
 
-	@Column(name = "CHGNUMBER", precision = 8)
-	public Double getChgnumber() {
-		return this.chgnumber;
+	@Column(name = "AREA", precision = 8)
+	public Double getArea() {
+		return this.area;
 	}
 
-	public void setChgnumber(Double chgnumber) {
-		this.chgnumber = chgnumber;
+	public void setArea(Double area) {
+		this.area = area;
 	}
 
-	@Column(name = "REALCHGNUMBER", precision = 8)
-	public Double getRealchgnumber() {
-		return this.realchgnumber;
+	@Column(name = "RATE", precision = 8)
+	public Double getRate() {
+		return this.rate;
 	}
 
-	public void setRealchgnumber(Double realchgnumber) {
-		this.realchgnumber = realchgnumber;
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
+
+	@Column(name = "REDUCECHG", precision = 8)
+	public Double getReducechg() {
+		return this.reducechg;
+	}
+
+	public void setReducechg(Double reducechg) {
+		this.reducechg = reducechg;
+	}
+
+	@Column(name = "MONEY", precision = 8)
+	public Double getMoney() {
+		return this.money;
+	}
+
+	public void setMoney(Double money) {
+		this.money = money;
 	}
 
 	@Column(name = "LASTCHGTIME", length = 7)
@@ -141,6 +164,15 @@ public class DueCharge implements java.io.Serializable {
 
 	public void setLastchgtime(Timestamp lastchgtime) {
 		this.lastchgtime = lastchgtime;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "dueCharge")

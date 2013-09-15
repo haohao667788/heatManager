@@ -3,24 +3,23 @@ package org.heatmanagment.spring.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.heatmanagment.hibernate.domain.BuildingInfo;
 import org.heatmanagment.hibernate.domain.CommunityInfo;
-import org.heatmanagment.hibernate.domain.HeatsourceInfo;
+import org.heatmanagment.hibernate.domain.MachinesetInfo;
 import org.heatmanagment.hibernate.util.FileUploader;
+import org.heatmanagment.hibernate.util.MapperTool;
+import org.heatmanagment.hibernate.util.ResultHolder;
 import org.heatmanagment.spring.entity.BuildingOut;
 import org.heatmanagment.spring.entity.SuccessOut;
 import org.heatmanagment.spring.services.BuildingService;
 import org.heatmanagment.spring.services.CommunityService;
-import org.heatmanagment.spring.services.HeatsourceService;
+import org.heatmanagment.spring.services.MachineSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
-import com.sun.net.httpserver.Authenticator.Success;
 
 @Controller
 @RequestMapping("/data/level")
@@ -33,25 +32,22 @@ public class BuildingController {
 	private CommunityService communityService;
 
 	@Autowired
-	private HeatsourceService heatsourceService;
+	private MachineSetService machineSetService;
 
 	@Autowired
 	private FileUploader fileUploader;
 
-	private ObjectMapper mapper;
-
-	public BuildingController() {
-		this.mapper = new ObjectMapper();
-	}
+	@Autowired
+	private MapperTool tool;
 
 	@RequestMapping("/loudong/update")
 	@ResponseBody
 	public String saveOrUpdate(@RequestParam(required = false) Long bldid,
 			@RequestParam String bldname, @RequestParam String bldaddress,
-			@RequestParam Long cmtid, @RequestParam Long srcid,
+			@RequestParam Long cmtid, @RequestParam Long mchid,
 			@RequestParam String heattype, @RequestParam String gis,
 			@RequestParam(value = "picaddress") CommonsMultipartFile file,
-			@RequestParam String desp) {
+			@RequestParam(required = false) String desp) {
 		SuccessOut out = new SuccessOut();
 		out.reset();
 
@@ -66,118 +62,95 @@ public class BuildingController {
 					this.fileUploader.deleteFile(tempPath);
 				}
 			}
-			filePath = this.fileUploader.upload(file, "building", bldname);
+			filePath = this.fileUploader.upload(file, "building");
 		}
 
 		this.buildingService.saveOrUpdateBuilding(bldid, bldname, bldaddress,
-				cmtid, srcid, heattype, gis, filePath, desp);
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(out);
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				out.setSuccess(false);
-				out.setMessage(e.getMessage());
-				return this.mapper.writeValueAsString(out);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		return outCome;
+				cmtid, mchid, heattype, gis, filePath, desp);
+		return this.tool.successRetort();
 	}
 
 	@RequestMapping("/loudong/del")
 	@ResponseBody
 	public String delete(@RequestParam Long id) {
 		this.buildingService.deleteBuilding(id);
-		SuccessOut out = new SuccessOut();
-		out.reset();
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(out);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return outCome;
+		return this.tool.successRetort();
 	}
 
 	@RequestMapping("/loudong/list")
 	@ResponseBody
-	public String inquireAll(
-			@RequestParam(required = false, defaultValue = "0") Integer start,
-			@RequestParam(required = false, defaultValue = "20") Integer limit) {
+	public String listItems(
+			@RequestParam(required = false, defaultValue = "0") Long start,
+			@RequestParam(required = false, defaultValue = "20") Long limit,
+			@RequestParam(required = false) Long cmtid) {
+		SuccessOut out = new SuccessOut();
+		out.reset();
 		if (start == null) {
-			start = new Integer(0);
+			start = 0l;
 		}
 		if (limit == null) {
-			limit = new Integer(20);
+			limit = 20l;
 		}
-		List<BuildingInfo> infos = this.buildingService.findPage(start, limit);
-
-		BuildingOut out = new BuildingOut();
-		out.setSuccess(true);
-		out.setMessage("");
-		out.setData(infos);
-		out.setTotalProperty(infos.size());
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(out);
-		} catch (Exception e) {
-			e.printStackTrace();
+		List<BuildingInfo> infos = null;
+		List<Object> data = new ArrayList<Object>();
+		if (cmtid != null) {
+			infos = this.buildingService.findByCmtid(cmtid, start, limit);
+			out.setTotalProperty(this.buildingService.countByCmtId(cmtid));
+		} else {
+			infos = this.buildingService.findPage(start, limit);
+			out.setTotalProperty(this.buildingService.count());
 		}
-		return outCome;
+		for (BuildingInfo i : infos) {
+			BuildingOut temp = new BuildingOut();
+			temp.setBldid(i.getBldid());
+			temp.setBldname(i.getBldname());
+			temp.setBldaddress(i.getAddress());
+			temp.setHeattype(i.getHeattype());
+			temp.setGis(i.getGis());
+			temp.setPicaddress(i.getPicaddress());
+			temp.setDesp(i.getDesp());
+			MachinesetInfo t;
+			CommunityInfo c;
+			if ((t = i.getMachinesetInfo()) != null) {
+				temp.setMchid(t.getMchid());
+				temp.setMchname(t.getMchname());
+			}
+			if ((c = i.getCommunityInfo()) != null) {
+				temp.setCmtid(c.getCmtid());
+				temp.setCmtname(c.getCmtname());
+			}
+			data.add(temp);
+		}
+		out.setData(data);
+		return this.tool.result(out);
 	}
 
 	@RequestMapping("/loudong/queryShequ")
 	@ResponseBody
-	public String inquireCmt(@RequestParam(required = false) String query) {
+	public String listCmt(@RequestParam(required = false) String query) {
 		/**
 		 * lack of parameter, no need to add extra item in the first place.
 		 */
-		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+		ResultHolder holder = new ResultHolder();
 		List<CommunityInfo> cmt = this.communityService.findAll();
 		if (query != null) {
-			ArrayList<Object> begin = new ArrayList<Object>();
-			begin.add(new Long(0));
-			begin.add("全部社区");
-			data.add(begin);
+			holder.add(0l, "全部社区");
 		}
 
 		for (CommunityInfo i : cmt) {
-			ArrayList<Object> temp = new ArrayList<Object>(2);
-			temp.add(i.getCmtid());
-			temp.add(i.getCmtname());
-			data.add(temp);
+			holder.add(i.getCmtid(), i.getCmtname());
 		}
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return outCome;
+		return this.tool.result(holder.getData());
 	}
 
-	@RequestMapping("/loudong/queryHeat")
+	@RequestMapping("/loudong/queryMch")
 	@ResponseBody
-	public String inquireHeat() {
-
-		List<HeatsourceInfo> heat = this.heatsourceService.inquireAll();
-		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-
-		for (HeatsourceInfo i : heat) {
-			ArrayList<Object> temp = new ArrayList<Object>(2);
-			temp.add(i.getSrcid());
-			temp.add(i.getSrcname());
-			data.add(temp);
+	public String listMch() {
+		ResultHolder holder = new ResultHolder();
+		List<MachinesetInfo> mch = this.machineSetService.findAll();
+		for (MachinesetInfo i : mch) {
+			holder.add(i.getMchid(), i.getMchname());
 		}
-		String outCome = null;
-		try {
-			outCome = this.mapper.writeValueAsString(data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return outCome;
+		return this.tool.result(holder.getData());
 	}
 }

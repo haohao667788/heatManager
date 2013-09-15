@@ -36,6 +36,7 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -118,17 +119,21 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<UnitInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all UnitInfo instances");
 		try {
-			String queryString = "from UnitInfo";
+			String queryString = "from UnitInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all UnitInfo instances with boundary");
 		try {
@@ -136,9 +141,10 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from UnitInfo";
+					String q = "from UnitInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -146,6 +152,19 @@ public class UnitInfoDAO extends HibernateDaoSupport {
 			log.error("find all UnitInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		UnitInfo unt = new UnitInfo();
+		unt.setUntid(id);
+		unt.setIsvalid(false);
+		attachDirty(unt);
+	}
+
+	public Long count() {
+		log.debug("count UnitInfos");
+		String hql = "select count(*) from UnitInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public UnitInfo merge(UnitInfo detachedInstance) {

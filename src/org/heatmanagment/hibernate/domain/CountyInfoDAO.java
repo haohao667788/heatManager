@@ -35,6 +35,7 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 	public static final String TOWNNAME = "townname";
 	public static final String CITYNAME = "cityname";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -113,17 +114,21 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<CountyInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all CountyInfo instances");
 		try {
-			String queryString = "from CountyInfo";
+			String queryString = "from CountyInfo where isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all CountyInfo instances with boundary");
 		try {
@@ -131,9 +136,10 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from CountyInfo";
+					String q = "from CountyInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -141,6 +147,19 @@ public class CountyInfoDAO extends HibernateDaoSupport {
 			log.error("find all CountyInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		CountyInfo cty = new CountyInfo();
+		cty.setCtyid(id);
+		cty.setIsvalid(false);
+		attachDirty(cty);
+	}
+	
+	public Long count() {
+		log.debug("count CountyInfos");
+		String hql = "select count(*) from CountyInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public CountyInfo merge(CountyInfo detachedInstance) {

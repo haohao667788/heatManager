@@ -28,6 +28,7 @@ public class UserLog implements java.io.Serializable {
 	private String logtitle;
 	private String logcontent;
 	private String desp;
+	private Boolean isvalid;
 
 	// Constructors
 
@@ -42,12 +43,13 @@ public class UserLog implements java.io.Serializable {
 
 	/** full constructor */
 	public UserLog(UsersInfo usersInfo, String logtype, String logtitle,
-			String logcontent, String desp) {
+			String logcontent, String desp, Boolean isvalid) {
 		this.usersInfo = usersInfo;
 		this.logtype = logtype;
 		this.logtitle = logtitle;
 		this.logcontent = logcontent;
 		this.desp = desp;
+		this.isvalid = isvalid;
 	}
 
 	// Property accessors
@@ -107,6 +109,15 @@ public class UserLog implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 }

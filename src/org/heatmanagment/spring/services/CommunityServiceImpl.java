@@ -34,14 +34,15 @@ public class CommunityServiceImpl implements CommunityService {
 		cmt.setDesp(comm);
 		cmt.setGis(gis);
 		cmt.setPicaddress(pic);
+		cmt.setIsvalid(true);
 		this.dao.attachDirty(cmt);
 	}
 
 	@Override
 	public void deleteCommunity(Long id) {
-		CommunityInfo cmt = new CommunityInfo();
-		cmt.setCmtid(id);
-		this.dao.delete(cmt);
+		CommunityInfo cmt = this.dao.findById(id);
+		cmt.setIsvalid(false);
+		this.dao.attachDirty(cmt);
 	}
 
 	@Override
@@ -52,5 +53,10 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public List<CommunityInfo> findAll() {
 		return this.dao.findAll();
+	}
+
+	@Override
+	public Long count() {
+		return this.dao.count();
 	}
 }

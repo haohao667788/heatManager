@@ -27,8 +27,9 @@ public class ClassInfo implements java.io.Serializable {
 	private Long clsid;
 	private String clsname;
 	private String desp;
+	private Boolean isvalid;
+	private Set<ClsStfMap> clsStfMaps = new HashSet<ClsStfMap>(0);
 	private Set<MachinesetInfo> machinesetInfos = new HashSet<MachinesetInfo>(0);
-	private Set<HeatsourceInfo> heatsourceInfos = new HashSet<HeatsourceInfo>(0);
 
 	// Constructors
 
@@ -37,13 +38,13 @@ public class ClassInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ClassInfo(String clsname, String desp,
-			Set<MachinesetInfo> machinesetInfos,
-			Set<HeatsourceInfo> heatsourceInfos) {
+	public ClassInfo(String clsname, String desp, Boolean isvalid,
+			Set<ClsStfMap> clsStfMaps, Set<MachinesetInfo> machinesetInfos) {
 		this.clsname = clsname;
 		this.desp = desp;
+		this.isvalid = isvalid;
+		this.clsStfMaps = clsStfMaps;
 		this.machinesetInfos = machinesetInfos;
-		this.heatsourceInfos = heatsourceInfos;
 	}
 
 	// Property accessors
@@ -59,7 +60,7 @@ public class ClassInfo implements java.io.Serializable {
 		this.clsid = clsid;
 	}
 
-	@Column(name = "CLSNAME", length = 20)
+	@Column(name = "CLSNAME", length = 200)
 	public String getClsname() {
 		return this.clsname;
 	}
@@ -77,6 +78,24 @@ public class ClassInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "classInfo")
+	public Set<ClsStfMap> getClsStfMaps() {
+		return this.clsStfMaps;
+	}
+
+	public void setClsStfMaps(Set<ClsStfMap> clsStfMaps) {
+		this.clsStfMaps = clsStfMaps;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "classInfo")
 	public Set<MachinesetInfo> getMachinesetInfos() {
 		return this.machinesetInfos;
@@ -84,15 +103,6 @@ public class ClassInfo implements java.io.Serializable {
 
 	public void setMachinesetInfos(Set<MachinesetInfo> machinesetInfos) {
 		this.machinesetInfos = machinesetInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "classInfo")
-	public Set<HeatsourceInfo> getHeatsourceInfos() {
-		return this.heatsourceInfos;
-	}
-
-	public void setHeatsourceInfos(Set<HeatsourceInfo> heatsourceInfos) {
-		this.heatsourceInfos = heatsourceInfos;
 	}
 
 }

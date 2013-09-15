@@ -29,16 +29,18 @@ public class BuildingInfo implements java.io.Serializable {
 	// Fields
 
 	private Long bldid;
-	private HeatsourceInfo heatsourceInfo;
+	private MachinesetInfo machinesetInfo;
 	private CommunityInfo communityInfo;
 	private String bldname;
-	private String bldaddress;
+	private String address;
 	private String heattype;
 	private String gis;
 	private String picaddress;
 	private String desp;
-	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
+	private Boolean isvalid;
+
 	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
+	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
 
@@ -47,20 +49,21 @@ public class BuildingInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public BuildingInfo(HeatsourceInfo heatsourceInfo,
-			CommunityInfo communityInfo, String bldname, String bldaddress,
+	public BuildingInfo(MachinesetInfo machinesetInfo,
+			CommunityInfo communityInfo, String bldname, String address,
 			String heattype, String gis, String picaddress, String desp,
-			Set<UsersInfo> usersInfos, Set<UnitInfo> unitInfos) {
-		this.heatsourceInfo = heatsourceInfo;
+			Boolean isvalid, Set<UnitInfo> unitInfos, Set<UsersInfo> usersInfos) {
+		this.machinesetInfo = machinesetInfo;
 		this.communityInfo = communityInfo;
 		this.bldname = bldname;
-		this.bldaddress = bldaddress;
+		this.address = address;
 		this.heattype = heattype;
 		this.gis = gis;
 		this.picaddress = picaddress;
 		this.desp = desp;
-		this.usersInfos = usersInfos;
+		this.isvalid = isvalid;
 		this.unitInfos = unitInfos;
+		this.usersInfos = usersInfos;
 	}
 
 	// Property accessors
@@ -76,17 +79,17 @@ public class BuildingInfo implements java.io.Serializable {
 		this.bldid = bldid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SRCID")
-	public HeatsourceInfo getHeatsourceInfo() {
-		return this.heatsourceInfo;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "MCHID")
+	public MachinesetInfo getMachinesetInfo() {
+		return this.machinesetInfo;
 	}
 
-	public void setHeatsourceInfo(HeatsourceInfo heatsourceInfo) {
-		this.heatsourceInfo = heatsourceInfo;
+	public void setMachinesetInfo(MachinesetInfo machinesetInfo) {
+		this.machinesetInfo = machinesetInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CMTID")
 	public CommunityInfo getCommunityInfo() {
 		return this.communityInfo;
@@ -96,7 +99,7 @@ public class BuildingInfo implements java.io.Serializable {
 		this.communityInfo = communityInfo;
 	}
 
-	@Column(name = "BLDNAME", length = 20)
+	@Column(name = "BLDNAME", length = 200)
 	public String getBldname() {
 		return this.bldname;
 	}
@@ -105,13 +108,13 @@ public class BuildingInfo implements java.io.Serializable {
 		this.bldname = bldname;
 	}
 
-	@Column(name = "BLDADDRESS", length = 200)
-	public String getBldaddress() {
-		return this.bldaddress;
+	@Column(name = "ADDRESS", length = 200)
+	public String getAddress() {
+		return this.address;
 	}
 
-	public void setBldaddress(String bldaddress) {
-		this.bldaddress = bldaddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	@Column(name = "HEATTYPE", length = 10)
@@ -132,7 +135,7 @@ public class BuildingInfo implements java.io.Serializable {
 		this.gis = gis;
 	}
 
-	@Column(name = "PICADDRESS", length = 100)
+	@Column(name = "PICADDRESS", length = 200)
 	public String getPicaddress() {
 		return this.picaddress;
 	}
@@ -150,13 +153,13 @@ public class BuildingInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "buildingInfo")
-	public Set<UsersInfo> getUsersInfos() {
-		return this.usersInfos;
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
 	}
 
-	public void setUsersInfos(Set<UsersInfo> usersInfos) {
-		this.usersInfos = usersInfos;
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "buildingInfo")
@@ -166,6 +169,15 @@ public class BuildingInfo implements java.io.Serializable {
 
 	public void setUnitInfos(Set<UnitInfo> unitInfos) {
 		this.unitInfos = unitInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "buildingInfo")
+	public Set<UsersInfo> getUsersInfos() {
+		return this.usersInfos;
+	}
+
+	public void setUsersInfos(Set<UsersInfo> usersInfos) {
+		this.usersInfos = usersInfos;
 	}
 
 }

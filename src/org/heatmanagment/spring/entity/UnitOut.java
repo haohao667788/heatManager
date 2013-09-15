@@ -1,48 +1,89 @@
 package org.heatmanagment.spring.entity;
 
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.heatmanagment.hibernate.domain.UnitInfo;
 
 @JsonAutoDetect
 public class UnitOut {
 
-	private boolean success;
-	private String message;
-	private int totalProperty;
-	private List<UnitInfo> data;
+	private Long untid;
+	private Long bldid;
+	private String bldname;
+	private Long cmtid;
+	private String cmtname;
+	private String untname;
+	private String gis;
+	private String picaddress;
+	private String desp;
 
-	public boolean isSuccess() {
-		return success;
+	public Long getUntid() {
+		return untid;
 	}
 
-	public void setSuccess(boolean success) {
-		this.success = success;
+	public void setUntid(Long untid) {
+		this.untid = untid;
 	}
 
-	public String getMessage() {
-		return message;
+	public Long getBldid() {
+		return bldid;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setBldid(Long bldid) {
+		this.bldid = bldid;
 	}
 
-	public int getTotalProperty() {
-		return totalProperty;
+	public String getBldname() {
+		return bldname;
 	}
 
-	public void setTotalProperty(int totalProperty) {
-		this.totalProperty = totalProperty;
+	public void setBldname(String bldname) {
+		this.bldname = bldname;
 	}
 
-	public List<UnitInfo> getData() {
-		return data;
+	public Long getCmtid() {
+		return cmtid;
 	}
 
-	public void setData(List<UnitInfo> data) {
-		this.data = data;
+	public void setCmtid(Long cmtid) {
+		this.cmtid = cmtid;
 	}
 
+	public String getCmtname() {
+		return cmtname;
+	}
+
+	public void setCmtname(String cmtname) {
+		this.cmtname = cmtname;
+	}
+
+	public String getUntname() {
+		return untname;
+	}
+
+	public void setUntname(String untname) {
+		this.untname = untname;
+	}
+
+	public String getGis() {
+		return gis;
+	}
+
+	public void setGis(String gis) {
+		this.gis = gis;
+	}
+
+	public String getPicaddress() {
+		return picaddress;
+	}
+
+	public void setPicaddress(String picaddress) {
+		this.picaddress = picaddress;
+	}
+
+	public String getDesp() {
+		return desp;
+	}
+
+	public void setDesp(String desp) {
+		this.desp = desp;
+	}
 }

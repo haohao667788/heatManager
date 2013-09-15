@@ -1,6 +1,7 @@
 package org.heatmanagment.hibernate.domain;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
@@ -17,29 +18,27 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * CertificateChargeMapping entities. Transaction control of the save(),
- * update() and delete() operations can directly support Spring
- * container-managed transactions or they can be augmented to handle
- * user-managed Spring transactions. Each of these methods provides additional
- * information for how to configure it for the desired type of transaction
- * control.
+ * Config entities. Transaction control of the save(), update() and delete()
+ * operations can directly support Spring container-managed transactions or they
+ * can be augmented to handle user-managed Spring transactions. Each of these
+ * methods provides additional information for how to configure it for the
+ * desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.CertificateChargeMapping
+ * @see org.heatmanagment.hibernate.domain.Config
  * @author MyEclipse Persistence Tools
  */
 
-public class CertificateChargeMappingDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(CertificateChargeMappingDAO.class);
-
+public class ConfigDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(ConfigDAO.class);
 	// property constants
+	public static final String DEALNAME = "dealname";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(CertificateChargeMapping transientInstance) {
-		log.debug("saving CertificateChargeMapping instance");
+	public void save(Config transientInstance) {
+		log.debug("saving Config instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -49,8 +48,8 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(CertificateChargeMapping persistentInstance) {
-		log.debug("deleting CertificateChargeMapping instance");
+	public void delete(Config persistentInstance) {
+		log.debug("deleting Config instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -60,12 +59,11 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public CertificateChargeMapping findById(java.lang.Long id) {
-		log.debug("getting CertificateChargeMapping instance with id: " + id);
+	public Config findById(java.lang.Long id) {
+		log.debug("getting Config instance with id: " + id);
 		try {
-			CertificateChargeMapping instance = (CertificateChargeMapping) getHibernateTemplate()
-					.get("org.heatmanagment.hibernate.domain.CertificateChargeMapping",
-							id);
+			Config instance = (Config) getHibernateTemplate().get(
+					"org.heatmanagment.hibernate.domain.Config", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -73,11 +71,10 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<CertificateChargeMapping> findByExample(
-			CertificateChargeMapping instance) {
-		log.debug("finding CertificateChargeMapping instance by example");
+	public List<Config> findByExample(Config instance) {
+		log.debug("finding Config instance by example");
 		try {
-			List<CertificateChargeMapping> results = (List<CertificateChargeMapping>) getHibernateTemplate()
+			List<Config> results = (List<Config>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -89,10 +86,10 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding CertificateChargeMapping instance with property: "
-				+ propertyName + ", value: " + value);
+		log.debug("finding Config instance with property: " + propertyName
+				+ ", value: " + value);
 		try {
-			String queryString = "from CertificateChargeMapping as model where model."
+			String queryString = "from Config as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -101,10 +98,14 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List<Config> findByDealname(Object dealname) {
+		return findByProperty(DEALNAME, dealname);
+	}
+
 	public List findAll() {
-		log.debug("finding all CertificateChargeMapping instances");
+		log.debug("finding all Config instances");
 		try {
-			String queryString = "from CertificateChargeMapping";
+			String queryString = "from Config";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -113,30 +114,30 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 	}
 	
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all CertificateChargeMapping instances with boundary");
+		log.debug("finding all Config instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from CertificateChargeMapping";
+					String q = "from Config as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all CertificateChargeMapping with boundary failed", re);
+			log.error("find all Config with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public CertificateChargeMapping merge(
-			CertificateChargeMapping detachedInstance) {
-		log.debug("merging CertificateChargeMapping instance");
+	public Config merge(Config detachedInstance) {
+		log.debug("merging Config instance");
 		try {
-			CertificateChargeMapping result = (CertificateChargeMapping) getHibernateTemplate()
-					.merge(detachedInstance);
+			Config result = (Config) getHibernateTemplate().merge(
+					detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -145,8 +146,8 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(CertificateChargeMapping instance) {
-		log.debug("attaching dirty CertificateChargeMapping instance");
+	public void attachDirty(Config instance) {
+		log.debug("attaching dirty Config instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -156,8 +157,8 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(CertificateChargeMapping instance) {
-		log.debug("attaching clean CertificateChargeMapping instance");
+	public void attachClean(Config instance) {
+		log.debug("attaching clean Config instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -167,9 +168,7 @@ public class CertificateChargeMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static CertificateChargeMappingDAO getFromApplicationContext(
-			ApplicationContext ctx) {
-		return (CertificateChargeMappingDAO) ctx
-				.getBean("CertificateChargeMappingDAO");
+	public static ConfigDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (ConfigDAO) ctx.getBean("ConfigDAO");
 	}
 }

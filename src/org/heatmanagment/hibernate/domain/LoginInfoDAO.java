@@ -36,6 +36,7 @@ public class LoginInfoDAO extends HibernateDaoSupport {
 	public static final String SUCCESS = "success";
 	public static final String FAILRSN = "failrsn";
 	public static final String OLTIME = "oltime";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -118,17 +119,21 @@ public class LoginInfoDAO extends HibernateDaoSupport {
 		return findByProperty(OLTIME, oltime);
 	}
 
+	public List<LoginInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all LoginInfo instances");
 		try {
-			String queryString = "from LoginInfo";
+			String queryString = "from LoginInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all LoginInfo instances with boundary");
 		try {
@@ -136,9 +141,10 @@ public class LoginInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from LoginInfo";
+					String q = "from LoginInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -146,6 +152,13 @@ public class LoginInfoDAO extends HibernateDaoSupport {
 			log.error("find all LoginInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		LoginInfo info = new LoginInfo();
+		info.setLginid(id);
+		info.setIsvalid(false);
+		attachDirty(info);
 	}
 
 	public LoginInfo merge(LoginInfo detachedInstance) {

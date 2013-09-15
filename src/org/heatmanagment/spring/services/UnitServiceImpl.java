@@ -31,12 +31,13 @@ public class UnitServiceImpl implements UnitService {
 
 	@Override
 	public void saveOrUpdateUnit(Long id, String name, Long bldid, Long cmtid,
-			Long mchid, String gis, String picaddress) {
+			String gis, String picaddress) {
 		UnitInfo unt = new UnitInfo();
 		unt.setUntid(id);
 		unt.setUntname(name);
 		unt.setGis(gis);
 		unt.setPicaddress(picaddress);
+		unt.setIsvalid(true);
 
 		if (bldid != null) {
 			BuildingInfo bld = new BuildingInfo();
@@ -48,19 +49,27 @@ public class UnitServiceImpl implements UnitService {
 			cmt.setCmtid(cmtid);
 			unt.setCommunityInfo(cmt);
 		}
-		if (mchid != null) {
-			MachinesetInfo mch = new MachinesetInfo();
-			mch.setMchid(mchid);
-			unt.setMachinesetInfo(mch);
-		}
 		this.dao.attachDirty(unt);
 	}
 
 	@Override
 	public void deleteUnit(Long id) {
-		UnitInfo unt = new UnitInfo();
-		unt.setUntid(id);
-		this.dao.delete(unt);
+		UnitInfo unt = this.dao.findById(id);
+		unt.setIsvalid(false);
+		this.dao.attachDirty(unt);
 	}
 
+	@Override
+	public Long count() {
+		return this.dao.count();
+	}
+
+	@Override
+	public List<UnitInfo> findByBldid(Long bldid) {
+		BuildingInfo bld = new BuildingInfo();
+		bld.setBldid(bldid);
+		UnitInfo unt = new UnitInfo();
+		unt.setBuildingInfo(bld);
+		return this.dao.findByExample(unt);
+	}
 }
