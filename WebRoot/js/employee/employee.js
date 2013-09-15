@@ -241,7 +241,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'groupname', type: 'string'},
                     {name: 'loginname', type: 'string'},
                     {name: 'pwd', type: 'string'},
-                    {name: 'startDate', type: 'string'}
+                    {name: 'startdate', type: 'string'}
                 ]
             })
         });
@@ -286,7 +286,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "添加时间",
-                dataIndex: "startDate",
+                dataIndex: "startdate",
                 width: 2
             }],
 
