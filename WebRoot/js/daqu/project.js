@@ -443,7 +443,6 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'dstname', type: 'string'},
                     {name: 'start_date', type: 'string'},
                     {name: 'middle', type: 'string'},
-                    {name: 'status', type: 'string'},
                     {name: 'desp', type: 'string'}
                 ]
             })
@@ -474,10 +473,6 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }, {
                 header: "是否中途收购",
                 dataIndex: 'middle',
-                width: 1
-            }, {
-                header: "状态",
-                dataIndex: 'status',
                 width: 1
             }, {
                 header: "描述",

@@ -34,13 +34,13 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }, {
                 xtype: 'textfield',
                 fieldLabel: '联系方式',
-                name: 'contactnumber',
+                name: 'phone',
                 width: 160,
                 allowBlank: false
             }, {
                 xtype: 'textfield',
                 fieldLabel: '所属部门',
-                name: 'groupid',
+                name: 'department',
                 width: 160,
                 allowBlank: false
             }, new Ext.form.ComboBox({
@@ -51,7 +51,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 triggerAction: 'query',
                 valueField: 'value',
                 displayField: 'text',
-                allowBlank: false,
+                allowBlank: true,
                 store: new Ext.data.Store({
                     autoLoad: true,
                     proxy: new Ext.data.HttpProxy({url: "/heatManager/data/employee/employee/queryGroup"+debug}),
@@ -88,7 +88,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'pwd',
                 width: 160
             }, new Ext.form.ComboBox({
-                hiddenName: 'authMethod',
+                hiddenName: 'verifytype',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '鉴权方式',
@@ -250,9 +250,9 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'stfid', type: 'int'},
                     {name: 'stfname', type: 'string'},
                     {name: 'stfnumber', type: 'string'},
-                    {name: 'contactnumber', type: 'string'},
+                    {name: 'phone', type: 'string'},
                     {name: 'department', type: 'string'},
-                    {name: 'authMethod', type: 'int'},
+                    {name: 'verifytype', type: 'string'},
                     {name: 'groupid', type: 'int'},
                     {name: 'groupname', type: 'string'},
                     {name: 'loginname', type: 'string'},
@@ -279,10 +279,14 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "联系方式",
-                dataIndex: 'contactnumber',
+                dataIndex: 'phone',
                 width: 3
             }, {
                 header: "所属部门",
+                dataIndex: 'department',
+                width: 3
+            }, {
+                header: "鉴权方式",
                 dataIndex: 'department',
                 width: 3
             }, {
