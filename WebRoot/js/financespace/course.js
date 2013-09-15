@@ -323,7 +323,7 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
-        this.shequWin.hide();
+        this.courseWin.hide();
         this.getStore().reload();
     },
 
