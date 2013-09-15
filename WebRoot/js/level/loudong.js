@@ -303,6 +303,8 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'bldname', type: 'string'},
                     {name: 'cmtid', type: 'int'},
                     {name: 'cmtname', type: 'string'},
+                    {name: 'pjtid', type: 'int'},
+                    {name: 'pjtname', type: 'string'},
                     {name: 'mchid', type: 'int'},
                     {name: 'mchname', type: 'string'},
                     {name: 'heattype', type: 'string'},
@@ -331,6 +333,10 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             }, {
                 header: "所属社区",
                 dataIndex: 'cmtname',
+                width: 1
+            }, {
+                header: "所属项目",
+                dataIndex: 'pjtname',
                 width: 1
             }, {
                 header: "所属机组",
@@ -437,15 +443,9 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                                     items: [newGrid]
                                 });
                                 Heat.tabs.setActiveTab(tab);
-                            } else {
-                                var g = o_tab.items.items[0];
-                                g.cmtid = cmtid;
-                                g.cmtname = cmtname;
-                                g.bldid = bldid;
-                                g.bldname = bldname;
-                                g.onShow();
-                                Heat.tabs.setActiveTab(ns);
                             }
+
+
                         }
                     }, {
                         text: "显示楼栋平面图",
@@ -506,10 +506,10 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     deleteRecord: function(btn) {
         var store = this.getStore();
         var record = this.getSelected();
-        var id = record.get('bldid');
+        var id = record.get('id');
         if(btn == 'yes') {
             Ext.Ajax.request({
-                url: '/heatManager/data/level/loudong/del'+debug,
+                url: '/heatManager/level/loudong/del'+debug,
                 params: {id: id},
                 success: function(response) {
                     store.reload();
