@@ -417,6 +417,7 @@ Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
             listeners: {
                 show: function(win) {
                     win.form.getStaff(win.pid);
+                    win.grid.refreshStaff(win.pid);
                 }
             }
         });
