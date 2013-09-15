@@ -95,7 +95,7 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 fieldLabel: '项目开始时间',
                 editable: false,
                 format: 'Y-m-d',
-                name: 'start_date',
+                name: 'startDate',
                 width: 160
             }, new Ext.form.ComboBox({
                 hiddenName: 'middle',
@@ -441,7 +441,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'townname', type: 'string'},
                     {name: 'dstid', type: 'int'},
                     {name: 'dstname', type: 'string'},
-                    {name: 'start_date', type: 'string'},
+                    {name: 'startDate', type: 'string'},
                     {name: 'middle', type: 'string'},
                     {name: 'status', type: 'string'},
                     {name: 'desp', type: 'string'}
@@ -469,7 +469,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 1
             }, {
                 header: "项目开始时间",
-                dataIndex: 'start_date',
+                dataIndex: 'startDate',
                 width: 1
             }, {
                 header: "是否中途收购",
