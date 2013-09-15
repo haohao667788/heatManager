@@ -11,7 +11,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
         Heat.user.BasicForm.superclass.constructor.call(this, {
             url: '/heatManager/data/fare/user/update'+debug,
             width: 588,
-            height: 520,
+            height: 550,
             labelAlign: 'right',
             labelWidth: 80,
             frame: true,
@@ -42,59 +42,191 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             width: 160,
                             allowBlank: false
                         }, new Ext.form.ComboBox({
-                            hiddenName: 'cmtid',
+                            hiddenName: 'ptjid',
                             mode: 'local',
                             width: 160,
-                            fieldLabel: '所在社区',
-                            triggerAction: 'all',
+                            fieldLabel: '所属项目',
+                            triggerAction: 'query',
                             valueField: 'value',
                             displayField: 'text',
                             allowBlank: false,
-                            editable: false,
                             store: new Ext.data.Store({
                                 autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryShequ"+debug}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryPjt"+debug}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
                                 ])
-                            })
+                            }),
+                            listeners: {
+                                change: function(combo, value) {
+                                    var flag = false;
+                                    combo.getStore().each(function(record, index, total) {
+                                        var text = record.get("text"),
+                                            val = record.get("value");
+                                        if (val == value || val == text) {
+                                            flag = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (!flag) {
+                                        combo.markInvalid("请选择对应记录");
+                                    }
+                                }
+                            }
+                        }), new Ext.form.ComboBox({
+                            hiddenName: 'cmtid',
+                            mode: 'local',
+                            width: 160,
+                            fieldLabel: '所在社区',
+                            triggerAction: 'query',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            store: new Ext.data.Store({
+                                autoLoad: true,
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            }),
+                            listeners: {
+                                change: function(combo, value) {
+                                    var flag = false;
+                                    combo.getStore().each(function(record, index, total) {
+                                        var text = record.get("text"),
+                                            val = record.get("value");
+                                        if (val == value || val == text) {
+                                            flag = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (!flag) {
+                                        combo.markInvalid("请选择对应记录");
+                                    } else {
+                                        combo.nextSibling().getStore().load({params: {cmtid: value}});
+                                    }
+                                },
+                                select: function(combo, record, index) {
+                                    var bld = combo.nextSibling(),
+                                        unt = combo.nextSibling().nextSibling();
+                                    bld.getStore().load({params: {cmtid: record.data.value}});
+                                    bld.setValue("");
+                                    unt.setValue("");
+                                }
+                            }
                         }), new Ext.form.ComboBox({
                             hiddenName: 'bldid',
                             mode: 'local',
                             width: 160,
                             fieldLabel: '所在楼栋',
-                            triggerAction: 'all',
+                            triggerAction: 'query',
                             valueField: 'value',
                             displayField: 'text',
                             allowBlank: false,
-                            editable: false,
                             store: new Ext.data.Store({
-                                autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryLoudong"+debug}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/danyuan/queryLoudong"+debug+"?query=true"}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
                                 ])
-                            })
+                            }),
+                            listeners: {
+                                change: function(combo, value) {
+                                    var flag = false;
+                                    combo.getStore().each(function(record, index, total) {
+                                        var text = record.get("text"),
+                                            val = record.get("value");
+                                        if (val == value || val == text) {
+                                            flag = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (!flag) {
+                                        combo.markInvalid("请选择对应记录");
+                                    } else {
+                                        var form = combo.ownerCt.ownerCt.ownerCt.ownerCt,
+                                            basicForm = form.getForm();
+                                        combo.nextSibling().getStore().load({params: {bldid: value}});
+                                        Ext.Ajax.request({
+                                            url: '/heatManager/data/fare/user/relateMch'+debug,
+                                            params: {bldid: value},
+                                            success: function(res) {
+                                                var response = res.responseText,
+                                                    r = Ext.decode(response);
+                                                if (!r) {
+                                                    Ext.Msg.alert("系统提示", "服务器连接失败");
+                                                }
+                                                if (r.success) {
+                                                    var data = r.data;
+                                                    basicForm.findField("mchid").setValue(data[0]);
+                                                    basicForm.findField("mchname").setValue(data[1]);
+                                                } else {
+                                                    Ext.Msg.alert("系统提示", r.message);
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                select: function(combo, record, index) {
+                                    var unt = combo.nextSibling(),
+                                        form = combo.ownerCt.ownerCt.ownerCt.ownerCt,
+                                        basicForm = form.getForm();
+                                    unt.getStore().load({params: {bldid: record.data.value}});
+                                    unt.setValue("");
+                                    Ext.Ajax.request({
+                                        url: '/heatManager/data/fare/user/relateMch'+debug,
+                                        params: {bldid: record.data.value},
+                                        success: function(res) {
+                                            var response = res.responseText,
+                                                r = Ext.decode(response);
+                                            if (!r) {
+                                                Ext.Msg.alert("系统提示", "服务器连接失败");
+                                            }
+                                            if (r.success) {
+                                                var data = r.data;
+                                                basicForm.findField("mchid").setValue(data[0]);
+                                                basicForm.findField("mchname").setValue(data[1]);
+                                            } else {
+                                                Ext.Msg.alert("系统提示", r.message);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
                         }), new Ext.form.ComboBox({
                             hiddenName: 'untid',
                             mode: 'local',
                             width: 160,
                             fieldLabel: '所在单元',
-                            triggerAction: 'all',
+                            triggerAction: 'query',
                             valueField: 'value',
                             displayField: 'text',
                             allowBlank: false,
-                            editable: false,
                             store: new Ext.data.Store({
-                                autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryDanyuan"+debug}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/danyuan/queryDanyuan"+debug+"?query=true"}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
                                 ])
-                            })
+                            }),
+                            listeners: {
+                                change: function(combo, value) {
+                                    var flag = false;
+                                    combo.getStore().each(function(record, index, total) {
+                                        var text = record.get("text"),
+                                            val = record.get("value");
+                                        if (val == value || val == text) {
+                                            flag = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (!flag) {
+                                        combo.markInvalid("请选择对应记录");
+                                    }
+                                }
+                            }
                         }), {
                             xtype: 'textfield',
                             fieldLabel: '用户地址',
@@ -107,25 +239,17 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             name: 'phone',
                             width: 160,
                             allowBlank: false
-                        }, new Ext.form.ComboBox({
-                            hiddenName: 'mchid',
-                            mode: 'local',
-                            width: 160,
+                        }, {
+                            xtype: 'hidden',
+                            name: "mchid"
+                        }, {
+                            xtype: 'textfield',
                             fieldLabel: '所属机组',
-                            triggerAction: 'all',
-                            valueField: 'value',
-                            displayField: 'text',
+                            name: 'mchname',
+                            width: 160,
                             allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.Store({
-                                autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryUnit"+debug}),
-                                reader: new Ext.data.ArrayReader({}, [
-                                    {name: 'value'},
-                                    {name: 'text'}
-                                ])
-                            })
-                        })]
+                            disabled: true
+                        }]
                     }, {
                         columnWidth:.5,
                         layout: 'form',
@@ -208,19 +332,19 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             fieldLabel: '建筑面积',
                             name: 'area',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }, {
                             xtype: 'textfield',
                             fieldLabel: '套内面积',
                             name: 'realarea',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }, {
                             xtype: 'textfield',
                             fieldLabel: '计费面积',
                             name: 'feearea',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }, new Ext.form.ComboBox({
                             hiddenName: 'feetype',
                             mode: 'local',
@@ -229,7 +353,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             triggerAction: 'all',
                             valueField: 'value',
                             displayField: 'text',
-                            allowBlank: false,
+                            allowBlank: true,
                             editable: false,
                             store: new Ext.data.SimpleStore({
                                 fields: ['value', 'text'],
@@ -261,13 +385,13 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             fieldLabel: '费率',
                             name: 'feerate',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }, {
                             xtype: 'textfield',
                             fieldLabel: '折扣',
                             name: 'discount',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }]
                     }, {
                         columnWidth:.5,
@@ -277,7 +401,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             fieldLabel: '减免额',
                             name: 'reducefee',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }, new Ext.form.ComboBox({
                             hiddenName: 'heatstate',
                             mode: 'local',
@@ -286,7 +410,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             triggerAction: 'all',
                             valueField: 'value',
                             displayField: 'text',
-                            allowBlank: false,
+                            allowBlank: true,
                             editable: false,
                             store: new Ext.data.SimpleStore({
                                 fields: ['value', 'text'],
@@ -301,21 +425,21 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             fieldLabel: '热计量基数',
                             name: 'heatbase',
                             width: 160,
-                            allowBlank: false,
+                            allowBlank: true,
                             disabled: true
                         }, {
                             xtype: 'textfield',
                             fieldLabel: '热计量费率',
                             name: 'heatrate',
                             width: 160,
-                            allowBlank: false,
+                            allowBlank: true,
                             disabled: true
                         }, {
                             xtype: 'textfield',
                             fieldLabel: '户型',
                             name: 'housetype',
                             width: 160,
-                            allowBlank: false
+                            allowBlank: true
                         }]
                     }]
                 }, {
@@ -336,24 +460,46 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     formSubmit: function() {
-        this.getForm().submit({
-            clientValidation: true,
-            waitMsg:'数据保存中...',
-            success: this.submitcomplete.createDelegate(this),
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                        break;
-                    case Ext.form.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                        break;
-                    case Ext.form.Action.SERVER_INVALID:
-                        Ext.Msg.alert('系统提示', action.result.msg);
-                        break;
-                }
+        var isInvalid = false,
+            form = this.getForm(),
+            fields = ["pjtid", "cmtid", "bldid", "untid"];
+        Ext.each(fields, function(field) {
+            var $f = $(form.findField(field).el.dom);
+            if ($f.hasClass("x-form-invalid")) {
+                isInvalid = true;
+                return false;
             }
         });
+        if (isInvalid) {
+            Ext.Msg.alert("系统提示", "请正确填写表单");
+        } else {
+            this.getForm().submit({
+                clientValidation: true,
+                waitMsg:'数据保存中...',
+                success: this.submitcomplete.createDelegate(this),
+                failure: function(form, action) {
+                    switch (action.failureType) {
+                        case Ext.form.Action.CLIENT_INVALID:
+                            Ext.Msg.alert('系统提示', '请先填写完所有必填项');
+                            break;
+                        case Ext.form.Action.CONNECT_FAILURE:
+                            Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
+                            break;
+                        case Ext.form.Action.SERVER_INVALID:
+                            Ext.Msg.alert('系统提示', action.result.msg);
+                            break;
+                    }
+                }
+            });
+        }
+    },
+
+    disablePjt: function(disable) {
+        if (disable) {
+            this.getForm().findField("ptjid").disable();
+        } else {
+            this.getForm().findField("ptjid").enable();
+        }
     },
 
     reset: function() {
@@ -364,7 +510,6 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
         this.fireEvent('submitcomplete');
     }
 });
-
 
 Heat.user.BasicWin = Ext.extend(Ext.Window, {
     form: null,
@@ -398,7 +543,16 @@ Heat.user.BasicWin = Ext.extend(Ext.Window, {
             title: '修改记录',
             width: 600,
             buttonAlign: 'center',
-            closeAction: 'hide'
+            closeAction: 'hide',
+            listeners: {
+                show: function(win) {
+                    if (win.title == "修改用户") {
+                        win.form.disablePjt(true);
+                    } else {
+                        win.form.disablePjt(false);
+                    }
+                }
+            }
         });
 
         this.addEvents('submitcomplete');
@@ -438,13 +592,36 @@ Heat.user.BasicWin = Ext.extend(Ext.Window, {
     }
 });
 
+Heat.user.PicWin = Ext.extend(Ext.Window, {
+    constructor: function(cfg) {
+        cfg = cfg || {};
+        Ext.apply(this, cfg);
+        Heat.loudong.PicWin.superclass.constructor.call(this, {
+            title: '楼层平面图',
+            width: 800,
+            height: 400,
+            autoScroll: true,
+            closeAction: 'hide',
+            modal: true,
+            html: '<img src="image/loading.gif">',
+            listeners: {
+                show: function(win) {
+                    win.el.dom.getElementsByTagName("img")[0].src = win.pic;
+                }
+            }
+        });
+    }
+});
+
 Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     userWin: null,
     expander: null,
+    picWin: null,
     constructor: function(cfg) {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         this.userWin = new Heat.user.BasicWin();
+        this.picWin = new Heat.user.PicWin();
         this.expander = new Ext.grid.RowExpander({
             tpl: new Ext.Template(
                 '<table style="margin-top:10px;padding-top:10px;width:100%;border-top:2px solid #999;" border=0 cellpadding=0 cellspacing=0>',
@@ -586,6 +763,44 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 render: function(grid) {
                     grid.getStore().load();
+                },
+                rowcontextmenu: function(grid, rowIndex, e) {
+                    e.preventDefault();
+                    if (rowIndex < 0) return;
+                    var menu = new Ext.menu.Menu([{
+                        text: "显示合同影像",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                pic = record.get('contractpic');
+                            grid.picWin.pic = pic;
+                            grid.picWin.show();
+                        }
+                    }, {
+                        text: "显示身份证影像",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                pic = record.get('idpic');
+                            grid.picWin.pic = pic;
+                            grid.picWin.show();
+                        }
+                    }, {
+                        text: "显示房产证影像",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                pic = record.get('houseidpic');
+                            grid.picWin.pic = pic;
+                            grid.picWin.show();
+                        }
+                    }, {
+                        text: "显示户型图纸影像",
+                        handler: function() {
+                            var record = grid.getStore().getAt(rowIndex),
+                                pic = record.get('housepic');
+                            grid.picWin.pic = pic;
+                            grid.picWin.show();
+                        }
+                    }]);
+                    menu.showAt(e.getPoint());
                 }
             }
         });
@@ -621,7 +836,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     deleteRecord: function(btn) {
         var store = this.getStore();
         var record = this.getSelected();
-        var id = record.get('id');
+        var id = record.get('usrid');
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '/heatManager/data/fare/user/del'+debug,
