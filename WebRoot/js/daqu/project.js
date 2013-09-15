@@ -443,6 +443,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'dstname', type: 'string'},
                     {name: 'start_date', type: 'string'},
                     {name: 'middle', type: 'string'},
+                    {name: 'status', type: 'string'},
                     {name: 'desp', type: 'string'}
                 ]
             })
