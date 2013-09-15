@@ -20,6 +20,12 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 name: 'pjtid'
             }, {
                 xtype: 'textfield',
+                fieldLabel: '项目编号',
+                name: 'pjtnum',
+                width: 160,
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
                 fieldLabel: '项目名称',
                 name: 'pjtname',
                 width: 160,
@@ -436,6 +442,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 root: 'data',
                 fields: [
                     {name: 'pjtid', type: 'int'},
+                    {name: 'pjtnum', type: 'string'},
                     {name: 'pjtname', type: 'string'},
                     {name: 'ctyid', type: 'int'},
                     {name: 'townname', type: 'string'},
@@ -453,7 +460,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "项目编号",
-                dataIndex: 'pjtid',
+                dataIndex: 'pjtnum',
                 width: 1
             }, {
                 header: "项目名称",
