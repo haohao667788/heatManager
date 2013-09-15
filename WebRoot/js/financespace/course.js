@@ -15,7 +15,6 @@ Heat.course.BasicForm = Ext.extend(Ext.form.FormPanel, {
             labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
-            fileUpload: true,
             items: [{
                 xtype: 'textfield',
                 fieldLabel: '科目代码',
