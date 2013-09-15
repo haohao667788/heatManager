@@ -129,6 +129,10 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
         this.addEvents('submitcomplete');
     },
 
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
+    },
+
     //提交表单数据
     formSubmit: function() {
         var isInvalid = false,
@@ -634,6 +638,7 @@ Heat.project.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
+        this.projectWin.hide();
         this.getStore().reload();
     },
 
