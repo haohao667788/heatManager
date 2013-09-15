@@ -58,7 +58,7 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     }
                 }
             }), new Ext.form.ComboBox({
-                hiddenName: 'ctyid',
+                hiddenName: 'dstid',
                 mode: 'local',
                 width: 160,
                 fieldLabel: '所属大区',
@@ -125,24 +125,38 @@ Heat.project.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     //提交表单数据
     formSubmit: function() {
-        this.getForm().submit({
-            clientValidation: true,
-            waitMsg:'数据保存中...',
-            success: this.submitcomplete.createDelegate(this),
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                        break;
-                    case Ext.form.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                        break;
-                    case Ext.form.Action.SERVER_INVALID:
-                        Ext.Msg.alert('系统提示', action.result.msg);
-                        break;
-                }
+        var isInvalid = false,
+            form = this.getForm(),
+            fields = ["ctyid", "dstid"];
+        Ext.each(fields, function(field) {
+            var $f = $(form.findField(field).el.dom);
+            if ($f.hasClass("x-form-invalid")) {
+                isInvalid = true;
+                return false;
             }
         });
+        if (isInvalid) {
+            Ext.Msg.alert("系统提示", "请正确填写表单");
+        } else {
+            this.getForm().submit({
+                clientValidation: true,
+                waitMsg:'数据保存中...',
+                success: this.submitcomplete.createDelegate(this),
+                failure: function(form, action) {
+                    switch (action.failureType) {
+                        case Ext.form.Action.CLIENT_INVALID:
+                            Ext.Msg.alert('系统提示', '请先填写完所有必填项');
+                            break;
+                        case Ext.form.Action.CONNECT_FAILURE:
+                            Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
+                            break;
+                        case Ext.form.Action.SERVER_INVALID:
+                            Ext.Msg.alert('系统提示', action.result.msg);
+                            break;
+                    }
+                }
+            });
+        }
     },
 
     reset: function() {
