@@ -59,23 +59,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         {name: 'value'},
                         {name: 'text'}
                     ])
-                }),
-                listeners: {
-                    change: function(combo, value) {
-                        var flag = false;
-                        combo.getStore().each(function(record, index, total) {
-                            var text = record.get("text"),
-                                val = record.get("value");
-                            if (val == value || val == text) {
-                                flag = true;
-                                return false;
-                            }
-                        });
-                        if (!flag) {
-                            combo.markInvalid("请选择对应记录");
-                        }
-                    }
-                }
+                })
             }), {
                 xtype: 'textfield',
                 fieldLabel: '登录名',
@@ -257,8 +241,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'groupname', type: 'string'},
                     {name: 'loginname', type: 'string'},
                     {name: 'pwd', type: 'string'},
-                    {name: 'createTime', type: 'string'},
-                    {name: 'lastLoginTime', type: 'string'}
+                    {name: 'startDate', type: 'string'}
                 ]
             })
         });
@@ -287,7 +270,7 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 3
             }, {
                 header: "鉴权方式",
-                dataIndex: 'department',
+                dataIndex: 'verifytype',
                 width: 3
             }, {
                 header: "登录名",
@@ -303,12 +286,8 @@ Heat.employee.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "添加时间",
-                dataIndex: "createTime",
+                dataIndex: "startDate",
                 width: 2
-            }, {
-                header: "上次登录时间",
-                dataIndex: 'lastLoginTime',
-                width: 4
             }],
 
             tbar: [{
