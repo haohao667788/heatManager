@@ -186,8 +186,8 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                                             }
                                             if (r.success) {
                                                 var data = r.data;
-                                                basicForm.findField("mchid").setValue(data[0]);
-                                                basicForm.findField("mchname").setValue(data[1]);
+                                                basicForm.findField("mchid").setValue(data[0].mchid);
+                                                basicForm.findField("mchname").setValue(data[1].mchname);
                                             } else {
                                                 Ext.Msg.alert("系统提示", r.message);
                                             }
