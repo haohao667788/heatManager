@@ -8,21 +8,23 @@ import org.heatmanagment.hibernate.domain.HeatsourceInfo;
 
 public interface BuildingService {
 
-	List<BuildingInfo> findPage(int start, int limit);
+	List<BuildingInfo> findPage(Long start, Long limit);
 
 	List<BuildingInfo> findAll();
 
-	List<BuildingInfo> findByCmtid(Long id);
+	List<BuildingInfo> findAllByCmtId(Long cmtid);
+
+	List<BuildingInfo> findByCmtid(Long id, Long start, Long limit);
 
 	BuildingInfo findById(Long id);
 
 	void saveOrUpdateBuilding(Long id, String name, String address, Long cmtid,
-			Long srcid, String heattype, String gis, String picaddress,
+			Long mchid, String heattype, String gis, String picaddress,
 			String comm);
 
 	void deleteBuilding(Long id);
 
-	List<CommunityInfo> inquireCmt();
+	Long count();
 
-	List<HeatsourceInfo> inquireHeatSrc();
+	Long countByCmtId(Long cmtId);
 }

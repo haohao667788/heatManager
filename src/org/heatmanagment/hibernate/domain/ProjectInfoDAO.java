@@ -38,6 +38,7 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 	public static final String MIDDLE = "middle";
 	public static final String DEPARTMENTNAME = "departmentname";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -124,17 +125,21 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<ProjectInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all ProjectInfo instances");
 		try {
-			String queryString = "from ProjectInfo";
+			String queryString = "from ProjectInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all ProjectInfo instances with boundary");
 		try {
@@ -142,9 +147,10 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from ProjectInfo";
+					String q = "from ProjectInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -152,6 +158,19 @@ public class ProjectInfoDAO extends HibernateDaoSupport {
 			log.error("find all ProjectInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		ProjectInfo pjt = new ProjectInfo();
+		pjt.setPjtid(id);
+		pjt.setIsvalid(false);
+		attachDirty(pjt);
+	}
+
+	public Long count() {
+		log.debug("count ProjectInfos");
+		String hql = "select count(*) from ProjectInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public ProjectInfo merge(ProjectInfo detachedInstance) {

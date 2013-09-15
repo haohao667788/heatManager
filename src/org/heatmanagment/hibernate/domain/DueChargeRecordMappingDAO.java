@@ -30,8 +30,8 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class DueChargeRecordMappingDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(DueChargeRecordMappingDAO.class);
-
 	// property constants
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -100,17 +100,21 @@ public class DueChargeRecordMappingDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List<DueChargeRecordMapping> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all DueChargeRecordMapping instances");
 		try {
-			String queryString = "from DueChargeRecordMapping";
+			String queryString = "from DueChargeRecordMapping as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all DueChargeRecordMapping instances with boundary");
 		try {
@@ -118,16 +122,25 @@ public class DueChargeRecordMappingDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from DueChargeRecordMapping";
+					String q = "from DueChargeRecordMapping as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all DueChargeRecordMapping with boundary failed", re);
+			log.error("find all DueChargeRecordMapping with boundary failed",
+					re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		DueChargeRecordMapping mapping = new DueChargeRecordMapping();
+		mapping.setMapid(id);
+		mapping.setIsvalid(false);
+		attachDirty(mapping);
 	}
 
 	public DueChargeRecordMapping merge(DueChargeRecordMapping detachedInstance) {

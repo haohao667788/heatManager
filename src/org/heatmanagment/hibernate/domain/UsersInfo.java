@@ -8,30 +8,35 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.SEQUENCE;
-
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * UsersInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "USERS_INFO", schema = "HEATMGR")
+@JsonAutoDetect
 public class UsersInfo implements java.io.Serializable {
 
 	// Fields
 
 	private Long usrid;
+	@JsonIgnore
 	private MachinesetInfo machinesetInfo;
+	@JsonIgnore
 	private ProjectInfo projectInfo;
+	@JsonIgnore
 	private BuildingInfo buildingInfo;
+	@JsonIgnore
 	private UnitInfo unitInfo;
+	@JsonIgnore
 	private CommunityInfo communityInfo;
 	private String usertype;
 	private String address;
@@ -45,12 +50,23 @@ public class UsersInfo implements java.io.Serializable {
 	private String idpic;
 	private String houseidpic;
 	private String housepic;
+	private Double area;
+	private Double realarea;
+	private Double feearea;
+	private String feetype;
+	private Double feerate;
+	private Double discount;
+	private Double reducefee;
+	private String heatstate;
+	private Double heatbase;
+	private Double heatrate;
+	private String housetype;
 	private String desp;
-	private Set<UserLog> userLogs = new HashSet<UserLog>(0);
-	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
-	private Set<FeeInfo> feeInfos = new HashSet<FeeInfo>(0);
-	private Set<DealInfo> dealInfos = new HashSet<DealInfo>(0);
+	private Boolean isvalid;
 	private Set<DueCharge> dueCharges = new HashSet<DueCharge>(0);
+	private Set<DealInfo> dealInfos = new HashSet<DealInfo>(0);
+	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
+	private Set<UserLog> userLogs = new HashSet<UserLog>(0);
 
 	// Constructors
 
@@ -65,9 +81,12 @@ public class UsersInfo implements java.io.Serializable {
 			String usrname, String phone, Timestamp startdate,
 			Timestamp contractdate, String contracttype, String contractver,
 			String contractpic, String idpic, String houseidpic,
-			String housepic, String desp, Set<UserLog> userLogs,
-			Set<ChargeRecord> chargeRecords, Set<FeeInfo> feeInfos,
-			Set<DealInfo> dealInfos, Set<DueCharge> dueCharges) {
+			String housepic, Double area, Double realarea, Double feearea,
+			String feetype, Double feerate, Double discount, Double reducefee,
+			String heatstate, Double heatbase, Double heatrate,
+			String housetype, String desp, Boolean isvalid,
+			Set<DueCharge> dueCharges, Set<DealInfo> dealInfos,
+			Set<ChargeRecord> chargeRecords, Set<UserLog> userLogs) {
 		this.machinesetInfo = machinesetInfo;
 		this.projectInfo = projectInfo;
 		this.buildingInfo = buildingInfo;
@@ -85,18 +104,28 @@ public class UsersInfo implements java.io.Serializable {
 		this.idpic = idpic;
 		this.houseidpic = houseidpic;
 		this.housepic = housepic;
+		this.area = area;
+		this.realarea = realarea;
+		this.feearea = feearea;
+		this.feetype = feetype;
+		this.feerate = feerate;
+		this.discount = discount;
+		this.reducefee = reducefee;
+		this.heatstate = heatstate;
+		this.heatbase = heatbase;
+		this.heatrate = heatrate;
+		this.housetype = housetype;
 		this.desp = desp;
-		this.userLogs = userLogs;
-		this.chargeRecords = chargeRecords;
-		this.feeInfos = feeInfos;
-		this.dealInfos = dealInfos;
+		this.isvalid = isvalid;
 		this.dueCharges = dueCharges;
+		this.dealInfos = dealInfos;
+		this.chargeRecords = chargeRecords;
+		this.userLogs = userLogs;
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "USR_ID", allocationSize = 1, sequenceName = "USR_ID")
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "USR_ID")
+	@GeneratedValue
 	@Column(name = "USRID", unique = true, nullable = false, precision = 10, scale = 0)
 	public Long getUsrid() {
 		return this.usrid;
@@ -106,7 +135,7 @@ public class UsersInfo implements java.io.Serializable {
 		this.usrid = usrid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MCHID")
 	public MachinesetInfo getMachinesetInfo() {
 		return this.machinesetInfo;
@@ -116,7 +145,7 @@ public class UsersInfo implements java.io.Serializable {
 		this.machinesetInfo = machinesetInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PJTID")
 	public ProjectInfo getProjectInfo() {
 		return this.projectInfo;
@@ -126,7 +155,7 @@ public class UsersInfo implements java.io.Serializable {
 		this.projectInfo = projectInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "BLDID")
 	public BuildingInfo getBuildingInfo() {
 		return this.buildingInfo;
@@ -136,7 +165,7 @@ public class UsersInfo implements java.io.Serializable {
 		this.buildingInfo = buildingInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "UNTID")
 	public UnitInfo getUnitInfo() {
 		return this.unitInfo;
@@ -146,7 +175,7 @@ public class UsersInfo implements java.io.Serializable {
 		this.unitInfo = unitInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CMTID")
 	public CommunityInfo getCommunityInfo() {
 		return this.communityInfo;
@@ -174,7 +203,7 @@ public class UsersInfo implements java.io.Serializable {
 		this.address = address;
 	}
 
-	@Column(name = "USRNAME", length = 20)
+	@Column(name = "USRNAME", length = 200)
 	public String getUsrname() {
 		return this.usrname;
 	}
@@ -264,6 +293,105 @@ public class UsersInfo implements java.io.Serializable {
 		this.housepic = housepic;
 	}
 
+	@Column(name = "AREA", precision = 8)
+	public Double getArea() {
+		return this.area;
+	}
+
+	public void setArea(Double area) {
+		this.area = area;
+	}
+
+	@Column(name = "REALAREA", precision = 8)
+	public Double getRealarea() {
+		return this.realarea;
+	}
+
+	public void setRealarea(Double realarea) {
+		this.realarea = realarea;
+	}
+
+	@Column(name = "FEEAREA", precision = 8)
+	public Double getFeearea() {
+		return this.feearea;
+	}
+
+	public void setFeearea(Double feearea) {
+		this.feearea = feearea;
+	}
+
+	@Column(name = "FEETYPE", length = 10)
+	public String getFeetype() {
+		return this.feetype;
+	}
+
+	public void setFeetype(String feetype) {
+		this.feetype = feetype;
+	}
+
+	@Column(name = "FEERATE", precision = 8)
+	public Double getFeerate() {
+		return this.feerate;
+	}
+
+	public void setFeerate(Double feerate) {
+		this.feerate = feerate;
+	}
+
+	@Column(name = "DISCOUNT", precision = 8)
+	public Double getDiscount() {
+		return this.discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+
+	@Column(name = "REDUCEFEE", precision = 10)
+	public Double getReducefee() {
+		return this.reducefee;
+	}
+
+	public void setReducefee(Double reducefee) {
+		this.reducefee = reducefee;
+	}
+
+	@Column(name = "HEATSTATE", length = 10)
+	public String getHeatstate() {
+		return this.heatstate;
+	}
+
+	public void setHeatstate(String heatstate) {
+		this.heatstate = heatstate;
+	}
+
+	@Column(name = "HEATBASE", precision = 8)
+	public Double getHeatbase() {
+		return this.heatbase;
+	}
+
+	public void setHeatbase(Double heatbase) {
+		this.heatbase = heatbase;
+	}
+
+	@Column(name = "HEATRATE", precision = 8)
+	public Double getHeatrate() {
+		return this.heatrate;
+	}
+
+	public void setHeatrate(Double heatrate) {
+		this.heatrate = heatrate;
+	}
+
+	@Column(name = "HOUSETYPE", length = 20)
+	public String getHousetype() {
+		return this.housetype;
+	}
+
+	public void setHousetype(String housetype) {
+		this.housetype = housetype;
+	}
+
 	@Column(name = "DESP", length = 2000)
 	public String getDesp() {
 		return this.desp;
@@ -273,31 +401,22 @@ public class UsersInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
-	public Set<UserLog> getUserLogs() {
-		return this.userLogs;
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
 	}
 
-	public void setUserLogs(Set<UserLog> userLogs) {
-		this.userLogs = userLogs;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
-	public Set<ChargeRecord> getChargeRecords() {
-		return this.chargeRecords;
-	}
-
-	public void setChargeRecords(Set<ChargeRecord> chargeRecords) {
-		this.chargeRecords = chargeRecords;
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
-	public Set<FeeInfo> getFeeInfos() {
-		return this.feeInfos;
+	public Set<DueCharge> getDueCharges() {
+		return this.dueCharges;
 	}
 
-	public void setFeeInfos(Set<FeeInfo> feeInfos) {
-		this.feeInfos = feeInfos;
+	public void setDueCharges(Set<DueCharge> dueCharges) {
+		this.dueCharges = dueCharges;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
@@ -310,12 +429,21 @@ public class UsersInfo implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
-	public Set<DueCharge> getDueCharges() {
-		return this.dueCharges;
+	public Set<ChargeRecord> getChargeRecords() {
+		return this.chargeRecords;
 	}
 
-	public void setDueCharges(Set<DueCharge> dueCharges) {
-		this.dueCharges = dueCharges;
+	public void setChargeRecords(Set<ChargeRecord> chargeRecords) {
+		this.chargeRecords = chargeRecords;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usersInfo")
+	public Set<UserLog> getUserLogs() {
+		return this.userLogs;
+	}
+
+	public void setUserLogs(Set<UserLog> userLogs) {
+		this.userLogs = userLogs;
 	}
 
 }

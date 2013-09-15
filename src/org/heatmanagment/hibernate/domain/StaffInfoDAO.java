@@ -40,6 +40,7 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 	public static final String PWD = "pwd";
 	public static final String DEPARTMENT = "department";
 	public static final String VERIFYTYPE = "verifytype";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -134,17 +135,21 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 		return findByProperty(VERIFYTYPE, verifytype);
 	}
 
+	public List<StaffInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all StaffInfo instances");
 		try {
-			String queryString = "from StaffInfo";
+			String queryString = "from StaffInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all StaffInfo instances with boundary");
 		try {
@@ -152,9 +157,10 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from StaffInfo";
+					String q = "from StaffInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -162,6 +168,19 @@ public class StaffInfoDAO extends HibernateDaoSupport {
 			log.error("find all StaffInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public Long count() {
+		log.debug("count CountyInfos");
+		String hql = "select count(*) from StaffInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
+	}
+
+	public void remove(Long id) {
+		StaffInfo stf = new StaffInfo();
+		stf.setStfid(id);
+		stf.setIsvalid(false);
+		attachDirty(stf);
 	}
 
 	public StaffInfo merge(StaffInfo detachedInstance) {

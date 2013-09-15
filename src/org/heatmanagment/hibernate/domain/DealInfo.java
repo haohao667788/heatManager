@@ -27,12 +27,12 @@ public class DealInfo implements java.io.Serializable {
 
 	private Long dealid;
 	private UsersInfo usersInfo;
-	private Double curbalance;
-	private Double curcharge;
-	private Double curmoney;
+	private Double balance;
+	private Double money;
 	private Timestamp lastdate;
 	private String dealname;
 	private String desp;
+	private Boolean isvalid;
 
 	// Constructors
 
@@ -47,15 +47,15 @@ public class DealInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public DealInfo(UsersInfo usersInfo, Double curbalance, Double curcharge,
-			Double curmoney, Timestamp lastdate, String dealname, String desp) {
+	public DealInfo(UsersInfo usersInfo, Double balance, Double money,
+			Timestamp lastdate, String dealname, String desp, Boolean isvalid) {
 		this.usersInfo = usersInfo;
-		this.curbalance = curbalance;
-		this.curcharge = curcharge;
-		this.curmoney = curmoney;
+		this.balance = balance;
+		this.money = money;
 		this.lastdate = lastdate;
 		this.dealname = dealname;
 		this.desp = desp;
+		this.isvalid = isvalid;
 	}
 
 	// Property accessors
@@ -71,7 +71,7 @@ public class DealInfo implements java.io.Serializable {
 		this.dealid = dealid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USRID", nullable = true)
 	public UsersInfo getUsersInfo() {
 		return this.usersInfo;
@@ -81,31 +81,22 @@ public class DealInfo implements java.io.Serializable {
 		this.usersInfo = usersInfo;
 	}
 
-	@Column(name = "CURBALANCE", precision = 10)
-	public Double getCurbalance() {
-		return this.curbalance;
+	@Column(name = "BALANCE", precision = 10)
+	public Double getBalance() {
+		return this.balance;
 	}
 
-	public void setCurbalance(Double curbalance) {
-		this.curbalance = curbalance;
+	public void setBalance(Double balance) {
+		this.balance = balance;
 	}
 
-	@Column(name = "CURCHARGE", precision = 10)
-	public Double getCurcharge() {
-		return this.curcharge;
+	@Column(name = "MONEY", precision = 10)
+	public Double getMoney() {
+		return this.money;
 	}
 
-	public void setCurcharge(Double curcharge) {
-		this.curcharge = curcharge;
-	}
-
-	@Column(name = "CURMONEY", precision = 10)
-	public Double getCurmoney() {
-		return this.curmoney;
-	}
-
-	public void setCurmoney(Double curmoney) {
-		this.curmoney = curmoney;
+	public void setMoney(Double money) {
+		this.money = money;
 	}
 
 	@Column(name = "LASTDATE", length = 7)
@@ -117,7 +108,7 @@ public class DealInfo implements java.io.Serializable {
 		this.lastdate = lastdate;
 	}
 
-	@Column(name = "DEALNAME", nullable = true, length = 20)
+	@Column(name = "DEALNAME", nullable = true, length = 200)
 	public String getDealname() {
 		return this.dealname;
 	}
@@ -133,6 +124,15 @@ public class DealInfo implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 }

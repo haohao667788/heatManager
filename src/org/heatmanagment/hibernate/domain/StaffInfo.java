@@ -35,6 +35,8 @@ public class StaffInfo implements java.io.Serializable {
 	private String pwd;
 	private String department;
 	private Long verifytype;
+	private Boolean isvalid;
+	private Set<ClsStfMap> clsStfMaps = new HashSet<ClsStfMap>(0);
 	private Set<LoginInfo> loginInfos = new HashSet<LoginInfo>(0);
 	private Set<ChargeRecord> chargeRecords = new HashSet<ChargeRecord>(0);
 
@@ -47,8 +49,8 @@ public class StaffInfo implements java.io.Serializable {
 	/** full constructor */
 	public StaffInfo(String stfname, String stfnumber, Timestamp startdate,
 			String phone, String loginname, String pwd, String department,
-			Long verifytype, Set<LoginInfo> loginInfos,
-			Set<ChargeRecord> chargeRecords) {
+			Long verifytype, Boolean isvalid, Set<ClsStfMap> clsStfMaps,
+			Set<LoginInfo> loginInfos, Set<ChargeRecord> chargeRecords) {
 		this.stfname = stfname;
 		this.stfnumber = stfnumber;
 		this.startdate = startdate;
@@ -57,6 +59,8 @@ public class StaffInfo implements java.io.Serializable {
 		this.pwd = pwd;
 		this.department = department;
 		this.verifytype = verifytype;
+		this.isvalid = isvalid;
+		this.clsStfMaps = clsStfMaps;
 		this.loginInfos = loginInfos;
 		this.chargeRecords = chargeRecords;
 	}
@@ -144,6 +148,24 @@ public class StaffInfo implements java.io.Serializable {
 
 	public void setVerifytype(Long verifytype) {
 		this.verifytype = verifytype;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "staffInfo")
+	public Set<ClsStfMap> getClsStfMaps() {
+		return this.clsStfMaps;
+	}
+
+	public void setClsStfMaps(Set<ClsStfMap> clsStfMaps) {
+		this.clsStfMaps = clsStfMaps;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "staffInfo")

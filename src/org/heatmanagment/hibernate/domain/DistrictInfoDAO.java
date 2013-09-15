@@ -34,6 +34,7 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 	// property constants
 	public static final String DSTNAME = "dstname";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -108,17 +109,21 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<DistrictInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all DistrictInfo instances");
 		try {
-			String queryString = "from DistrictInfo";
+			String queryString = "from DistrictInfo where isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all DistrictInfo instances with boundary");
 		try {
@@ -126,9 +131,10 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from DistrictInfo";
+					String q = "from DistrictInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -136,6 +142,13 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 			log.error("find all DistrictInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		DistrictInfo dst = new DistrictInfo();
+		dst.setDstid(id);
+		dst.setIsvalid(false);
+		attachDirty(dst);
 	}
 
 	public DistrictInfo merge(DistrictInfo detachedInstance) {
@@ -149,6 +162,12 @@ public class DistrictInfoDAO extends HibernateDaoSupport {
 			log.error("merge failed", re);
 			throw re;
 		}
+	}
+
+	public Long count() {
+		log.debug("count DistrictInfos");
+		String hql = "select count(*) from DistrictInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public void attachDirty(DistrictInfo instance) {

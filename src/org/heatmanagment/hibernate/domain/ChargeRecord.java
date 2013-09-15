@@ -31,18 +31,16 @@ public class ChargeRecord implements java.io.Serializable {
 	private StaffInfo staffInfo;
 	private UsersInfo usersInfo;
 	private BankCertificate bankCertificate;
-	private Long accrangeid;
 	private Timestamp rcdtime;
 	private Double money;
 	private String chgtype;
 	private String checknum;
 	private String rcdpic;
-	private String chgyear;
+	private String dealname;
 	private Long financechecker;
 	private String desp;
 	private Timestamp chargeverifytime;
-	private Set<CertificateChargeMapping> certificateChargeMappings = new HashSet<CertificateChargeMapping>(
-			0);
+	private Boolean isvalid;
 	private Set<DueChargeRecordMapping> dueChargeRecordMappings = new HashSet<DueChargeRecordMapping>(
 			0);
 
@@ -53,37 +51,35 @@ public class ChargeRecord implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public ChargeRecord(UsersInfo usersInfo) {
+	public ChargeRecord(StaffInfo staffInfo, UsersInfo usersInfo) {
+		this.staffInfo = staffInfo;
 		this.usersInfo = usersInfo;
 	}
 
 	/** full constructor */
 	public ChargeRecord(StaffInfo staffInfo, UsersInfo usersInfo,
-			BankCertificate bankCertificate, Long accrangeid,
-			Timestamp rcdtime, Double money, String chgtype, String checknum,
-			String rcdpic, String chgyear, Long financechecker, String desp,
-			Timestamp chargeverifytime,
-			Set<CertificateChargeMapping> certificateChargeMappings,
-			Set<DueChargeRecordMapping> dueChargeRecordMappings) {
+			BankCertificate bankCertificate, Timestamp rcdtime, Double money,
+			String chgtype, String checknum, String rcdpic, String dealname,
+			Long financechecker, String desp, Timestamp chargeverifytime,
+			Boolean isvalid, Set<DueChargeRecordMapping> dueChargeRecordMappings) {
 		this.staffInfo = staffInfo;
 		this.usersInfo = usersInfo;
 		this.bankCertificate = bankCertificate;
-		this.accrangeid = accrangeid;
 		this.rcdtime = rcdtime;
 		this.money = money;
 		this.chgtype = chgtype;
 		this.checknum = checknum;
 		this.rcdpic = rcdpic;
-		this.chgyear = chgyear;
+		this.dealname = dealname;
 		this.financechecker = financechecker;
 		this.desp = desp;
 		this.chargeverifytime = chargeverifytime;
-		this.certificateChargeMappings = certificateChargeMappings;
+		this.isvalid = isvalid;
 		this.dueChargeRecordMappings = dueChargeRecordMappings;
 	}
 
 	// Property accessors
-	@SequenceGenerator(name = "RECORD_ID",allocationSize = 1, sequenceName = "RECORD_ID")
+	@SequenceGenerator(name = "RECORD_ID", allocationSize = 1, sequenceName = "RECORD_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "RECORD_ID")
 	@Column(name = "RCDID", unique = true, nullable = false, precision = 15, scale = 0)
@@ -95,8 +91,8 @@ public class ChargeRecord implements java.io.Serializable {
 		this.rcdid = rcdid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "STFID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "STFID", nullable = true)
 	public StaffInfo getStaffInfo() {
 		return this.staffInfo;
 	}
@@ -105,7 +101,7 @@ public class ChargeRecord implements java.io.Serializable {
 		this.staffInfo = staffInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USRID", nullable = true)
 	public UsersInfo getUsersInfo() {
 		return this.usersInfo;
@@ -115,7 +111,7 @@ public class ChargeRecord implements java.io.Serializable {
 		this.usersInfo = usersInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CTFID")
 	public BankCertificate getBankCertificate() {
 		return this.bankCertificate;
@@ -123,15 +119,6 @@ public class ChargeRecord implements java.io.Serializable {
 
 	public void setBankCertificate(BankCertificate bankCertificate) {
 		this.bankCertificate = bankCertificate;
-	}
-
-	@Column(name = "ACCRANGEID", precision = 15, scale = 0)
-	public Long getAccrangeid() {
-		return this.accrangeid;
-	}
-
-	public void setAccrangeid(Long accrangeid) {
-		this.accrangeid = accrangeid;
 	}
 
 	@Column(name = "RCDTIME", length = 7)
@@ -170,7 +157,7 @@ public class ChargeRecord implements java.io.Serializable {
 		this.checknum = checknum;
 	}
 
-	@Column(name = "RCDPIC", length = 100)
+	@Column(name = "RCDPIC", length = 200)
 	public String getRcdpic() {
 		return this.rcdpic;
 	}
@@ -179,13 +166,13 @@ public class ChargeRecord implements java.io.Serializable {
 		this.rcdpic = rcdpic;
 	}
 
-	@Column(name = "CHGYEAR", length = 20)
-	public String getChgyear() {
-		return this.chgyear;
+	@Column(name = "DEALNAME", length = 200)
+	public String getDealname() {
+		return this.dealname;
 	}
 
-	public void setChgyear(String chgyear) {
-		this.chgyear = chgyear;
+	public void setDealname(String dealname) {
+		this.dealname = dealname;
 	}
 
 	@Column(name = "FINANCECHECKER", precision = 10, scale = 0)
@@ -215,14 +202,13 @@ public class ChargeRecord implements java.io.Serializable {
 		this.chargeverifytime = chargeverifytime;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "chargeRecord")
-	public Set<CertificateChargeMapping> getCertificateChargeMappings() {
-		return this.certificateChargeMappings;
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
 	}
 
-	public void setCertificateChargeMappings(
-			Set<CertificateChargeMapping> certificateChargeMappings) {
-		this.certificateChargeMappings = certificateChargeMappings;
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "chargeRecord")

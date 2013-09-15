@@ -12,4 +12,8 @@ public interface CountyService {
 	void deleteCounty(Long id);
 
 	List<CountyInfo> findPage(int start, int limit);
+
+	Long count();
+
+	List<CountyInfo> findAll();
 }

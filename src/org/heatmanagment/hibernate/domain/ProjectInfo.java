@@ -36,6 +36,7 @@ public class ProjectInfo implements java.io.Serializable {
 	private String departmentname;
 	private Timestamp startDate;
 	private String desp;
+	private Boolean isvalid;
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
 
 	// Constructors
@@ -54,7 +55,7 @@ public class ProjectInfo implements java.io.Serializable {
 	public ProjectInfo(DistrictInfo districtInfo, CountyInfo countyInfo,
 			String pjtnum, String pjtname, String middle,
 			String departmentname, Timestamp startDate, String desp,
-			Set<UsersInfo> usersInfos) {
+			Boolean isvalid, Set<UsersInfo> usersInfos) {
 		this.districtInfo = districtInfo;
 		this.countyInfo = countyInfo;
 		this.pjtnum = pjtnum;
@@ -63,6 +64,7 @@ public class ProjectInfo implements java.io.Serializable {
 		this.departmentname = departmentname;
 		this.startDate = startDate;
 		this.desp = desp;
+		this.isvalid = isvalid;
 		this.usersInfos = usersInfos;
 	}
 
@@ -79,7 +81,7 @@ public class ProjectInfo implements java.io.Serializable {
 		this.pjtid = pjtid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "DSTID")
 	public DistrictInfo getDistrictInfo() {
 		return this.districtInfo;
@@ -89,7 +91,7 @@ public class ProjectInfo implements java.io.Serializable {
 		this.districtInfo = districtInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CTYID")
 	public CountyInfo getCountyInfo() {
 		return this.countyInfo;
@@ -108,7 +110,7 @@ public class ProjectInfo implements java.io.Serializable {
 		this.pjtnum = pjtnum;
 	}
 
-	@Column(name = "PJTNAME", nullable = true, length = 40)
+	@Column(name = "PJTNAME", nullable = true, length = 200)
 	public String getPjtname() {
 		return this.pjtname;
 	}
@@ -151,6 +153,15 @@ public class ProjectInfo implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "projectInfo")

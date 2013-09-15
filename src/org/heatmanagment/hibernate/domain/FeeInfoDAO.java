@@ -42,6 +42,7 @@ public class FeeInfoDAO extends HibernateDaoSupport {
 	public static final String HEATRATE = "heatrate";
 	public static final String HOUSETYPE = "housetype";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -156,17 +157,21 @@ public class FeeInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<FeeInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all FeeInfo instances");
 		try {
-			String queryString = "from FeeInfo";
+			String queryString = "from FeeInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all FeeInfo instances with boundary");
 		try {
@@ -174,9 +179,10 @@ public class FeeInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from FeeInfo";
+					String q = "from FeeInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -184,6 +190,13 @@ public class FeeInfoDAO extends HibernateDaoSupport {
 			log.error("find all FeeInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		FeeInfo fee = new FeeInfo();
+		fee.setFeeid(id);
+		fee.setIsvalid(false);
+		attachDirty(fee);
 	}
 
 	public FeeInfo merge(FeeInfo detachedInstance) {

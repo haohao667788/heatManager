@@ -22,14 +22,15 @@ public class DistrictServiceImpl implements DistrictService {
 		temp.setDstid(id);
 		temp.setDstname(name);
 		temp.setDesp(comm);
+		temp.setIsvalid(true);
 		this.dao.attachDirty(temp);
 	}
 
 	@Override
 	public void deleteDistrict(Long id) {
-		DistrictInfo temp = new DistrictInfo();
-		temp.setDstid(id);
-		this.dao.delete(temp);
+		DistrictInfo dst = this.dao.findById(id);
+		dst.setIsvalid(false);
+		this.dao.attachDirty(dst);
 	}
 
 	@Override
@@ -40,6 +41,11 @@ public class DistrictServiceImpl implements DistrictService {
 	@Override
 	public List<DistrictInfo> findAll() {
 		return this.dao.findAll();
+	}
+
+	@Override
+	public Long count() {
+		return this.dao.count();
 	}
 
 }

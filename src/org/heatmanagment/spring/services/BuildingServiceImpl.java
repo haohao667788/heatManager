@@ -6,6 +6,7 @@ import org.heatmanagment.hibernate.domain.BuildingInfo;
 import org.heatmanagment.hibernate.domain.BuildingInfoDAO;
 import org.heatmanagment.hibernate.domain.CommunityInfo;
 import org.heatmanagment.hibernate.domain.HeatsourceInfo;
+import org.heatmanagment.hibernate.domain.MachinesetInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,8 @@ public class BuildingServiceImpl implements BuildingService {
 	private BuildingInfoDAO dao;
 
 	@Override
-	public List<BuildingInfo> findPage(int start, int limit) {
-		return this.dao.findPage(start, limit);
+	public List<BuildingInfo> findPage(Long start, Long limit) {
+		return this.dao.findPage(start.intValue(), limit.intValue());
 	}
 
 	@Override
@@ -30,47 +31,36 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public void saveOrUpdateBuilding(Long id, String name, String address,
-			Long cmtid, Long srcid, String heattype, String gis,
+			Long cmtid, Long mchid, String heattype, String gis,
 			String picaddress, String comm) {
 		BuildingInfo bld = new BuildingInfo();
 		bld.setBldid(id);
 		bld.setBldname(name);
-		bld.setBldaddress(address);
+		bld.setAddress(address);
 		bld.setHeattype(heattype);
 		bld.setGis(gis);
 		bld.setDesp(comm);
 		bld.setPicaddress(picaddress);
+		bld.setIsvalid(true);
 
 		if (cmtid != null) {
 			CommunityInfo cmt = new CommunityInfo();
 			cmt.setCmtid(cmtid);
 			bld.setCommunityInfo(cmt);
 		}
-		if (srcid != null) {
-			HeatsourceInfo src = new HeatsourceInfo();
-			src.setSrcid(srcid);
-			bld.setHeatsourceInfo(src);
+		if (mchid != null) {
+			MachinesetInfo mch = new MachinesetInfo();
+			mch.setMchid(mchid);
+			bld.setMachinesetInfo(mch);
 		}
 		this.dao.attachDirty(bld);
 	}
 
 	@Override
 	public void deleteBuilding(Long id) {
-		BuildingInfo info = new BuildingInfo();
-		info.setBldid(id);
-		this.dao.delete(info);
-	}
-
-	@Override
-	public List<CommunityInfo> inquireCmt() {
-
-		return null;
-	}
-
-	@Override
-	public List<HeatsourceInfo> inquireHeatSrc() {
-		// null
-		return null;
+		BuildingInfo bld = this.dao.findById(id);
+		bld.setIsvalid(false);
+		this.dao.attachDirty(bld);
 	}
 
 	@Override
@@ -79,12 +69,22 @@ public class BuildingServiceImpl implements BuildingService {
 	}
 
 	@Override
-	public List<BuildingInfo> findByCmtid(Long id) {
-		BuildingInfo bld = new BuildingInfo();
-		CommunityInfo cmt = new CommunityInfo();
-		cmt.setCmtid(id);
-		bld.setCommunityInfo(cmt);
+	public List<BuildingInfo> findByCmtid(Long id, Long start, Long limit) {
+		return this.dao.findPageByCmtid(id, start, limit);
+	}
 
-		return this.dao.findByExample(bld);
+	@Override
+	public Long count() {
+		return this.dao.count();
+	}
+
+	@Override
+	public Long countByCmtId(Long cmtId) {
+		return this.dao.countByCmt(cmtId);
+	}
+
+	@Override
+	public List<BuildingInfo> findAllByCmtId(Long cmtid) {
+		return this.dao.findAllByCmtId(cmtid);
 	}
 }

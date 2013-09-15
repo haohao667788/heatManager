@@ -32,8 +32,9 @@ public class MachinesetInfo implements java.io.Serializable {
 	private String mchname;
 	private String gis;
 	private String desp;
+	private Boolean isvalid;
+	private Set<BuildingInfo> buildingInfos = new HashSet<BuildingInfo>(0);
 	private Set<UsersInfo> usersInfos = new HashSet<UsersInfo>(0);
-	private Set<UnitInfo> unitInfos = new HashSet<UnitInfo>(0);
 
 	// Constructors
 
@@ -48,15 +49,16 @@ public class MachinesetInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public MachinesetInfo(HeatsourceInfo heatsourceInfo, ClassInfo classInfo,
-			String mchname, String gis, String desp, Set<UsersInfo> usersInfos,
-			Set<UnitInfo> unitInfos) {
+			String mchname, String gis, String desp, Boolean isvalid,
+			Set<BuildingInfo> buildingInfos, Set<UsersInfo> usersInfos) {
 		this.heatsourceInfo = heatsourceInfo;
 		this.classInfo = classInfo;
 		this.mchname = mchname;
 		this.gis = gis;
 		this.desp = desp;
+		this.isvalid = isvalid;
+		this.buildingInfos = buildingInfos;
 		this.usersInfos = usersInfos;
-		this.unitInfos = unitInfos;
 	}
 
 	// Property accessors
@@ -72,7 +74,7 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.mchid = mchid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SRCID")
 	public HeatsourceInfo getHeatsourceInfo() {
 		return this.heatsourceInfo;
@@ -82,7 +84,7 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.heatsourceInfo = heatsourceInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CLSID")
 	public ClassInfo getClassInfo() {
 		return this.classInfo;
@@ -92,7 +94,7 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.classInfo = classInfo;
 	}
 
-	@Column(name = "MCHNAME", nullable = true, length = 20)
+	@Column(name = "MCHNAME", nullable = true, length = 200)
 	public String getMchname() {
 		return this.mchname;
 	}
@@ -119,6 +121,24 @@ public class MachinesetInfo implements java.io.Serializable {
 		this.desp = desp;
 	}
 
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "machinesetInfo")
+	public Set<BuildingInfo> getBuildingInfos() {
+		return this.buildingInfos;
+	}
+
+	public void setBuildingInfos(Set<BuildingInfo> buildingInfos) {
+		this.buildingInfos = buildingInfos;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "machinesetInfo")
 	public Set<UsersInfo> getUsersInfos() {
 		return this.usersInfos;
@@ -126,15 +146,6 @@ public class MachinesetInfo implements java.io.Serializable {
 
 	public void setUsersInfos(Set<UsersInfo> usersInfos) {
 		this.usersInfos = usersInfos;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "machinesetInfo")
-	public Set<UnitInfo> getUnitInfos() {
-		return this.unitInfos;
-	}
-
-	public void setUnitInfos(Set<UnitInfo> unitInfos) {
-		this.unitInfos = unitInfos;
 	}
 
 }

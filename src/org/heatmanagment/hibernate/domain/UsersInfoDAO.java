@@ -43,7 +43,19 @@ public class UsersInfoDAO extends HibernateDaoSupport {
 	public static final String IDPIC = "idpic";
 	public static final String HOUSEIDPIC = "houseidpic";
 	public static final String HOUSEPIC = "housepic";
+	public static final String AREA = "area";
+	public static final String REALAREA = "realarea";
+	public static final String FEEAREA = "feearea";
+	public static final String FEETYPE = "feetype";
+	public static final String FEERATE = "feerate";
+	public static final String DISCOUNT = "discount";
+	public static final String REDUCEFEE = "reducefee";
+	public static final String HEATSTATE = "heatstate";
+	public static final String HEATBASE = "heatbase";
+	public static final String HEATRATE = "heatrate";
+	public static final String HOUSETYPE = "housetype";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -150,21 +162,69 @@ public class UsersInfoDAO extends HibernateDaoSupport {
 		return findByProperty(HOUSEPIC, housepic);
 	}
 
+	public List<UsersInfo> findByArea(Object area) {
+		return findByProperty(AREA, area);
+	}
+
+	public List<UsersInfo> findByRealarea(Object realarea) {
+		return findByProperty(REALAREA, realarea);
+	}
+
+	public List<UsersInfo> findByFeearea(Object feearea) {
+		return findByProperty(FEEAREA, feearea);
+	}
+
+	public List<UsersInfo> findByFeetype(Object feetype) {
+		return findByProperty(FEETYPE, feetype);
+	}
+
+	public List<UsersInfo> findByFeerate(Object feerate) {
+		return findByProperty(FEERATE, feerate);
+	}
+
+	public List<UsersInfo> findByDiscount(Object discount) {
+		return findByProperty(DISCOUNT, discount);
+	}
+
+	public List<UsersInfo> findByReducefee(Object reducefee) {
+		return findByProperty(REDUCEFEE, reducefee);
+	}
+
+	public List<UsersInfo> findByHeatstate(Object heatstate) {
+		return findByProperty(HEATSTATE, heatstate);
+	}
+
+	public List<UsersInfo> findByHeatbase(Object heatbase) {
+		return findByProperty(HEATBASE, heatbase);
+	}
+
+	public List<UsersInfo> findByHeatrate(Object heatrate) {
+		return findByProperty(HEATRATE, heatrate);
+	}
+
+	public List<UsersInfo> findByHousetype(Object housetype) {
+		return findByProperty(HOUSETYPE, housetype);
+	}
+
 	public List<UsersInfo> findByDesp(Object desp) {
 		return findByProperty(DESP, desp);
+	}
+
+	public List<UsersInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
 	}
 
 	public List findAll() {
 		log.debug("finding all UsersInfo instances");
 		try {
-			String queryString = "from UsersInfo";
+			String queryString = "from UsersInfo where isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all UsersInfo instances with boundary");
 		try {
@@ -172,9 +232,10 @@ public class UsersInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from UsersInfo";
+					String q = "from UsersInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -182,6 +243,12 @@ public class UsersInfoDAO extends HibernateDaoSupport {
 			log.error("find all UsersInfo with boundary failed", re);
 			throw re;
 		}
+	}
+	
+	public Long count() {
+		log.debug("count UsersInfos");
+		String hql = "select count(*) from UsersInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public UsersInfo merge(UsersInfo detachedInstance) {

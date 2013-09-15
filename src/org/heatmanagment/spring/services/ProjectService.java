@@ -1,5 +1,6 @@
 package org.heatmanagment.spring.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.heatmanagment.hibernate.domain.DistrictInfo;
@@ -17,6 +18,14 @@ public interface ProjectService {
 
 	List<ProjectInfo> findPage(int start, int limit);
 
-	void saveOrUpdateProject(Long id, String name, Long ctyId, Long dstId,
-			String middle, String comm);
+	List<ProjectInfo> findAll();
+
+	List<ProjectInfo> findByDst(Long dstid);
+
+	void saveOrUpdateProject(Long id, String name, String pjtnum, Long ctyId,
+			Long dstId, String middle, String comm, Timestamp startDate);
+
+	void addMapping(Long pjtid, Long stfid, String desp);
+
+	Long count();
 }

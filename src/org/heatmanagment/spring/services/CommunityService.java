@@ -16,4 +16,6 @@ public interface CommunityService {
 	List<CommunityInfo> findAll();
 
 	CommunityInfo findById(Long id);
+
+	Long count();
 }

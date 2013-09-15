@@ -1,47 +1,108 @@
 package org.heatmanagment.spring.entity;
 
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.heatmanagment.hibernate.domain.BuildingInfo;
 
 @JsonAutoDetect
 public class BuildingOut {
 
-	private boolean success;
-	private String message;
-	private int totalProperty;
-	private List<BuildingInfo> data;
+	private Long bldid;
+	private Long mchid;
+	private String mchname;
+	private Long cmtid;
+	private String cmtname;
+	private String bldname;
+	private String bldaddress;
+	private String heattype;
+	private String gis;
+	private String picaddress;
+	private String desp;
 
-	public boolean isSuccess() {
-		return success;
+	public Long getBldid() {
+		return bldid;
 	}
 
-	public void setSuccess(boolean success) {
-		this.success = success;
+	public void setBldid(Long bldid) {
+		this.bldid = bldid;
 	}
 
-	public String getMessage() {
-		return message;
+	public Long getMchid() {
+		return mchid;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMchid(Long mchid) {
+		this.mchid = mchid;
 	}
 
-	public int getTotalProperty() {
-		return totalProperty;
+	public String getMchname() {
+		return mchname;
 	}
 
-	public void setTotalProperty(int totalProperty) {
-		this.totalProperty = totalProperty;
+	public void setMchname(String mchname) {
+		this.mchname = mchname;
 	}
 
-	public List<BuildingInfo> getData() {
-		return data;
+	public Long getCmtid() {
+		return cmtid;
 	}
 
-	public void setData(List<BuildingInfo> data) {
-		this.data = data;
+	public void setCmtid(Long cmtid) {
+		this.cmtid = cmtid;
 	}
+
+	public String getCmtname() {
+		return cmtname;
+	}
+
+	public void setCmtname(String cmtname) {
+		this.cmtname = cmtname;
+	}
+
+	public String getBldname() {
+		return bldname;
+	}
+
+	public void setBldname(String bldname) {
+		this.bldname = bldname;
+	}
+
+	public String getBldaddress() {
+		return bldaddress;
+	}
+
+	public void setBldaddress(String bldaddress) {
+		this.bldaddress = bldaddress;
+	}
+
+	public String getHeattype() {
+		return heattype;
+	}
+
+	public void setHeattype(String heattype) {
+		this.heattype = heattype;
+	}
+
+	public String getGis() {
+		return gis;
+	}
+
+	public void setGis(String gis) {
+		this.gis = gis;
+	}
+
+	public String getPicaddress() {
+		return picaddress;
+	}
+
+	public void setPicaddress(String picaddress) {
+		this.picaddress = picaddress;
+	}
+
+	public String getDesp() {
+		return desp;
+	}
+
+	public void setDesp(String desp) {
+		this.desp = desp;
+	}
+
 }

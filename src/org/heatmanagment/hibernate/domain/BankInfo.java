@@ -34,6 +34,7 @@ public class BankInfo implements java.io.Serializable {
 	private String bnkname;
 	private String accountnum;
 	private String desp;
+	private Boolean isvalid;
 	private Set<BankCertificate> bankCertificates = new HashSet<BankCertificate>(
 			0);
 
@@ -52,13 +53,14 @@ public class BankInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public BankInfo(CourseInfo courseInfo, String bnknum, String bnkname,
-			String accountnum, String desp,
+			String accountnum, String desp, Boolean isvalid,
 			Set<BankCertificate> bankCertificates) {
 		this.courseInfo = courseInfo;
 		this.bnknum = bnknum;
 		this.bnkname = bnkname;
 		this.accountnum = accountnum;
 		this.desp = desp;
+		this.isvalid = isvalid;
 		this.bankCertificates = bankCertificates;
 	}
 
@@ -75,7 +77,7 @@ public class BankInfo implements java.io.Serializable {
 		this.bnkid = bnkid;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CRSID", nullable = true)
 	public CourseInfo getCourseInfo() {
 		return this.courseInfo;
@@ -119,6 +121,15 @@ public class BankInfo implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bankInfo")

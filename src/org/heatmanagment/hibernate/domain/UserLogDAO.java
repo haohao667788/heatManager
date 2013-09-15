@@ -34,6 +34,7 @@ public class UserLogDAO extends HibernateDaoSupport {
 	public static final String LOGTITLE = "logtitle";
 	public static final String LOGCONTENT = "logcontent";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -116,17 +117,21 @@ public class UserLogDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<UserLog> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all UserLog instances");
 		try {
-			String queryString = "from UserLog";
+			String queryString = "from UserLog as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all UserLog instances with boundary");
 		try {
@@ -134,9 +139,10 @@ public class UserLogDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from UserLog";
+					String q = "from UserLog as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -144,6 +150,13 @@ public class UserLogDAO extends HibernateDaoSupport {
 			log.error("find all UserLog with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		UserLog log = new UserLog();
+		log.setLogid(id);
+		log.setIsvalid(false);
+		attachDirty(log);
 	}
 
 	public UserLog merge(UserLog detachedInstance) {

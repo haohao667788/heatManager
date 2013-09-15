@@ -3,45 +3,34 @@ package org.heatmanagment.spring.entity;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.heatmanagment.hibernate.domain.DistrictInfo;
 
 @JsonAutoDetect
 public class DistrictOut {
+	private Long dstid;
+	private String dstname;
+	private String desp;
 
-	private boolean success;
-	private String message;
-	private int totalProperty;
-	private List<DistrictInfo> data;
-
-	public boolean isSuccess() {
-		return success;
+	public Long getDstid() {
+		return dstid;
 	}
 
-	public void setSuccess(boolean success) {
-		this.success = success;
+	public void setDstid(Long dstid) {
+		this.dstid = dstid;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getDstname() {
+		return dstname;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setDstname(String dstname) {
+		this.dstname = dstname;
 	}
 
-	public int getTotalProperty() {
-		return totalProperty;
+	public String getDesp() {
+		return desp;
 	}
 
-	public void setTotalProperty(int totalProperty) {
-		this.totalProperty = totalProperty;
-	}
-
-	public List<DistrictInfo> getData() {
-		return data;
-	}
-
-	public void setData(List<DistrictInfo> data) {
-		this.data = data;
+	public void setDesp(String desp) {
+		this.desp = desp;
 	}
 }

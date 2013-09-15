@@ -16,6 +16,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 /**
  * CountyInfo entity. @author MyEclipse Persistence Tools
  */
@@ -30,6 +32,8 @@ public class CountyInfo implements java.io.Serializable {
 	private String townname;
 	private String cityname;
 	private String desp;
+	private Boolean isvalid;
+	@JsonIgnore
 	private Set<ProjectInfo> projectInfos = new HashSet<ProjectInfo>(0);
 
 	// Constructors
@@ -46,10 +50,11 @@ public class CountyInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public CountyInfo(String townname, String cityname, String desp,
-			Set<ProjectInfo> projectInfos) {
+			Boolean isvalid, Set<ProjectInfo> projectInfos) {
 		this.townname = townname;
 		this.cityname = cityname;
 		this.desp = desp;
+		this.isvalid = isvalid;
 		this.projectInfos = projectInfos;
 	}
 
@@ -66,7 +71,7 @@ public class CountyInfo implements java.io.Serializable {
 		this.ctyid = ctyid;
 	}
 
-	@Column(name = "TOWNNAME", nullable = true, length = 20)
+	@Column(name = "TOWNNAME", nullable = true, length = 200)
 	public String getTownname() {
 		return this.townname;
 	}
@@ -75,7 +80,7 @@ public class CountyInfo implements java.io.Serializable {
 		this.townname = townname;
 	}
 
-	@Column(name = "CITYNAME", nullable = true, length = 20)
+	@Column(name = "CITYNAME", nullable = true, length = 200)
 	public String getCityname() {
 		return this.cityname;
 	}
@@ -91,6 +96,15 @@ public class CountyInfo implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "countyInfo")

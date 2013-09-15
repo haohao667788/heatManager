@@ -36,6 +36,7 @@ public class FeeInfo implements java.io.Serializable {
 	private Double heatrate;
 	private String housetype;
 	private String desp;
+	private Boolean isvalid;
 
 	// Constructors
 
@@ -52,7 +53,7 @@ public class FeeInfo implements java.io.Serializable {
 	public FeeInfo(UsersInfo usersInfo, Double area, Double realarea,
 			Double feearea, String feetype, Double feerate, Double discount,
 			Double reducefee, String heatstate, Double heatbase,
-			Double heatrate, String housetype, String desp) {
+			Double heatrate, String housetype, String desp, Boolean isvalid) {
 		this.usersInfo = usersInfo;
 		this.area = area;
 		this.realarea = realarea;
@@ -66,6 +67,7 @@ public class FeeInfo implements java.io.Serializable {
 		this.heatrate = heatrate;
 		this.housetype = housetype;
 		this.desp = desp;
+		this.isvalid = isvalid;
 	}
 
 	// Property accessors
@@ -197,6 +199,15 @@ public class FeeInfo implements java.io.Serializable {
 
 	public void setDesp(String desp) {
 		this.desp = desp;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 }

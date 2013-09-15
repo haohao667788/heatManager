@@ -35,6 +35,7 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 	public static final String MCHNAME = "mchname";
 	public static final String GIS = "gis";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -102,6 +103,15 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List<Object[]> findByBldId(Long bldid) {
+		log.debug("finding MachinesetInfo instance by bldid");
+		String sql = "select a.mchid,a.mchname from machineset_info a,building_info b where a.mchid=b.mchid and b.bldid="
+				+ bldid;
+		Query query = getHibernateTemplate().getSessionFactory().openSession()
+				.createSQLQuery(sql);
+		return query.list();
+	}
+
 	public List<MachinesetInfo> findByMchname(Object mchname) {
 		return findByProperty(MCHNAME, mchname);
 	}
@@ -114,17 +124,21 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<MachinesetInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all MachinesetInfo instances");
 		try {
-			String queryString = "from MachinesetInfo";
+			String queryString = "from MachinesetInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all MachinesetInfo instances with boundary");
 		try {
@@ -132,9 +146,10 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from MachinesetInfo";
+					String q = "from MachinesetInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -142,6 +157,19 @@ public class MachinesetInfoDAO extends HibernateDaoSupport {
 			log.error("find all MachinesetInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		MachinesetInfo mch = new MachinesetInfo();
+		mch.setMchid(id);
+		mch.setIsvalid(false);
+		attachDirty(mch);
+	}
+
+	public Long count() {
+		log.debug("count MachinesetInfos");
+		String hql = "select count(*) from MachinesetInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public MachinesetInfo merge(MachinesetInfo detachedInstance) {

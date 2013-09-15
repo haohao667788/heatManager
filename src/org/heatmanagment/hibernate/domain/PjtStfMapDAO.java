@@ -1,7 +1,6 @@
 package org.heatmanagment.hibernate.domain;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
@@ -18,28 +17,29 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * DealGenerator entities. Transaction control of the save(), update() and
- * delete() operations can directly support Spring container-managed
- * transactions or they can be augmented to handle user-managed Spring
- * transactions. Each of these methods provides additional information for how
- * to configure it for the desired type of transaction control.
+ * PjtStfMap entities. Transaction control of the save(), update() and delete()
+ * operations can directly support Spring container-managed transactions or they
+ * can be augmented to handle user-managed Spring transactions. Each of these
+ * methods provides additional information for how to configure it for the
+ * desired type of transaction control.
  * 
- * @see org.heatmanagment.hibernate.domain.DealGenerator
+ * @see org.heatmanagment.hibernate.domain.PjtStfMap
  * @author MyEclipse Persistence Tools
  */
 
-public class DealGeneratorDAO extends HibernateDaoSupport {
+public class PjtStfMapDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
-			.getLogger(DealGeneratorDAO.class);
+			.getLogger(PjtStfMapDAO.class);
 	// property constants
-	public static final String DEALNAME = "dealname";
+	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(DealGenerator transientInstance) {
-		log.debug("saving DealGenerator instance");
+	public void save(PjtStfMap transientInstance) {
+		log.debug("saving PjtStfMap instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -49,8 +49,8 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(DealGenerator persistentInstance) {
-		log.debug("deleting DealGenerator instance");
+	public void delete(PjtStfMap persistentInstance) {
+		log.debug("deleting PjtStfMap instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -60,11 +60,11 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public DealGenerator findById(java.lang.Long id) {
-		log.debug("getting DealGenerator instance with id: " + id);
+	public PjtStfMap findById(java.lang.Long id) {
+		log.debug("getting PjtStfMap instance with id: " + id);
 		try {
-			DealGenerator instance = (DealGenerator) getHibernateTemplate()
-					.get("org.heatmanagment.hibernate.domain.DealGenerator", id);
+			PjtStfMap instance = (PjtStfMap) getHibernateTemplate().get(
+					"org.heatmanagment.hibernate.domain.PjtStfMap", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -72,10 +72,10 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DealGenerator> findByExample(DealGenerator instance) {
-		log.debug("finding DealGenerator instance by example");
+	public List<PjtStfMap> findByExample(PjtStfMap instance) {
+		log.debug("finding PjtStfMap instance by example");
 		try {
-			List<DealGenerator> results = (List<DealGenerator>) getHibernateTemplate()
+			List<PjtStfMap> results = (List<PjtStfMap>) getHibernateTemplate()
 					.findByExample(instance);
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -87,10 +87,10 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding DealGenerator instance with property: "
-				+ propertyName + ", value: " + value);
+		log.debug("finding PjtStfMap instance with property: " + propertyName
+				+ ", value: " + value);
 		try {
-			String queryString = "from DealGenerator as model where model."
+			String queryString = "from PjtStfMap as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -99,45 +99,56 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DealGenerator> findByDealname(Object dealname) {
-		return findByProperty(DEALNAME, dealname);
+	public List<PjtStfMap> findByDesp(Object desp) {
+		return findByProperty(DESP, desp);
+	}
+
+	public List<PjtStfMap> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
 	}
 
 	public List findAll() {
-		log.debug("finding all DealGenerator instances");
+		log.debug("finding all PjtStfMap instances");
 		try {
-			String queryString = "from DealGenerator";
+			String queryString = "from PjtStfMap";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
-		log.debug("finding all DealGenerator instances with boundary");
+		log.debug("finding all PjtStfMap instances with boundary");
 		try {
 			return getHibernateTemplate().executeFind(new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from DealGenerator";
+					String q = "from PjtStfMap as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
 		} catch (RuntimeErrorException re) {
-			log.error("find all DealGenerator with boundary failed", re);
+			log.error("find all PjtStfMap with boundary failed", re);
 			throw re;
 		}
 	}
 
-	public DealGenerator merge(DealGenerator detachedInstance) {
-		log.debug("merging DealGenerator instance");
+	public Long count() {
+		log.debug("count PjtStfMaps");
+		String hql = "select count(*) from PjtStfMap where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
+	}
+
+	public PjtStfMap merge(PjtStfMap detachedInstance) {
+		log.debug("merging PjtStfMap instance");
 		try {
-			DealGenerator result = (DealGenerator) getHibernateTemplate()
-					.merge(detachedInstance);
+			PjtStfMap result = (PjtStfMap) getHibernateTemplate().merge(
+					detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -146,8 +157,8 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(DealGenerator instance) {
-		log.debug("attaching dirty DealGenerator instance");
+	public void attachDirty(PjtStfMap instance) {
+		log.debug("attaching dirty PjtStfMap instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -157,8 +168,8 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(DealGenerator instance) {
-		log.debug("attaching clean DealGenerator instance");
+	public void attachClean(PjtStfMap instance) {
+		log.debug("attaching clean PjtStfMap instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -168,8 +179,7 @@ public class DealGeneratorDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static DealGeneratorDAO getFromApplicationContext(
-			ApplicationContext ctx) {
-		return (DealGeneratorDAO) ctx.getBean("DealGeneratorDAO");
+	public static PjtStfMapDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (PjtStfMapDAO) ctx.getBean("PjtStfMapDAO");
 	}
 }

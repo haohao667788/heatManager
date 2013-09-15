@@ -53,24 +53,24 @@ public class JacksonTest {
 		List<DistrictInfo> infos = new ArrayList<DistrictInfo>();
 		infos.add(info);
 		DistrictOut out = new DistrictOut();
-		out.setSuccess(true);
-		out.setData(infos);
+//		out.setSuccess(true);
+//		out.setData(infos);
 
-		String temp;
-		try {
-			temp = this.mapper.writeValueAsString(out);
-			System.out.println(temp);
-			DistrictOut in = this.mapper.readValue(temp, DistrictOut.class);
-			System.out.println(in.isSuccess() + " ");
-			List<DistrictInfo> di = in.getData();
-			for (DistrictInfo t : di) {
-				System.out.println(t.getDstid() + " " + t.getDstname() + " "
-						+ t.getDesp());
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		String temp;
+//		try {
+//			temp = this.mapper.writeValueAsString(out);
+//			System.out.println(temp);
+//			DistrictOut in = this.mapper.readValue(temp, DistrictOut.class);
+//			System.out.println(in.isSuccess() + " ");
+//			List<DistrictInfo> di = in.getData();
+//			for (DistrictInfo t : di) {
+//				System.out.println(t.getDstid() + " " + t.getDstname() + " "
+//						+ t.getDesp());
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 	}
 }

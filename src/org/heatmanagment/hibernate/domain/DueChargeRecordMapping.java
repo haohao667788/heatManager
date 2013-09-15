@@ -22,9 +22,10 @@ public class DueChargeRecordMapping implements java.io.Serializable {
 
 	// Fields
 
-	private Long mappingid;
+	private Long mapid;
 	private ChargeRecord chargeRecord;
 	private DueCharge dueCharge;
+	private Boolean isvalid;
 
 	// Constructors
 
@@ -33,22 +34,24 @@ public class DueChargeRecordMapping implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public DueChargeRecordMapping(ChargeRecord chargeRecord, DueCharge dueCharge) {
+	public DueChargeRecordMapping(ChargeRecord chargeRecord,
+			DueCharge dueCharge, Boolean isvalid) {
 		this.chargeRecord = chargeRecord;
 		this.dueCharge = dueCharge;
+		this.isvalid = isvalid;
 	}
 
 	// Property accessors
 	@SequenceGenerator(name = "CHG_RCD_MAPPING_ID",allocationSize = 1, sequenceName = "CHG_RCD_MAPPING_ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CHG_RCD_MAPPING_ID")
-	@Column(name = "MAPPINGID", unique = true, nullable = false, precision = 15, scale = 0)
-	public Long getMappingid() {
-		return this.mappingid;
+	@Column(name = "MAPID", unique = true, nullable = false, precision = 15, scale = 0)
+	public Long getMapid() {
+		return this.mapid;
 	}
 
-	public void setMappingid(Long mappingid) {
-		this.mappingid = mappingid;
+	public void setMapid(Long mapid) {
+		this.mapid = mapid;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -69,6 +72,15 @@ public class DueChargeRecordMapping implements java.io.Serializable {
 
 	public void setDueCharge(DueCharge dueCharge) {
 		this.dueCharge = dueCharge;
+	}
+
+	@Column(name = "ISVALID", precision = 1, scale = 0)
+	public Boolean getIsvalid() {
+		return this.isvalid;
+	}
+
+	public void setIsvalid(Boolean isvalid) {
+		this.isvalid = isvalid;
 	}
 
 }

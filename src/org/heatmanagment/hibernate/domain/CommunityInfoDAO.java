@@ -38,6 +38,7 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 	public static final String GIS = "gis";
 	public static final String PICADDRESS = "picaddress";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -128,17 +129,21 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<CommunityInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all CommunityInfo instances");
 		try {
-			String queryString = "from CommunityInfo";
+			String queryString = "from CommunityInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all CommunityInfo instances with boundary");
 		try {
@@ -146,9 +151,10 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from CommunityInfo";
+					String q = "from CommunityInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -156,6 +162,19 @@ public class CommunityInfoDAO extends HibernateDaoSupport {
 			log.error("find all CommunityInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public Long count() {
+		log.debug("count CommunityInfos");
+		String hql = "select count(*) from CommunityInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
+	}
+
+	public void remove(Long id) {
+		CommunityInfo cmt = new CommunityInfo();
+		cmt.setCmtid(id);
+		cmt.setIsvalid(false);
+		attachDirty(cmt);
 	}
 
 	public CommunityInfo merge(CommunityInfo detachedInstance) {

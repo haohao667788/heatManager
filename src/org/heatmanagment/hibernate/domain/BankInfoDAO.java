@@ -36,6 +36,7 @@ public class BankInfoDAO extends HibernateDaoSupport {
 	public static final String BNKNAME = "bnkname";
 	public static final String ACCOUNTNUM = "accountnum";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -118,17 +119,21 @@ public class BankInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<BankInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all BankInfo instances");
 		try {
-			String queryString = "from BankInfo";
+			String queryString = "from BankInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all BankInfo instances with boundary");
 		try {
@@ -136,9 +141,10 @@ public class BankInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from BankInfo";
+					String q = "from BankInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -146,6 +152,20 @@ public class BankInfoDAO extends HibernateDaoSupport {
 			log.error("find all BankInfo with boundary failed", re);
 			throw re;
 		}
+	}
+	
+
+	public Long count() {
+		log.debug("count BankInfos");
+		String hql = "select count(*) from BankInfo  where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
+	}
+
+	public void remove(Long id) {
+		BankInfo bnk = new BankInfo();
+		bnk.setBnkid(id);
+		bnk.setIsvalid(false);
+		attachDirty(bnk);
 	}
 
 	public BankInfo merge(BankInfo detachedInstance) {

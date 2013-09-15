@@ -1,20 +1,14 @@
 package org.heatmanagment.spring.controllers;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.heatmanagment.hibernate.domain.DistrictInfo;
-import org.heatmanagment.spring.entity.BoundOut;
-import org.heatmanagment.spring.entity.DistrictOut;
+import org.heatmanagment.hibernate.util.MapperTool;
 import org.heatmanagment.spring.entity.SuccessOut;
 import org.heatmanagment.spring.services.DistrictService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,31 +19,25 @@ public class DistrictController {
 
 	@Autowired
 	private DistrictService districtService;
-	private SuccessOut success;
 
-	private ObjectMapper mapper = new ObjectMapper();
-
-	public DistrictController() {
-		this.success = new SuccessOut();
-		success.setSuccess(true);
-		success.setMessage("");
-	}
+	@Autowired
+	private MapperTool tool;
 
 	@RequestMapping(value = "/daqu/update")
 	@ResponseBody
 	public String saveOrUpdate(@RequestParam(required = false) Long dstid,
-			@RequestParam String dstname, @RequestParam String desp)
-			throws IOException {
+			@RequestParam String dstname, @RequestParam String desp) {
 		this.districtService.saveOrUpdateDistrict(dstid, dstname, desp);
-		return this.mapper.writeValueAsString(this.success);
+		return this.tool.successRetort();
 	}
 
 	@RequestMapping(value = "/daqu/list")
 	@ResponseBody
-	public String inquire(
+	public String listItems(
 			@RequestParam(required = false, defaultValue = "0") Integer start,
 			@RequestParam(required = false, defaultValue = "20") Integer limit) {
-
+		SuccessOut out = new SuccessOut();
+		out.reset();
 		if (start == null) {
 			start = new Integer(0);
 		}
@@ -58,14 +46,10 @@ public class DistrictController {
 		}
 		String outCome = null;
 		try {
-			List<DistrictInfo> infos = this.districtService.findPage(start,
-					limit);
-			DistrictOut out = new DistrictOut();
-			out.setSuccess(true);
-			out.setMessage("");
+			List infos = this.districtService.findPage(start, limit);
 			out.setData(infos);
-			out.setTotalProperty(infos.size());
-			outCome = this.mapper.writeValueAsString(out);
+			out.setTotalProperty(this.districtService.count());
+			outCome = this.tool.result(out);
 			// System.out.println("District outCome : " + outCome);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,23 +60,7 @@ public class DistrictController {
 	@RequestMapping(value = "/daqu/del")
 	@ResponseBody
 	public String delete(@RequestParam Long id) {
-
-		String outCome = null;
-		try {
-			this.districtService.deleteDistrict(id);
-			outCome = this.mapper.writeValueAsString(this.success);
-		} catch (Exception e) {
-			this.success.setSuccess(false);
-			this.success.setMessage(e.getMessage());
-			String re = null;
-			try {
-				re = this.mapper.writeValueAsString(this.success);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			this.success.reset();
-			return re;
-		}
-		return outCome;
+		this.districtService.deleteDistrict(id);
+		return this.tool.successRetort();
 	}
 }

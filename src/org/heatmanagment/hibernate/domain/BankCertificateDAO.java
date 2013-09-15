@@ -39,6 +39,7 @@ public class BankCertificateDAO extends HibernateDaoSupport {
 	public static final String UNDERTAKER = "undertaker";
 	public static final String IMPORTER = "importer";
 	public static final String RELATEDNUM = "relatednum";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -130,17 +131,21 @@ public class BankCertificateDAO extends HibernateDaoSupport {
 		return findByProperty(RELATEDNUM, relatednum);
 	}
 
+	public List<BankCertificate> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all BankCertificate instances");
 		try {
-			String queryString = "from BankCertificate";
+			String queryString = "from BankCertificate as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all BankCertificate instances with boundary");
 		try {
@@ -148,9 +153,10 @@ public class BankCertificateDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from BankCertificate";
+					String q = "from BankCertificate as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -158,6 +164,13 @@ public class BankCertificateDAO extends HibernateDaoSupport {
 			log.error("find all BankCertificate with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		BankCertificate ctf = new BankCertificate();
+		ctf.setCtfid(id);
+		ctf.setIsvalid(false);
+		attachDirty(ctf);
 	}
 
 	public BankCertificate merge(BankCertificate detachedInstance) {

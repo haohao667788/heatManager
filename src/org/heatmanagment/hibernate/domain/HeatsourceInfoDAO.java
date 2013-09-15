@@ -33,9 +33,10 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 			.getLogger(HeatsourceInfoDAO.class);
 	// property constants
 	public static final String SRCNAME = "srcname";
-	public static final String SRCADDRESS = "srcaddress";
+	public static final String ADDRESS = "address";
 	public static final String HEATTYPE = "heattype";
 	public static final String DESP = "desp";
+	public static final String ISVALID = "isvalid";
 
 	protected void initDao() {
 		// do nothing
@@ -107,8 +108,8 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 		return findByProperty(SRCNAME, srcname);
 	}
 
-	public List<HeatsourceInfo> findBySrcaddress(Object srcaddress) {
-		return findByProperty(SRCADDRESS, srcaddress);
+	public List<HeatsourceInfo> findByAddress(Object address) {
+		return findByProperty(ADDRESS, address);
 	}
 
 	public List<HeatsourceInfo> findByHeattype(Object heattype) {
@@ -119,17 +120,21 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 		return findByProperty(DESP, desp);
 	}
 
+	public List<HeatsourceInfo> findByIsvalid(Object isvalid) {
+		return findByProperty(ISVALID, isvalid);
+	}
+
 	public List findAll() {
 		log.debug("finding all HeatsourceInfo instances");
 		try {
-			String queryString = "from HeatsourceInfo";
+			String queryString = "from HeatsourceInfo as c where c.isvalid=true";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
-	
+
 	public List findPage(final int start, final int limit) {
 		log.debug("finding all HeatsourceInfo instances with boundary");
 		try {
@@ -137,9 +142,10 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 				@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-					String q = "from HeatsourceInfo";
+					String q = "from HeatsourceInfo as d where d.isvalid=:valid";
 					Query query = session.createQuery(q).setFirstResult(start)
 							.setMaxResults(limit);
+					query.setBoolean("valid", true);
 					return query.list();
 				}
 			});
@@ -147,6 +153,19 @@ public class HeatsourceInfoDAO extends HibernateDaoSupport {
 			log.error("find all HeatsourceInfo with boundary failed", re);
 			throw re;
 		}
+	}
+
+	public void remove(Long id) {
+		HeatsourceInfo src = new HeatsourceInfo();
+		src.setSrcid(id);
+		src.setIsvalid(false);
+		attachDirty(src);
+	}
+	
+	public Long count() {
+		log.debug("count HeatsourceInfos");
+		String hql = "select count(*) from HeatsourceInfo where isvalid=true";
+		return (Long) getHibernateTemplate().find(hql).listIterator().next();
 	}
 
 	public HeatsourceInfo merge(HeatsourceInfo detachedInstance) {
