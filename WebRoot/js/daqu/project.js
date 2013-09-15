@@ -306,7 +306,7 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                             } else {
                                 Ext.Ajax.request({
                                     url: "/heatManager/data/daqu/project/assignPjt"+debug,
-                                    params: {pjtid: form.self.pid, usrid: sid},
+                                    params: {pjtid: form.self.pid, stfid: sid},
                                     success: function(res) {
                                         if (!res) {
                                             Ext.Msg.alert("系统提示", "服务器请求失败");
