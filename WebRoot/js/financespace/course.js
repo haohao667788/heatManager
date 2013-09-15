@@ -16,9 +16,12 @@ Heat.course.BasicForm = Ext.extend(Ext.form.FormPanel, {
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             items: [{
+                xtype: 'hidden',
+                name: 'crsid'
+            }, {
                 xtype: 'textfield',
                 fieldLabel: '科目代码',
-                name: 'crsid',
+                name: 'crsnum',
                 width: 160,
                 allowBlank: false
             }, {
@@ -209,6 +212,7 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 root: 'data',
                 fields: [
                     {name: 'crsid', type: 'int'},
+                    {name: 'crsnum', type: 'string'},
                     {name: 'crsname', type: 'string'},
                     {name: 'dealname', type: 'string'},
                     {name: 'desp', type: 'string'}
@@ -220,7 +224,7 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "科目代码",
-                dataIndex: 'crsid',
+                dataIndex: 'crsnum',
                 width: 1
             }, {
                 header: "科目名称",
