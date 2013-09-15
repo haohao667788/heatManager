@@ -326,7 +326,7 @@ Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     refresh: function() {
-        this.shequWin.hide();
+        this.bankWin.hide();
         this.getStore().reload();
     },
 
