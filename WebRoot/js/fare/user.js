@@ -42,7 +42,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             width: 160,
                             allowBlank: false
                         }, new Ext.form.ComboBox({
-                            hiddenName: 'ptjid',
+                            hiddenName: 'pjtid',
                             mode: 'local',
                             width: 160,
                             fieldLabel: '所属项目',
