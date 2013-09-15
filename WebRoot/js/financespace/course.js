@@ -63,7 +63,7 @@ Heat.course.BasicForm = Ext.extend(Ext.form.FormPanel, {
             }), {
                 xtype: 'textarea',
                 fieldLabel: '备注',
-                name: 'comm',
+                name: 'desp',
                 width: 240
             }]
         });
@@ -211,7 +211,7 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'crsid', type: 'int'},
                     {name: 'crsname', type: 'string'},
                     {name: 'dealname', type: 'string'},
-                    {name: 'comm', type: 'string'}
+                    {name: 'desp', type: 'string'}
                 ]
             })
         });
@@ -232,7 +232,7 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 1
             }, {
                 header: "备注",
-                dataIndex: 'comm',
+                dataIndex: 'desp',
                 width: 3
             }],
 
