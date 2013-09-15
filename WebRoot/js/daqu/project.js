@@ -313,7 +313,7 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                                         } else {
                                             var response = Ext.decode(res.responseText);
                                             if (response.success) {
-                                                form.self.refreshStaff();
+                                                form.self.refreshStaff(form.self.pid);
                                             } else {
                                                 Ext.Msg.alert("系统提示", response.message);
                                             }
@@ -381,8 +381,8 @@ Heat.project.EmployeeGrid = Ext.extend(Ext.grid.GridPanel, {
         });
     },
 
-    refreshStaff: function() {
-        this.getStore().reload();
+    refreshStaff: function(pid) {
+        this.getStore().load({params: {pjtid: pid}});
     }
 });
 
