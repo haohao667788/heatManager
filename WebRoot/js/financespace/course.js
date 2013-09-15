@@ -39,7 +39,7 @@ Heat.course.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/queryDealname'+debug}),
+                    proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/course/queryDealname'+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
