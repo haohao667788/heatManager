@@ -141,6 +141,7 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     //当表单提交成功后，触发complete事件(win由于监听了complete事件能通过得到响应)
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });

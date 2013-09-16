@@ -225,6 +225,7 @@ Heat.fareConfirm.BasicForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });
@@ -458,7 +459,7 @@ Heat.fareConfirm.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '/static/data/farespace/fareConfirm/list'+debug,
-                params: {idToDel: id},
+                params: {id: id},
                 success: function(response) {
                     store.reload();
                 }

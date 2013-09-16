@@ -65,6 +65,7 @@ Heat.daqu.BasicForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });

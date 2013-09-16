@@ -16,7 +16,6 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
             labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
-            fileUpload: true,
             items: [{
                 xtype: 'hidden',
                 name: 'usrid'
@@ -315,6 +314,10 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             buttonCfg: {
                                 iconCls: 'upload_icon'
                             }
+                        }, {
+                            xtype: 'checkbox',
+                            fieldLabel: '生成当期账期',
+                            name: 'genAccount'
                         }]
                     }]
                 }]
@@ -507,6 +510,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });

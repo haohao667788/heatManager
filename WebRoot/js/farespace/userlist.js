@@ -361,6 +361,7 @@ Heat.userlist.BasicForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });
@@ -609,11 +610,6 @@ Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                             });
                             Heat.tabs.setActiveTab(tab);
 
-                        }
-                    }, {
-                        text: "显示楼栋平面图",
-                        handler: function() {
-                            console.log(rowIndex);
                         }
                     }]);
                     menu.showAt(e.getPoint());

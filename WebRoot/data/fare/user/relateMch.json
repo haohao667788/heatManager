@@ -1,5 +1,5 @@
 {
     "success": true,
     "message": "",
-    "data": [0, "机组1"]
+    "data": [{"mchid":0, "mchname":"机组1"}]
 }

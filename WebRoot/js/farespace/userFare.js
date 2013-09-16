@@ -100,8 +100,24 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
                         [2, '刷卡'],
                         [3, '支票']
                     ]
-                })
+                }),
+                listeners: {
+                    select: function(combo, record) {
+                        var value = record.data.value;
+                        if (value == 0) {
+                            combo.nextSibling().setValue("");
+                            combo.nextSibling().disable();
+                        } else {
+                            combo.nextSibling().enable();
+                        }
+                    }
+                }
             }), {
+                xtype: 'textfield',
+                fieldLabel: '对应号码',
+                name: 'accountnum',
+                width: 120
+            }, {
                 xtype: 'textfield',
                 fieldLabel: '剩余费用',
                 name: 'leftFare',
@@ -167,6 +183,7 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });
