@@ -514,7 +514,6 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.userFare.FareForm.superclass.constructor.call(this, {
-            url: '/heatManager/data/farespace/userFare/update'+debug,
             labelAlign: 'right',
             labelWidth: 120,
             frame: true,
@@ -561,7 +560,6 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                         success: function(res) {
                             var response = res.responseText,
                                 data = Ext.decode(response);
-                            debugger
                             if (data && data.success) {
                                 form.getForm().setValues(data.data);
                                 form.self.recordGrid.getStore().load({params: {"usrid": form.usrid}});
@@ -606,7 +604,7 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/record/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/list"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
