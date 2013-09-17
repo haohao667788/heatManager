@@ -92,6 +92,7 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
                 displayField: 'text',
                 allowBlank: false,
                 editable: false,
+                value: 0,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
                     data: [
@@ -116,7 +117,8 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
                 xtype: 'textfield',
                 fieldLabel: '对应号码',
                 name: 'accountnum',
-                width: 120
+                width: 120,
+                disabled: true
             }, {
                 xtype: 'textfield',
                 fieldLabel: '剩余费用',
@@ -153,25 +155,35 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().loadRecord(record);
     },
 
-    formSubmit: function() {
-        this.getForm().submit({
-            clientValidation: true,
-            waitMsg:'数据保存中...',
-            success: this.submitcomplete.createDelegate(this),
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                        break;
-                    case Ext.form.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                        break;
-                    case Ext.form.Action.SERVER_INVALID:
-                        Ext.Msg.alert('系统提示', action.result.msg);
-                        break;
+    formSubmit: function(usrid, accountid, ids, dueFare) {
+        var self = this,
+            basicForm = this.getForm(),
+            fare = basicForm.findField("actualFare").getValue(),
+            useAccount = basicForm.findField("accountPay").getValue(),
+            method = basicForm.findField("fareMethod").getValue(),
+            number = basicForm.findField("accountnum").getValue(),
+            leftFare = basicForm.findField("leftFare").getValue();
+
+        if (Ext.isEmpty(fare) || Ext.isEmpty(method)) {
+            Ext.Msg.alert("系统提示", "请先填写必填项");
+        } else {
+            Ext.Ajax.request({
+                url: "/heatManager/data/farespace/fareConfirm/dueFare"+debug,
+                params: {usrid: usrid, accountid: accountid, dueNumber: ids, dueFare: dueFare, fare: fare, useAccount: useAccount, method: method, number: number, leftFare: leftFare},
+                success: function(res) {
+                    if (!res.responseText) {
+                        Ext.Msg.alert("系统提示", "服务器未响应");
+                    } else {
+                        var r = Ext.decode(res.responseText);
+                        if (r.success) {
+                            self.submitcomplete();
+                        } else {
+                            Ext.Msg.alert('系统提示', r.message);
+                        }
+                    }
                 }
-            }
-        });
+            })
+        }
     },
 
     reset: function() {
@@ -236,7 +248,7 @@ Heat.userFare.FareWin = Ext.extend(Ext.Window, {
 
     onSubmitClick: function() {
         try {
-            this.form.formSubmit();
+            this.form.formSubmit(this.usrid, this.accountId, this.ids, this.fare);
         }catch(error) {
             Ext.Msg.alert('系统提示', error.message);
             return;
@@ -292,7 +304,7 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
                     items: [{
                         xtype: 'textfield',
                         fieldLabel: '账期数目',
-                        name: 'accrangenum',
+                        name: 'dealnum',
                         width: 120,
                         allowBlank: false,
                         regex:/^\d$/,
@@ -307,7 +319,7 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
                                     af = af == "" ? 0 : af;
 
                                 basicForm.findField("dueFare").setValue(fare*n);
-                                basicForm.findField("leftFare").setValue((+af)-(fare*n));
+                                //basicForm.findField("leftFare").setValue((+af)-(fare*n));
                             }
                         }
                     }, {
@@ -326,18 +338,19 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
                         fieldLabel: '收取费用',
                         name: 'actualFare',
                         width: 120,
-                        allowBlank: false,
-                        listeners: {
-                            change: function(input, value) {
-                                var form = input.ownerCt.ownerCt.ownerCt,
-                                    basicForm = form.getForm(),
-                                    fare = basicForm.findField("dueFare").getValue(),
-                                    v = value == "" ? 0 : value,
-                                    left = (+v)-(+fare);
-
-                                basicForm.findField("leftFare").setValue(left);
-                            }
-                        }
+                        allowBlank: false
+//                        ,
+//                        listeners: {
+//                            change: function(input, value) {
+//                                var form = input.ownerCt.ownerCt.ownerCt,
+//                                    basicForm = form.getForm(),
+//                                    fare = basicForm.findField("dueFare").getValue(),
+//                                    v = value == "" ? 0 : value,
+//                                    left = (+v)-(+fare);
+//
+//                                basicForm.findField("leftFare").setValue(left);
+//                            }
+//                        }
                     }]
                 }]
             }, {
@@ -356,6 +369,7 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
                 displayField: 'text',
                 allowBlank: false,
                 editable: false,
+                value: 0,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
                     data: [
@@ -364,13 +378,23 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
                         [2, '刷卡'],
                         [3, '支票']
                     ]
-                })
+                }),
+                listeners: {
+                    select: function(combo, record) {
+                        var value = record.data.value;
+                        if (value == 0) {
+                            combo.nextSibling().setValue("");
+                            combo.nextSibling().disable();
+                        } else {
+                            combo.nextSibling().enable();
+                        }
+                    }
+                }
             }), {
                 xtype: 'textfield',
-                fieldLabel: '剩余费用',
-                name: 'leftFare',
+                fieldLabel: '对应号码',
+                name: 'accountnum',
                 width: 120,
-                allowBlank: false,
                 disabled: true
             }
                 /*
@@ -396,25 +420,35 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().loadRecord(record);
     },
 
-    formSubmit: function() {
-        this.getForm().submit({
-            clientValidation: true,
-            waitMsg:'数据保存中...',
-            success: this.submitcomplete.createDelegate(this),
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('系统提示', '请先填写完所有必填项');
-                        break;
-                    case Ext.form.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('系统提示', '连接失败，请确认网络连接正常');
-                        break;
-                    case Ext.form.Action.SERVER_INVALID:
-                        Ext.Msg.alert('系统提示', action.result.msg);
-                        break;
+    formSubmit: function(usrid, accountid) {
+        var self = this,
+            basicForm = this.getForm(),
+            fare = basicForm.findField("actualFare").getValue(),
+            dealnum = basicForm.findField("dealnum").getValue(),
+            dueFare = basicForm.findField("dueFare").getValue(),
+            method = basicForm.findField("fareMethod").getValue(),
+            number = basicForm.findField("accountnum").getValue();
+
+        if (Ext.isEmpty(fare) || Ext.isEmpty(method)) {
+            Ext.Msg.alert("系统提示", "请先填写必填项");
+        } else {
+            Ext.Ajax.request({
+                url: "/heatManager/data/farespace/fareConfirm/preSave"+debug,
+                params: {usrid: usrid, accountid: accountid, dealnum: dealnum, dueFare: dueFare, fare: fare, method: method, number: number},
+                success: function(res) {
+                    if (!res.responseText) {
+                        Ext.Msg.alert("系统提示", "服务器未响应");
+                    } else {
+                        var r = Ext.decode(res.responseText);
+                        if (r.success) {
+                            self.submitcomplete();
+                        } else {
+                            Ext.Msg.alert('系统提示', r.message);
+                        }
+                    }
                 }
-            }
-        });
+            })
+        }
     },
 
     reset: function() {
@@ -426,6 +460,7 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     submitcomplete: function(form, action) {
+        this.reset();
         this.fireEvent('submitcomplete');
     }
 });
@@ -553,25 +588,7 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                 disabled: true
             }],
             listeners: {
-                render: function(form) {
-                    Ext.Ajax.request({
-                        url: '/heatManager/data/farespace/fareConfirm/queryDue'+debug,
-                        params: {usrid: form.usrid},
-                        success: function(res) {
-                            var response = res.responseText,
-                                data = Ext.decode(response);
-                            if (data && data.success) {
-                                form.getForm().setValues(data.data);
-                                form.self.recordGrid.getStore().load({params: {"usrid": form.usrid}});
-                            } else {
-                                Ext.Msg.alert('系统提示', data ? "服务器出错" : data.message);
-                            }
-                        },
-                        failure: function() {
-                            Ext.Msg.alert('系统提示', '服务器通信失败');
-                        }
-                    });
-                }
+                render: this.refresh
             }
         });
     },
@@ -584,6 +601,10 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
         return this.getForm().findField("curbalance").getValue();
     },
 
+    getAccountId: function() {
+        return this.getForm().findField("accrangeid").getValue();
+    },
+
     getCurcharge: function() {
         return this.getForm().findField("curcharge").getValue();
     },
@@ -594,6 +615,28 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
             throw new Error('请先选择一条账户信息');
         }
         return sm.getSelected();
+    },
+
+    refresh: function() {
+        var self = this;
+        Ext.Ajax.request({
+            url: '/heatManager/data/farespace/fareConfirm/queryDue'+debug,
+            params: {usrid: self.usrid},
+            success: function(res) {
+                var response = res.responseText,
+                    data = Ext.decode(response);
+                if (data.success) {
+                    self.getForm().setValues(data.data);
+                    self.self.recordGrid.clearSelection();
+                    self.self.recordGrid.getStore().load({params: {"usrid": self.usrid}});
+                } else {
+                    Ext.Msg.alert('系统提示', data.message);
+                }
+            },
+            failure: function() {
+                Ext.Msg.alert('系统提示', '服务器通信失败');
+            }
+        });
     }
 });
 
@@ -685,6 +728,10 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
         } else {
             return selected;
         }
+    },
+
+    clearSelection: function() {
+        this.getSelectionModel().selections.items = [];
     }
 });
 
@@ -732,6 +779,9 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
                 }
             }
         });
+
+        this.fareWin.on('submitcomplete', this.refresh, this);
+        this.preWin.on('submitcomplete', this.refresh, this);
     },
 
     onFareClick: function() {
@@ -746,7 +796,8 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
             }
             this.fareWin.fare = sum;
             this.fareWin.ids = ids.join(',');
-            this.fareWin.userid = this.accountGrid.getUserId();
+            this.fareWin.usrid = this.accountGrid.getUserId();
+            this.fareWin.accountId = this.accountGrid.getAccountId();
             this.fareWin.accountFare = this.accountGrid.getAccountFare();
             this.fareWin.show();
         } catch(err) {
@@ -756,6 +807,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
 
     onSaveClick: function() {
         this.preWin.userid = this.accountGrid.getUserId();
+        this.fareWin.accountId = this.accountGrid.getAccountId();
         this.preWin.curCharge = this.accountGrid.getCurcharge();
         this.preWin.show();
     },
@@ -765,7 +817,8 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
     },
 
     refresh: function() {
+        this.fareWin.hide();
+        this.preWin.hide();
         this.accountGrid.refresh();
-        this.recordGrid.getStore().reload();
     }
 });
