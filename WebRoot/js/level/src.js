@@ -49,6 +49,15 @@ Heat.src.BasicForm = Ext.extend(Ext.form.FormPanel, {
                     ])
                 }),
                 listeners: {
+                    beforequery: function(con) {
+                        if (!con.combo.sel) {
+                            con.combo.sel = true;
+                            con.combo.getStore().reload();
+                        }
+                    },
+                    blur: function(combo) {
+                        combo.sel = false;
+                    },
                     change: function(combo, value) {
                         var flag = false;
                         combo.getStore().each(function(record, index, total) {

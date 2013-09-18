@@ -2576,10 +2576,12 @@ Ext.util.JSON = new (function() {
     }(), pad = function(n) {
         return n < 10 ? "0" + n : n
     }, doDecode = function(json) {
-        var r = /[\[{].*[\]}]/g;
-        if(r.test(json)){
-            var m = json.match(r);
-            return eval("(" + m[0] + ')');
+        if (json.indexOf("<pre") == 0) {
+            var r = /[\[{].*[\]}]/g;
+            if(r.test(json)){
+                var m = json.match(r);
+                return eval("(" + m[0] + ')');
+            }
         }
         return eval("(" + json + ')');
     }, doEncode = function(o) {

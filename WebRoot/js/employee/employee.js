@@ -59,7 +59,18 @@ Heat.employee.BasicForm = Ext.extend(Ext.form.FormPanel, {
                         {name: 'value'},
                         {name: 'text'}
                     ])
-                })
+                }),
+                listeners: {
+                    beforequery: function(con) {
+                        if (!con.combo.sel) {
+                            con.combo.sel = true;
+                            con.combo.getStore().reload();
+                        }
+                    },
+                    blur: function(combo) {
+                        combo.sel = false;
+                    }
+                }
             }), {
                 xtype: 'textfield',
                 fieldLabel: '登录名',
