@@ -550,43 +550,283 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
         Ext.apply(this, cfg);
         Heat.userFare.FareForm.superclass.constructor.call(this, {
             labelAlign: 'right',
-            labelWidth: 120,
+            labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             columnLines: true,
             height: 180,
+            autoScroll: true,
             items: [{
-                xtype: "hidden",
+                xtype: 'hidden',
                 name: 'usrid'
             }, {
-                xtype: "hidden",
-                name: 'accrangeid'
+                xtype: 'fieldset',
+                title: '基础信息',
+                collapsible: false,
+                items: [{
+                    layout: 'column',
+                    items: [{
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '户主姓名',
+                            name: 'usrname',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'hidden',
+                            name: 'bldid'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '所在楼栋',
+                            name: 'bldname',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'hidden',
+                            name: "mchid"
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '所属机组',
+                            name: 'mchname',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '合同版本',
+                            name: 'contractver',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '用户类型',
+                            name: 'usrtype',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'hidden',
+                            name: 'untid'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '所属单元',
+                            name: 'untname',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '开户时间',
+                            name: 'startdate',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'hidden',
+                            name: 'pjtid'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '所属项目',
+                            name: 'pjtname',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '用户地址',
+                            name: 'address',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '合同签订时间',
+                            name: 'contractdate',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'hidden',
+                            name: 'cmtid'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '所属社区',
+                            name: 'cmtname',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '联系方式',
+                            name: 'phone',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '合同类型',
+                            name: 'contracttype',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }]
+                }]
             }, {
-                xtype: 'textfield',
-                name: 'finacerange',
-                fieldLabel: '所属收费年度',
-                disabled: true
+                xtype: 'fieldset',
+                title: '计费信息',
+                collapsible: false,
+                items: [{
+                    layout: 'column',
+                    items: [{
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '建筑面积',
+                            name: 'area',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '费率',
+                            name: 'feerate',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '热计量基数',
+                            name: 'heatbase',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '套内面积',
+                            name: 'realarea',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '折扣',
+                            name: 'discount',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '热计量费率',
+                            name: 'heatrate',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '计费面积',
+                            name: 'feearea',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '减免额',
+                            name: 'reducefee',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '户型',
+                            name: 'housetype',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: '计费方式',
+                            name: 'feetype',
+                            width: 120,
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: '供热状态',
+                            name: 'heatstate',
+                            width: 120,
+                            disabled: true
+                        }]
+                    }]
+                }, {
+                    xtype: 'textarea',
+                    fieldLabel: '备注',
+                    name: 'desp',
+                    width: 438,
+                    height: 50,
+                    disabled: true
+                }]
             }, {
-                xtype: 'textfield',
-                name: 'curbalance',
-                fieldLabel: '本期余额',
-                disabled: true
-            }, {
-                xtype: 'textfield',
-                name: 'curcharge',
-                fieldLabel: '本期应缴',
-                disabled: true
-            }, {
-                xtype: 'textfield',
-                name: 'curmoney',
-                fieldLabel: '本期实缴',
-                disabled: true
-            }, {
-                xtype: 'textfield',
-                name: 'lastdate',
-                fieldLabel: '最后一次缴费时间',
-                disabled: true
+                xtype: 'fieldset',
+                title: '账户信息',
+                collapsible: false,
+                items: [{
+                    layout: 'column',
+                    items: [{
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: "hidden",
+                            name: 'accrangeid'
+                        }, {
+                            xtype: 'textfield',
+                            name: 'finacerange',
+                            fieldLabel: '所属收费年度',
+                            disabled: true
+                        }, {
+                            xtype: 'textfield',
+                            name: 'lastdate',
+                            fieldLabel: '最后缴费时间',
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            name: 'curbalance',
+                            fieldLabel: '本期余额',
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            name: 'curcharge',
+                            fieldLabel: '本期应缴',
+                            disabled: true
+                        }]
+                    }, {
+                        columnWidth:.25,
+                        layout: 'form',
+                        items: [{
+                            xtype: 'textfield',
+                            name: 'curmoney',
+                            fieldLabel: '本期实缴',
+                            disabled: true
+                        }]
+                    }]
+                }]
             }],
+
             listeners: {
                 render: this.refresh
             }
@@ -636,6 +876,87 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
             failure: function() {
                 Ext.Msg.alert('系统提示', '服务器通信失败');
             }
+        });
+    }
+});
+
+Heat.userFare.FareFlowGrid = Ext.extend(Ext.grid.GridPanel, {
+    constructor: function(cfg) {
+        var doc = document.documentElement || document.body,
+            sm = new Ext.grid.CheckboxSelectionModel({singleSelect:false});
+        cfg = cfg || {};
+        Ext.apply(this, cfg);
+        var store = new Ext.data.Store({
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/list"+debug}),
+            reader: new Ext.data.JsonReader({
+                totalProperty: 'totalProperty',
+                root: 'data',
+                fields: [
+                    {name: 'id', type: 'int'},
+                    {name: 'usrid', type: 'string'},
+                    {name: 'year', type: 'string'},
+                    {name: 'type', type: 'string'},
+                    {name: 'area', type: 'float'},
+                    {name: 'rate', type: 'float'},
+                    {name: 'dueFare', type: 'float'},
+                    {name: 'actualFare', type: 'float'},
+                    {name: 'lastFareTime', type: 'string'}
+                ]
+            })
+        });
+        Heat.userFare.FareFlowGrid.superclass.constructor.call(this, {
+            store: store,
+
+            title: '流水记录',
+            sm: sm,
+            columns: [
+                sm,
+                {
+                    header: "记录编号",
+                    dataIndex: "id",
+                    width: 2
+                }, {
+                    header: "用户账号",
+                    dataIndex: 'usrid',
+                    width: 2
+                }, {
+                    header: "所属收费年度",
+                    dataIndex: 'year',
+                    width: 2
+                }, {
+                    header: "缴费类型",
+                    dataIndex: "type",
+                    width: 2
+                }, {
+                    header: "应缴面积",
+                    dataIndex: "area",
+                    width: 2
+                }, {
+                    header: "费率",
+                    dataIndex: "rate",
+                    width: 2
+                }, {
+                    header: "应缴金额",
+                    dataIndex: "dueFare",
+                    width: 2
+                }, {
+                    header: "实缴金额",
+                    dataIndex: "actualFare",
+                    width: 2
+                }, {
+                    header: "最后一次缴费时间",
+                    dataIndex: "lastFareTime",
+                    width: 4
+                }],
+
+            viewConfig: {
+                forceFit: true
+            },
+
+            frame: true,
+            loadMask: true,
+            collapsible: false,
+            height: 200
         });
     }
 });
@@ -716,7 +1037,7 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
             frame: true,
             loadMask: true,
             collapsible: false,
-            height: doc.clientHeight-320
+            height: doc.clientHeight-520
         });
     },
 
@@ -737,6 +1058,7 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
 
 Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
     accountGrid: null,
+    fareflowGrid: null,
     recordGrid: null,
     fareWin: null,
     preWin: null,
@@ -744,6 +1066,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         this.accountGrid = new Heat.userFare.AccountGrid();
+        this.fareflowGrid = new Heat.userFare.FareFlowGrid();
         this.recordGrid = new Heat.userFare.RecordGrid();
         this.accountGrid.self = this;
         this.recordGrid.self = this;
@@ -771,6 +1094,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
 
             items: [
                 this.accountGrid,
+                this.fareflowGrid,
                 this.recordGrid
             ],
             listeners: {
