@@ -279,8 +279,8 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
         Ext.apply(this, cfg);
         Heat.project.BasicForm.superclass.constructor.call(this, {
             width: 486,
-            labelAlign: 'right',
-            labelWidth: 80,
+            labelAlign: 'left',
+            labelWidth: 60,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             border: 0,
@@ -306,44 +306,65 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                                     {name: 'text'}
                                 ])
                             })
-                        })
+                        }), {
+                            xtype: 'button',
+                            text: "点击添加",
+                            bodyStyle: {
+                                "marginLeft": "20px"
+                            },
+                            handler: function(btn) {
+                                var form = btn.ownerCt.ownerCt.ownerCt,
+                                    basicForm = form.getForm(),
+                                    staff = basicForm.findField("staff"),
+                                    sid = staff.getValue();
+                                if ($(staff.el.dom).hasClass("x-form-invalid") || sid == "") {
+                                    Ext.Msg.alert("系统提示", "请选择对应的员工");
+                                } else {
+                                    Ext.Ajax.request({
+                                        url: "/heatManager/data/daqu/project/assignPjt"+debug,
+                                        params: {pjtid: form.self.pid, stfid: sid},
+                                        success: function(res) {
+                                            if (!res) {
+                                                Ext.Msg.alert("系统提示", "服务器请求失败");
+                                            } else {
+                                                var response = Ext.decode(res.responseText);
+                                                if (response.success) {
+                                                    form.self.refreshStaff(form.self.pid);
+                                                } else {
+                                                    Ext.Msg.alert("系统提示", response.message);
+                                                }
+                                            }
+                                        },
+                                        failure: function() {
+                                            Ext.Msg.alert("系统提示", "服务器请求失败");
+                                        }
+                                    });
+                                }
+                            }
+                        }
                     ]
                 }, {
                     columnWidth:.5,
                     layout: 'form',
-                    items: [{
-                        xtype: 'button',
-                        text: "点击添加",
-                        handler: function(btn) {
-                            var form = btn.ownerCt.ownerCt.ownerCt,
-                                basicForm = form.getForm(),
-                                staff = basicForm.findField("staff"),
-                                sid = staff.getValue();
-                            if ($(staff.el.dom).hasClass("x-form-invalid") || sid == "") {
-                                Ext.Msg.alert("系统提示", "请选择对应的员工");
-                            } else {
-                                Ext.Ajax.request({
-                                    url: "/heatManager/data/daqu/project/assignPjt"+debug,
-                                    params: {pjtid: form.self.pid, stfid: sid},
-                                    success: function(res) {
-                                        if (!res) {
-                                            Ext.Msg.alert("系统提示", "服务器请求失败");
-                                        } else {
-                                            var response = Ext.decode(res.responseText);
-                                            if (response.success) {
-                                                form.self.refreshStaff(form.self.pid);
-                                            } else {
-                                                Ext.Msg.alert("系统提示", response.message);
-                                            }
-                                        }
-                                    },
-                                    failure: function() {
-                                        Ext.Msg.alert("系统提示", "服务器请求失败");
-                                    }
-                                });
-                            }
-                        }
-                    }]
+                    items: [
+                        new Ext.form.ComboBox({
+                            hiddenName: 'role',
+                            mode: 'local',
+                            width: 140,
+                            fieldLabel: '所属角色',
+                            triggerAction: 'query',
+                            valueField: 'value',
+                            displayField: 'text',
+                            allowBlank: false,
+                            store: new Ext.data.Store({
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/project/queryRole"+debug}),
+                                reader: new Ext.data.ArrayReader({}, [
+                                    {name: 'value'},
+                                    {name: 'text'}
+                                ])
+                            })
+                        })
+                    ]
                 }]
             }]
         });

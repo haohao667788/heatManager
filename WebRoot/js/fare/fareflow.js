@@ -61,52 +61,48 @@ Heat.fareflow.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
 
             columns: [{
                 header: "流水号",
-                dataIndex: 'rcdid',
-                width: 1.5
+                dataIndex: "rcdid",
+                width: 2
             }, {
                 header: "账号",
-                dataIndex: 'usrid',
-                width: 1
+                dataIndex: 'ctfnumber',
+                width: 2
+            }, {
+                header: "应缴记录号",
+                dataIndex: "chgid",
+                width: 4
             }, {
                 header: "时间",
                 dataIndex: 'rcdtime',
-                width: 2
+                width: 3
             }, {
                 header: "金额",
-                dataIndex: 'money',
+                dataIndex: "money",
                 width: 2
             }, {
                 header: "缴费方式",
-                dataIndex: 'chgtype',
+                dataIndex: "chgtype",
                 width: 2
             }, {
-                header: "支票号码",
-                dataIndex: 'checknum',
+                header: "对应号码",
+                dataIndex: "checknum",
                 width: 3
             }, {
-                header: "缴费所属帐期",
-                dataIndex: 'dealname',
-                width: 2.5
-            }, {
-                header: "应缴记录编号",
-                dataIndex: 'chgid',
-                width: 2.5
+                header: "账期",
+                dataIndex: "dealname",
+                width: 2
             }, {
                 header: "收费员",
-                dataIndex: 'stfname',
-                width: 2
-            }, {
-                header: "财务收款核对员",
-                dataIndex: 'financechecker',
-                width: 2.5
-            }, {
-                header: "银行凭证号",
-                dataIndex: 'ctfnumber',
+                dataIndex: "stfname",
                 width: 3
             }, {
-                header: "收费核对确认时间",
+                header: "核对员",
+                dataIndex: "financechecker",
+                width: 3
+            }, {
+                header: "核对时间",
                 dataIndex: "chargeverifytime",
-                width: 3
+                width: 4
             }],
 
 //            tbar: [{

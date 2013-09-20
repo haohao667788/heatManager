@@ -55,7 +55,7 @@ drop table operation_info;
 drop table operationgroup_info;
 
 
-/*系统配置表*/
+/*脧碌脥鲁脜盲脰脙卤铆*/
 create sequence cfg_id
        maxvalue 9999999999
        increment by 1
@@ -73,7 +73,7 @@ create table config(
 
 
 
-/*班组信息*/
+/*掳脿脳茅脨脜脧垄*/
 create sequence cls_id
        maxvalue 9999999999
        increment by 1
@@ -85,11 +85,11 @@ create table class_info (
        clsid number(10)
        ,clsname varchar2(200)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,primary key (clsid)
 );
 
-/*员工信息*/
+/*脭卤鹿陇脨脜脧垄*/
 create sequence staff_id
        maxvalue 9999999999
        increment by 1
@@ -107,11 +107,11 @@ create table staff_info(
        ,pwd varchar2(20)
 	     ,department varchar2(20)
 	     ,verifytype number(10)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,primary key (stfid)
 );
 
-/*员工班组映射*/
+/*脭卤鹿陇掳脿脳茅脫鲁脡盲*/
 create sequence cls_stf_map_id
        maxvalue 9999999999
        increment by 1
@@ -122,7 +122,7 @@ create sequence cls_stf_map_id
 create table cls_stf_map(
        mapid number(10)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,clsid number(10)
        ,stfid number(10)
        ,primary key (mapid)
@@ -132,7 +132,7 @@ create table cls_stf_map(
 );
 
 
-/* 区县表及其相关 */
+/* 脟酶脧脴卤铆录掳脝盲脧脿鹿脴 */
 create sequence cty_id
        maxvalue 9999999999
        increment by 1
@@ -145,12 +145,12 @@ create table county_info (
        ,townname varchar2(200) not null
        ,cityname varchar2(200) not null
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,primary key (ctyid)
        ,unique (townname,cityname)
 );       
 
-/* 大区表及其相关 */
+/* 麓贸脟酶卤铆录掳脝盲脧脿鹿脴 */
 create sequence dst_id
        maxvalue 9999999999
        increment by 1
@@ -162,11 +162,11 @@ create table district_info (
        dstid number(10)
        ,dstname varchar2(40) not null
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,primary key (dstid)
 );
 
-/* 项目表及其相关 */
+/* 脧卯脛驴卤铆录掳脝盲脧脿鹿脴 */
 create sequence pjt_id
        maxvalue 9999999999
        increment by 1
@@ -182,7 +182,7 @@ create table project_info (
        ,departmentname varchar2(20) 
        ,start_date date
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,dstid number(10)
        ,ctyid number(10)
        ,primary key (pjtid)
@@ -190,7 +190,7 @@ create table project_info (
        ,foreign key (dstid) references district_info(dstid)
 );
 
-/*项目和员工映射*/
+/*脧卯脛驴潞脥脭卤鹿陇脫鲁脡盲*/
 create sequence pjt_stf_map_id
        maxvalue 9999999999
        increment by 1
@@ -201,7 +201,7 @@ create sequence pjt_stf_map_id
 create table pjt_stf_map(
        mapid number(10)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,pjtid number(10)
        ,stfid number(10)
        ,unique (pjtid,stfid)
@@ -210,7 +210,7 @@ create table pjt_stf_map(
        ,foreign key (stfid) references staff_info(stfid)
 );
 
-/* 社区表及其相关 */
+/* 脡莽脟酶卤铆录掳脝盲脧脿鹿脴 */
 create sequence cmt_id
        maxvalue 9999999999
        increment by 1
@@ -226,11 +226,11 @@ create table community_info (
        ,gis varchar2(2000)
        ,picaddress varchar2(200)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,primary key (cmtid)
 );
 
-/* 热源（换热站）表及其相关 */
+/* 脠脠脭麓拢篓禄禄脠脠脮戮拢漏卤铆录掳脝盲脧脿鹿脴 */
 create sequence src_id
        maxvalue 9999999999
        increment by 1
@@ -244,13 +244,13 @@ create table heatsource_info(
        ,address varchar2(200)
        ,heattype varchar2(20)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,dstid number(10)
        ,primary key (srcid)
        ,foreign key (dstid) references district_info(dstid)
 );
 
-/* 机组表及其相关 */
+/* 禄煤脳茅卤铆录掳脝盲脧脿鹿脴 */
 create sequence mch_id
        maxvalue 9999999999
        increment by 1
@@ -263,7 +263,7 @@ create table machineset_info(
        ,mchname varchar2(200) not null    
        ,gis varchar2(2000)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,srcid number(10)
        ,clsid number(10)
        ,primary key (mchid)
@@ -271,7 +271,7 @@ create table machineset_info(
        ,foreign key (clsid) references class_info(clsid)
 );
 
-/* 楼栋表及其相关 */
+/* 脗楼露掳卤铆录掳脝盲脧脿鹿脴 */
 create sequence bld_id
        maxvalue 9999999999
        increment by 1
@@ -287,7 +287,7 @@ create table building_info (
        ,gis varchar2(2000)
        ,picaddress varchar2(200)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,cmtid number(10)
        ,mchid number(10)
        ,primary key (bldid)
@@ -296,7 +296,7 @@ create table building_info (
        ,foreign key (mchid) references machineset_info(mchid)
 );
 
-/* 单元表及其相关 */
+/* 碌楼脭陋卤铆录掳脝盲脧脿鹿脴 */
 create sequence unt_id
        maxvalue 9999999999
        increment by 1
@@ -310,7 +310,7 @@ create table unit_info (
        ,gis varchar2(2000)
        ,picaddress varchar2(200)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,cmtid number(10)
        ,bldid number(10)
        ,primary key (untid)
@@ -319,7 +319,7 @@ create table unit_info (
        ,foreign key (bldid) references building_info(bldid)   
 );
 
-/* 用户信息 */
+/* 脫脙禄搂脨脜脧垄 */
 create sequence usr_id
        maxvalue 9999999999
        increment by 1
@@ -341,19 +341,19 @@ create table users_info(
        ,idpic varchar2(200)
        ,houseidpic varchar2(200)
        ,housepic varchar2(200)
-       ,area number(8,2)  --建筑面积
-       ,realarea number(8,2) --套内面积
-       ,feearea number(8,2)  --计费面积
-       ,feetype varchar2(10) --计费方式
-       ,feerate number(8,2)  --费率
-       ,discount number(8,2)  --折扣
-       ,reducefee number(10,2)  --减免额
-       ,heatstate varchar2(10)  --供热状态
-       ,heatbase number(8,2)  --热计量基数
-       ,heatrate number(8,2)  --热计量费率
-       ,housetype varchar2(20)  --户型
+       ,area number(8,2)  --陆篓脰镁脙忙禄媒
+       ,realarea number(8,2) --脤脳脛脷脙忙禄媒
+       ,feearea number(8,2)  --录脝路脩脙忙禄媒
+       ,feetype varchar2(10) --录脝路脩路陆脢陆
+       ,feerate number(8,2)  --路脩脗脢
+       ,discount number(8,2)  --脮脹驴脹
+       ,reducefee number(10,2)  --录玫脙芒露卯
+       ,heatstate varchar2(10)  --鹿漏脠脠脳麓脤卢
+       ,heatbase number(8,2)  --脠脠录脝脕驴禄霉脢媒
+       ,heatrate number(8,2)  --脠脠录脝脕驴路脩脗脢
+       ,housetype varchar2(20)  --禄搂脨脥
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,pjtid number(10)
        ,cmtid number(10)
        ,bldid number(10)
@@ -368,7 +368,7 @@ create table users_info(
 );
 
 /
-/* 计费信息 */
+/* 录脝路脩脨脜脧垄 */
 /*
 create sequence fee_id
        maxvalue 9999999999
@@ -379,19 +379,19 @@ create sequence fee_id
 
 create table fee_info(
        feeid number(10)  
-       ,area number(8,2)  --建筑面积
-       ,realarea number(8,2) --套内面积
-       ,feearea number(8,2)  --计费面积
-       ,feetype varchar2(10) --计费方式
-       ,feerate number(8,2)  --费率
-       ,discount number(8,2)  --折扣
-       ,reducefee number(10,2)  --减免额
-       ,heatstate varchar2(10)  --供热状态
-       ,heatbase number(8,2)  --热计量基数
-       ,heatrate number(8,2)  --热计量费率
-       ,housetype varchar2(20)  --户型
+       ,area number(8,2)  --陆篓脰镁脙忙禄媒
+       ,realarea number(8,2) --脤脳脛脷脙忙禄媒
+       ,feearea number(8,2)  --录脝路脩脙忙禄媒
+       ,feetype varchar2(10) --录脝路脩路陆脢陆
+       ,feerate number(8,2)  --路脩脗脢
+       ,discount number(8,2)  --脮脹驴脹
+       ,reducefee number(10,2)  --录玫脙芒露卯
+       ,heatstate varchar2(10)  --鹿漏脠脠脳麓脤卢
+       ,heatbase number(8,2)  --脠脠录脝脕驴禄霉脢媒
+       ,heatrate number(8,2)  --脠脠录脝脕驴路脩脗脢
+       ,housetype varchar2(20)  --禄搂脨脥
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,usrid number(10) not null
        ,primary key (feeid)
        ,foreign key (usrid) references users_info(usrid)
@@ -399,7 +399,7 @@ create table fee_info(
 
 */
 
-/* 用户日志*/
+/* 脫脙禄搂脠脮脰戮*/
 create sequence log_id
        maxvalue 999999999999999
        increment by 1
@@ -413,13 +413,13 @@ create table user_log(
        ,logtitle varchar2(20)
        ,logcontent varchar2(2000)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,usrid number(10) not null
        ,primary key (logid)
        ,foreign key (usrid) references users_info(usrid)
 );
 
-/* 账期信息 */
+/* 脮脣脝脷脨脜脧垄 */
 create sequence deal_id
        maxvalue 999999999999999
        increment by 1
@@ -428,13 +428,13 @@ create sequence deal_id
        nocache;
 
 create table deal_info(
-       dealid number(15)   --内部使用，自动生成
-       ,balance number(10,2)  --本期余额
-       ,money number(10,2)  --本期实缴（本期已缴）
-       ,lastdate date --最后一次缴费时间
-       ,dealname varchar2(200) not null  --账期名称
+       dealid number(15)   --脛脷虏驴脢鹿脫脙拢卢脳脭露炉脡煤鲁脡
+       ,balance number(10,2)  --卤戮脝脷脫脿露卯
+       ,money number(10,2)  --卤戮脝脷脢碌陆脡拢篓卤戮脝脷脪脩陆脡拢漏
+       ,lastdate date --脳卯潞贸脪禄麓脦陆脡路脩脢卤录盲
+       ,dealname varchar2(200) not null  --脮脣脝脷脙没鲁脝
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,usrid number(10) not null
        ,unique (usrid,dealname)
        ,primary key (dealid)
@@ -443,7 +443,7 @@ create table deal_info(
 
 
 
-/* 应缴记录 */
+/* 脫娄陆脡录脟脗录 */
 create sequence duecharge_id
        maxvalue 999999999999999
        increment by 1
@@ -451,27 +451,28 @@ create sequence duecharge_id
        nocycle
        nocache;
 
+/*dueFare*/
 create table due_charge(
         chgid number(15)
-        ,charge number(8,2)  --本期应缴
-		    ,dealname varchar2(200) not null --账期名称
-        ,chgtype varchar2(20)   --应缴类型（欠费等）
-        ,area number(8,2)  --缴费面积
-		    ,rate number(8,2)  --缴费费率
-        ,reducechg number(8,2) --金额减免
-		    ,money number(8,2)  --本期实缴
+        ,charge number(8,2)  --卤戮脝脷脫娄陆脡
+		    ,dealname varchar2(200) not null --脮脣脝脷脙没鲁脝
+        ,chgtype varchar2(20)   --脫娄陆脡脌脿脨脥拢篓脟路路脩碌脠拢漏
+        ,area number(8,2)  --陆脡路脩脙忙禄媒
+		    ,rate number(8,2)  --陆脡路脩路脩脗脢
+        ,reducechg number(8,2) --陆冒露卯录玫脙芒
+		    ,money number(8,2)  --卤戮脝脷脢碌陆脡
 		    ,lastchgtime date
-        ,isvalid number(1) default(1) --1代表合法
+        ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
         ,usrid number(10) not null
 		    ,primary key (chgid)
 		    ,foreign key (usrid) references users_info(usrid)   
 );
 
-/*应缴记录与流水的映射关系见后面*/
+/*脫娄陆脡录脟脗录脫毛脕梅脣庐碌脛脫鲁脡盲鹿脴脧碌录没潞贸脙忙*/
 
 
 
-/*科目信息*/
+/*驴脝脛驴脨脜脧垄*/
 create sequence crs_id
        maxvalue 999999999999999
        increment by 1
@@ -485,11 +486,11 @@ create table course_info(
        ,crsname varchar2(200)
        ,desp varchar2(2000)
 	     ,dealname varchar2(200)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,primary key (crsid)
 );
 
-/* 银行信息*/
+/* 脪酶脨脨脨脜脧垄*/
 create sequence bnk_id
        maxvalue 9999999999
        increment by 1
@@ -503,14 +504,14 @@ create table bank_info(
        ,bnkname varchar2(20) not null
        ,accountnum varchar2(20)
        ,desp varchar2(2000)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,crsid number(10) not null
        ,primary key (bnkid)
        ,unique (bnknum,accountnum,crsid)
        ,foreign key (crsid) references course_info(crsid)
 );
 
-/*银行凭证记录*/
+/*脪酶脨脨脝戮脰陇录脟脗录*/
 create sequence certificate_id
        maxvalue 999999999999999
        increment by 1
@@ -528,33 +529,34 @@ create table bank_certificate(
        ,importdate date
        ,importer varchar2(20)
        ,relatednum number(10)
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,bnkid number(10)
        ,primary key (ctfid)
        ,foreign key (bnkid) references bank_info(bnkid)
 );
 
 
-/* 缴费流水记录*/
+/* 陆脡路脩脕梅脣庐录脟脗录*/
 create sequence record_id
        maxvalue 999999999999999
        increment by 1
        start with 1
        cycle
        nocache;
-       
+     
+/* fareflow */  
 create table charge_record(
        rcdid number(15)       
        ,rcdtime date
        ,money number(8,2)
-       ,chgtype varchar2(20) --缴费方式
-       ,checknum varchar2(20)  --支票号/POS流水号/转账单流水号
+       ,chgtype varchar2(20) --陆脡路脩路陆脢陆
+       ,checknum varchar2(20)  --脰搂脝卤潞脜/POS脕梅脣庐潞脜/脳陋脮脣碌楼脕梅脣庐潞脜
        ,rcdpic varchar2(200)
-       ,dealname varchar2(200)  --账期名称 
+       ,dealname varchar2(200)  --脮脣脝脷脙没鲁脝 
        ,financechecker number(10) 
        ,desp varchar2(2000)
 	     ,chargeverifytime date
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,usrid number(10) not null
        ,stfid number(10) not null
        ,ctfid number(10) 
@@ -565,7 +567,7 @@ create table charge_record(
 );
 
 
-/* 应缴记录流水映射*/
+/* 脫娄陆脡录脟脗录脕梅脣庐脫鲁脡盲*/
 create sequence chg_rcd_mapping_id
        maxvalue 999999999999999
        increment by 1
@@ -575,7 +577,7 @@ create sequence chg_rcd_mapping_id
 
 create table due_charge_record_mapping(
        mapid number(15)	   
-       ,isvalid number(1) default(1) --1代表合法
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,chgid number(10)
 		   ,rcdid number(10)
 		   ,primary key (mapid)
@@ -583,7 +585,7 @@ create table due_charge_record_mapping(
 		   ,foreign key (rcdid) references charge_record(rcdid)
 );
 
-/* 用户登陆记录*/
+/* 脫脙禄搂碌脟脗陆录脟脗录*/
 create sequence login_id
        maxvalue 9999999999999999
        increment by 1
@@ -596,9 +598,9 @@ create table login_info(
        ,logindate date
        ,ip varchar2(20)
        ,success varchar2(4)
-       ,failrsn varchar2(2000) --登陆失败原因
-       ,oltime varchar2(20)  --在线时长
-       ,isvalid number(1) default(1) --1代表合法
+       ,failrsn varchar2(2000) --碌脟脗陆脢搂掳脺脭颅脪貌
+       ,oltime varchar2(20)  --脭脷脧脽脢卤鲁陇
+       ,isvalid number(1) default(1) --1麓煤卤铆潞脧路篓
        ,stfid number(10)
        ,primary key (lginid)
        ,foreign key (stfid) references staff_info(stfid)
@@ -608,9 +610,9 @@ create table login_info(
 
 
 
-/***********************下一阶段***********************/
+/***********************脧脗脪禄陆脳露脦***********************/
 
-/* 操作描述表*/
+/* 虏脵脳梅脙猫脢枚卤铆*/
 create sequence opr_id
        maxvalue 9999999999
        increment by 1
@@ -624,7 +626,7 @@ create table operation_info(
        ,primary key (oprid)
 );
 
-/* 权限组表*/
+/* 脠篓脧脼脳茅卤铆*/
 create sequence oprgroup_id
        maxvalue 9999999999
        increment by 1
@@ -639,7 +641,7 @@ create table operationgroup_info(
        ,primary key (oprgroupid)
 );
 
-/* 权限映射表*/
+/* 脠篓脧脼脫鲁脡盲卤铆*/
 create sequence oomapping_id
        maxvalue 9999999999
        increment by 1
@@ -656,7 +658,7 @@ create table opr_operationgroup_mapping_info(
 	   ,foreign key (opr_id) references operation_info(opr_id)
 );
 
-/* 权限映射项目无关表*/
+/* 脠篓脧脼脫鲁脡盲脧卯脛驴脦脼鹿脴卤铆*/
 create sequence sonmapping_id
        maxvalue 9999999999
        increment by 1
@@ -673,7 +675,7 @@ create table staff_oprgroup_nopjt_mapping_info(
 	   ,foreign key (staffid) references staff_info(staffid)
 );
 
-/* 权限映射项目相关表*/
+/* 脠篓脧脼脫鲁脡盲脧卯脛驴脧脿鹿脴卤铆*/
 create sequence somapping_id
        maxvalue 9999999999
        increment by 1

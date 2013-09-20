@@ -45,7 +45,7 @@ Heat.menu = new Ext.tree.TreePanel({
             children: [{
                 text: '员工与任务',
                 leaf: false,
-                children: [{
+                children: [/*{
                     text: '员工查询',
                     ns: 'employeeInfo',
                     leaf: true
@@ -53,7 +53,7 @@ Heat.menu = new Ext.tree.TreePanel({
                     text: '任务下达',
                     ns: 'task',
                     leaf: true
-                }, {
+                }, */{
                     text: '账户管理',
                     ns: 'employee',
                     leaf: true
@@ -65,7 +65,7 @@ Heat.menu = new Ext.tree.TreePanel({
             }, {
                 text: '大区管理',
                 leaf: false,
-                children: [{
+                children: [/*{
                     text: '收费年度',
                     ns: 'fareYear',
                     leaf: true
@@ -73,7 +73,7 @@ Heat.menu = new Ext.tree.TreePanel({
                     text: '任务分析',
                     ns: 'taskAnalysis',
                     leaf: true
-                }, {
+                }, */{
                     text: '大区管理',
                     ns: 'daqu',
                     leaf: true
@@ -130,11 +130,11 @@ Heat.menu = new Ext.tree.TreePanel({
                 text: '用户缴费',
                 ns: 'userlist',
                 leaf: true
-            }, {
+            }/*, {
                 text: '收款确认',
                 ns: 'fareConfirm',
                 leaf: true
-            }]
+            }*/]
         }, {
             text: '财务工作台',
             leaf: false,
@@ -158,7 +158,7 @@ Heat.menu = new Ext.tree.TreePanel({
                 text: '权限管理',
                 ns: 'authGroup',
                 leaf: true
-            }, {
+            }/*, {
                 text: '全局用户管理',
                 ns: 'administrator',
                 leaf: true
@@ -170,7 +170,7 @@ Heat.menu = new Ext.tree.TreePanel({
                 text: '系统设置',
                 ns: 'system',
                 leaf: true
-            }]
+            }*/]
         }]
     })
 });

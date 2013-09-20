@@ -131,21 +131,7 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
                 bodyStyle: {
                     margin: '0 0 10px 85px'
                 }
-            }
-            /*
-                , {
-                xtype: 'radiogroup',
-                fieldLabel: '余额处理方式',
-                columns: 1,
-                bodyStyle: {
-                    "marginLeft": "2px"
-                },
-                items: [
-                    {boxLabel: '将余额存入账户', name: 'method', value: 'save', checked: true},
-                    {boxLabel: '将余额返予顾客', name: 'method', value: 'return'}
-                ]
-            } */
-            ]
+            }]
         });
 
         this.addEvents('submitcomplete');
@@ -554,8 +540,6 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             columnLines: true,
-            height: 180,
-            autoScroll: true,
             items: [{
                 xtype: 'hidden',
                 name: 'usrid'
@@ -867,8 +851,6 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                     data = Ext.decode(response);
                 if (data.success) {
                     self.getForm().setValues(data.data);
-                    self.self.recordGrid.clearSelection();
-                    self.self.recordGrid.getStore().load({params: {"usrid": self.usrid}});
                 } else {
                     Ext.Msg.alert('系统提示', data.message);
                 }
@@ -882,25 +864,30 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
 
 Heat.userFare.FareFlowGrid = Ext.extend(Ext.grid.GridPanel, {
     constructor: function(cfg) {
-        var doc = document.documentElement || document.body,
-            sm = new Ext.grid.CheckboxSelectionModel({singleSelect:false});
+        var doc = document.documentElement || document.body;
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/listFlow"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'id', type: 'int'},
-                    {name: 'usrid', type: 'string'},
-                    {name: 'year', type: 'string'},
-                    {name: 'type', type: 'string'},
-                    {name: 'area', type: 'float'},
+                    {name: 'rcdid', type: 'int'},
+                    {name: 'ctfid', type: 'int'},
+                    {name: 'chgid', type: 'string'},
+                    {name: 'ctfnumber', type: 'string'},
+                    {name: 'rcdtime', type: 'string'},
+                    {name: 'money', type: 'float'},
                     {name: 'rate', type: 'float'},
-                    {name: 'dueFare', type: 'float'},
-                    {name: 'actualFare', type: 'float'},
-                    {name: 'lastFareTime', type: 'string'}
+                    {name: 'chgtype', type: 'string'},
+                    {name: 'checknum', type: 'string'},
+                    {name: 'rcdpic', type: 'string'},
+                    {name: 'dealname', type: 'string'},
+                    {name: 'stfid', type: 'int'},
+                    {name: 'stfname', type: 'string'},
+                    {name: 'financechecker', type: 'string'},
+                    {name: 'chargeverifytime', type: 'string'}
                 ]
             })
         });
@@ -908,46 +895,51 @@ Heat.userFare.FareFlowGrid = Ext.extend(Ext.grid.GridPanel, {
             store: store,
 
             title: '流水记录',
-            sm: sm,
-            columns: [
-                sm,
-                {
-                    header: "记录编号",
-                    dataIndex: "id",
-                    width: 2
-                }, {
-                    header: "用户账号",
-                    dataIndex: 'usrid',
-                    width: 2
-                }, {
-                    header: "所属收费年度",
-                    dataIndex: 'year',
-                    width: 2
-                }, {
-                    header: "缴费类型",
-                    dataIndex: "type",
-                    width: 2
-                }, {
-                    header: "应缴面积",
-                    dataIndex: "area",
-                    width: 2
-                }, {
-                    header: "费率",
-                    dataIndex: "rate",
-                    width: 2
-                }, {
-                    header: "应缴金额",
-                    dataIndex: "dueFare",
-                    width: 2
-                }, {
-                    header: "实缴金额",
-                    dataIndex: "actualFare",
-                    width: 2
-                }, {
-                    header: "最后一次缴费时间",
-                    dataIndex: "lastFareTime",
-                    width: 4
-                }],
+            columns: [{
+                header: "流水号",
+                dataIndex: "rcdid",
+                width: 2
+            }, {
+                header: "账号",
+                dataIndex: 'ctfnumber',
+                width: 2
+            }, {
+                header: "应缴记录号",
+                dataIndex: "chgid",
+                width: 4
+            }, {
+                header: "时间",
+                dataIndex: 'rcdtime',
+                width: 3
+            }, {
+                header: "金额",
+                dataIndex: "money",
+                width: 2
+            }, {
+                header: "缴费方式",
+                dataIndex: "chgtype",
+                width: 2
+            }, {
+                header: "对应号码",
+                dataIndex: "checknum",
+                width: 3
+            }, {
+                header: "账期",
+                dataIndex: "dealname",
+                width: 2
+            }, {
+                header: "收费员",
+                dataIndex: "stfname",
+                width: 3
+            }, {
+                header: "核对员",
+                dataIndex: "financechecker",
+                width: 3
+            }, {
+                header: "核对时间",
+                dataIndex: "chargeverifytime",
+                width: 4
+            }],
 
             viewConfig: {
                 forceFit: true
@@ -956,8 +948,15 @@ Heat.userFare.FareFlowGrid = Ext.extend(Ext.grid.GridPanel, {
             frame: true,
             loadMask: true,
             collapsible: false,
-            height: 200
+            height: 200,
+            listeners: {
+                render: this.refresh
+            }
         });
+    },
+
+    refresh: function() {
+        this.getStore().load({params: {"usrid": this.self.usrid}});
     }
 });
 
@@ -973,15 +972,15 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
-                    {name: 'id', type: 'int'},
+                    {name: 'chgid', type: 'int'},
                     {name: 'usrid', type: 'string'},
-                    {name: 'year', type: 'string'},
-                    {name: 'type', type: 'string'},
+                    {name: 'dealname', type: 'string'},
+                    {name: 'chgtype', type: 'string'},
                     {name: 'area', type: 'float'},
                     {name: 'rate', type: 'float'},
-                    {name: 'dueFare', type: 'float'},
-                    {name: 'actualFare', type: 'float'},
-                    {name: 'lastFareTime', type: 'string'}
+                    {name: 'charge', type: 'float'},
+                    {name: 'money', type: 'float'},
+                    {name: 'lastchgtime', type: 'string'}
                 ]
             })
         });
@@ -994,7 +993,7 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
                 sm,
             {
                 header: "记录编号",
-                dataIndex: "id",
+                dataIndex: "chgid",
                 width: 2
             }, {
                 header: "用户账号",
@@ -1002,11 +1001,11 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "所属收费年度",
-                dataIndex: 'year',
+                dataIndex: 'dealname',
                 width: 2
             }, {
                 header: "缴费类型",
-                dataIndex: "type",
+                dataIndex: "chgtype",
                 width: 2
             }, {
                 header: "应缴面积",
@@ -1018,15 +1017,15 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "应缴金额",
-                dataIndex: "dueFare",
+                dataIndex: "charge",
                 width: 2
             }, {
                 header: "实缴金额",
-                dataIndex: "actualFare",
+                dataIndex: "money",
                 width: 2
             }, {
                 header: "最后一次缴费时间",
-                dataIndex: "lastFareTime",
+                dataIndex: "lastchgtime",
                 width: 4
             }],
 
@@ -1037,7 +1036,10 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
             frame: true,
             loadMask: true,
             collapsible: false,
-            height: doc.clientHeight-520
+            height: doc.clientHeight-520,
+            listeners: {
+                render: this.refresh
+            }
         });
     },
 
@@ -1053,6 +1055,11 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
 
     clearSelection: function() {
         this.getSelectionModel().selections.items = [];
+    },
+
+    refresh: function(grid) {
+        this.clearSelection();
+        this.getStore().load({params: {"usrid": this.self.usrid}});
     }
 });
 
@@ -1069,6 +1076,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
         this.fareflowGrid = new Heat.userFare.FareFlowGrid();
         this.recordGrid = new Heat.userFare.RecordGrid();
         this.accountGrid.self = this;
+        this.fareflowGrid.self = this;
         this.recordGrid.self = this;
         this.fareWin = new Heat.userFare.FareWin();
         this.preWin = new Heat.userFare.PreWin();
@@ -1077,6 +1085,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
             frame: true,
             loadMask: true,
             collapsible: false,
+            autoScroll: true,
 
             tbar: [{
                 xtype: 'button',
@@ -1096,12 +1105,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
                 this.accountGrid,
                 this.fareflowGrid,
                 this.recordGrid
-            ],
-            listeners: {
-                render: function(grid) {
-                    //grid.getStore().load();
-                }
-            }
+            ]
         });
 
         this.fareWin.on('submitcomplete', this.refresh, this);
@@ -1115,8 +1119,8 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
                 ids = [];
             for (var i = 0, l = records.length; i < l; i++) {
                 var record = records[i];
-                sum += record.get('dueFare');
-                ids.push(record.get('id'));
+                sum += record.get('charge');
+                ids.push(record.get('chgid'));
             }
             this.fareWin.fare = sum;
             this.fareWin.ids = ids.join(',');
@@ -1136,13 +1140,11 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
         this.preWin.show();
     },
 
-    loadDueFare: function(id) {
-        this.recordGrid.getStore().load({params: {id: id}});
-    },
-
     refresh: function() {
         this.fareWin.hide();
         this.preWin.hide();
         this.accountGrid.refresh();
+        this.fareflowGrid.refresh();
+        this.recordGrid.refresh();
     }
 });

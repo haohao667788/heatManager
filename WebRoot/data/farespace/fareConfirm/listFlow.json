@@ -1,0 +1,30 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "rcdid": 1,
+        "ctfnumber": 1348784,
+        "rcdtime": "2013-09-09",
+        "money": 12.3,
+        "rate": 2.4,
+        "chgtype": "现金",
+        "checknum": "322125",
+        "dealname": "2013",
+        "stfname": "张三",
+        "financechecker": "李四",
+        "chargeverifytime": "2013-09-09"
+    }, {
+        "rcdid": 2,
+        "ctfnumber": 1348784,
+        "rcdtime": "2013-09-09",
+        "money": 12.3,
+        "rate": 2.4,
+        "chgtype": "现金",
+        "checknum": "322125",
+        "dealname": "2013",
+        "stfname": "张三",
+        "financechecker": "李四",
+        "chargeverifytime": "2013-09-09"
+    }]
+}

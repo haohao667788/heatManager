@@ -694,8 +694,6 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name: 'idpic', type: 'string'},
                     {name: 'houseidpic', type: 'string'},
                     {name: 'housepic', type: 'string'},
-                    {name: 'feeid', type: 'int'},
-                    {name: 'usrid', type: 'int'},
                     {name: 'area', type: 'float'},
                     {name: 'realarea', type: 'float'},
                     {name: 'feearea', type: 'float'},
@@ -790,6 +788,21 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     e.preventDefault();
                     if (rowIndex < 0) return;
                     var menu = new Ext.menu.Menu([{
+                        text: "显示用户详细信息",
+                        handler: function() {
+                            var newGrid = new Heat.userDetail.BasicGrid,
+                                tab = Heat.tabs.add({
+                                    title: "用户详情",
+                                    //iconCls: 'fwxtabpanelicon',
+                                    border: 0,
+                                    autoWidth: true,
+                                    closable: true,
+                                    layout: 'fit',
+                                    items: [newGrid]
+                                });
+                            Heat.tabs.setActiveTab(tab);
+                        }
+                    }, {
                         text: "显示合同影像",
                         handler: function() {
                             var record = grid.getStore().getAt(rowIndex),

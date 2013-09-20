@@ -1,0 +1,30 @@
+{
+    "success": true,
+    "message": "",
+    "totalProperty": 20,
+    "data": [{
+        "ctfid": 1,
+        "bnkid": 1,
+        "bnkname": "招商银行",
+        "ctftype": "unknown",
+        "ctfnumber": "Y1100",
+        "money": 134.5,
+        "undertake": "小明",
+        "ctfdate": "2013-09-09",
+        "importdate": "2013-09-09",
+        "importer": "小红",
+        "relatednum": 0
+    }, {
+        "ctfid": 2,
+        "bnkid": 1,
+        "bnkname": "人民银行",
+        "ctftype": "unknown",
+        "ctfnumber": "Y1100",
+        "money": 134.5,
+        "undertake": "小明",
+        "ctfdate": "2013-09-09",
+        "importdate": "2013-09-09",
+        "importer": "小红",
+        "relatednum": 3
+    }]
+}
