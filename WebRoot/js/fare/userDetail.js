@@ -15,7 +15,6 @@ Heat.userDetail.AccountGrid = Ext.extend(Ext.form.FormPanel, {
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             columnLines: true,
-            height: 200,
             autoScroll: true,
             items: [{
                 xtype: 'hidden',
@@ -286,36 +285,8 @@ Heat.userDetail.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                         }]
                     }]
                 }]
-            }],
-
-            listeners: {
-                render: this.refresh
-            }
+            }]
         });
-    },
-
-    getUserId: function() {
-        return this.getForm().findField("usrid").getValue();
-    },
-
-    getAccountFare: function() {
-        return this.getForm().findField("curbalance").getValue();
-    },
-
-    getAccountId: function() {
-        return this.getForm().findField("accrangeid").getValue();
-    },
-
-    getCurcharge: function() {
-        return this.getForm().findField("curcharge").getValue();
-    },
-
-    getSelected: function() {
-        var sm = this.getSelectionModel();
-        if (sm.getCount() == 0) {
-            throw new Error('请先选择一条账户信息');
-        }
-        return sm.getSelected();
     },
 
     refresh: function() {
@@ -336,6 +307,10 @@ Heat.userDetail.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                 Ext.Msg.alert('系统提示', '服务器通信失败');
             }
         });
+    },
+
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
     }
 });
 
@@ -550,12 +525,19 @@ Heat.userDetail.BasicGrid = Ext.extend(Ext.Panel, {
             frame: true,
             loadMask: true,
             collapsible: false,
+            autoScroll: true,
 
             items: [
                 this.accountGrid,
                 this.fareflowGrid,
                 this.recordGrid
-            ]
+            ],
+
+            listeners: {
+                render: function() {
+                    this.accountGrid.setValues(this.record);
+                }
+            }
         });
     }
 });

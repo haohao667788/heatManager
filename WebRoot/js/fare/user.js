@@ -51,7 +51,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             allowBlank: false,
                             store: new Ext.data.Store({
                                 autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/queryPjt"+debug}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/getprojectinfo"+debug}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
@@ -93,7 +93,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             allowBlank: false,
                             store: new Ext.data.Store({
                                 autoLoad: true,
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/getcommunityinfo"+debug}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
@@ -143,7 +143,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             displayField: 'text',
                             allowBlank: false,
                             store: new Ext.data.Store({
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/danyuan/queryLoudong"+debug+"?query=true"}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/getbuildinginfo"+debug+"?query=true"}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
@@ -167,7 +167,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                                             basicForm = form.getForm();
                                         combo.nextSibling().getStore().load({params: {bldid: value}});
                                         Ext.Ajax.request({
-                                            url: '/heatManager/data/fare/user/relateMch'+debug,
+                                            url: '/heatManager/data/fare/user/getmachineinfo'+debug,
                                             params: {bldid: value},
                                             success: function(res) {
                                                 var response = res.responseText,
@@ -177,8 +177,8 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                                                 }
                                                 if (r.success) {
                                                     var data = r.data;
-                                                    basicForm.findField("mchid").setValue(data[0].mchid);
-                                                    basicForm.findField("mchname").setValue(data[0].mchname);
+                                                    basicForm.findField("mchid").setValue(data.mchid);
+                                                    basicForm.findField("mchname").setValue(data.mchname);
                                                 } else {
                                                     Ext.Msg.alert("系统提示", r.message);
                                                 }
@@ -203,8 +203,8 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                                             }
                                             if (r.success) {
                                                 var data = r.data;
-                                                basicForm.findField("mchid").setValue(data[0].mchid);
-                                                basicForm.findField("mchname").setValue(data[1].mchname);
+                                                basicForm.findField("mchid").setValue(data.mchid);
+                                                basicForm.findField("mchname").setValue(data.mchname);
                                             } else {
                                                 Ext.Msg.alert("系统提示", r.message);
                                             }
@@ -222,7 +222,7 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
                             displayField: 'text',
                             allowBlank: false,
                             store: new Ext.data.Store({
-                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/danyuan/queryDanyuan"+debug+"?query=true"}),
+                                proxy: new Ext.data.HttpProxy({url: "/heatManager/data/fare/user/getunitinfo"+debug}),
                                 reader: new Ext.data.ArrayReader({}, [
                                     {name: 'value'},
                                     {name: 'text'}
@@ -517,9 +517,9 @@ Heat.user.BasicForm = Ext.extend(Ext.form.FormPanel, {
 
     disablePjt: function(disable) {
         if (disable) {
-            this.getForm().findField("ptjid").disable();
+            this.getForm().findField("genAccount").disable();
         } else {
-            this.getForm().findField("ptjid").enable();
+            this.getForm().findField("genAccount").enable();
         }
     },
 
@@ -566,6 +566,7 @@ Heat.user.BasicWin = Ext.extend(Ext.Window, {
             width: 600,
             buttonAlign: 'center',
             closeAction: 'hide',
+            modal: true,
             listeners: {
                 show: function(win) {
                     if (win.title == "修改用户") {
@@ -787,11 +788,13 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 rowcontextmenu: function(grid, rowIndex, e) {
                     e.preventDefault();
                     if (rowIndex < 0) return;
+                    var record = grid.getStore().getAt(rowIndex);
                     var menu = new Ext.menu.Menu([{
                         text: "显示用户详细信息",
                         handler: function() {
-                            var newGrid = new Heat.userDetail.BasicGrid,
-                                tab = Heat.tabs.add({
+                            var newGrid = new Heat.userDetail.BasicGrid;
+                            newGrid.record = record;
+                            var tab = Heat.tabs.add({
                                     title: "用户详情",
                                     //iconCls: 'fwxtabpanelicon',
                                     border: 0,
@@ -805,32 +808,28 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     }, {
                         text: "显示合同影像",
                         handler: function() {
-                            var record = grid.getStore().getAt(rowIndex),
-                                pic = record.get('contractpic');
+                            var pic = record.get('contractpic');
                             grid.picWin.pic = pic;
                             grid.picWin.show();
                         }
                     }, {
                         text: "显示身份证影像",
                         handler: function() {
-                            var record = grid.getStore().getAt(rowIndex),
-                                pic = record.get('idpic');
+                            var pic = record.get('idpic');
                             grid.picWin.pic = pic;
                             grid.picWin.show();
                         }
                     }, {
                         text: "显示房产证影像",
                         handler: function() {
-                            var record = grid.getStore().getAt(rowIndex),
-                                pic = record.get('houseidpic');
+                            var pic = record.get('houseidpic');
                             grid.picWin.pic = pic;
                             grid.picWin.show();
                         }
                     }, {
                         text: "显示户型图纸影像",
                         handler: function() {
-                            var record = grid.getStore().getAt(rowIndex),
-                                pic = record.get('housepic');
+                            var pic = record.get('housepic');
                             grid.picWin.pic = pic;
                             grid.picWin.show();
                         }
@@ -875,7 +874,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         if(btn == 'yes') {
             Ext.Ajax.request({
                 url: '/heatManager/data/fare/user/del'+debug,
-                params: {id: id},
+                params: {usrid: id},
                 success: function(response) {
                     store.reload();
                 }

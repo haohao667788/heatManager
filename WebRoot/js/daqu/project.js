@@ -278,9 +278,9 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         Heat.project.BasicForm.superclass.constructor.call(this, {
-            width: 486,
-            labelAlign: 'left',
-            labelWidth: 60,
+            width: 586,
+            labelAlign: 'right',
+            labelWidth: 80,
             frame: true,
             bodyStyle: 'padding: 5px 0 0 0',
             border: 0,
@@ -307,11 +307,9 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                                 ])
                             })
                         }), {
+                            layout:
                             xtype: 'button',
                             text: "点击添加",
-                            bodyStyle: {
-                                "marginLeft": "20px"
-                            },
                             handler: function(btn) {
                                 var form = btn.ownerCt.ownerCt.ownerCt,
                                     basicForm = form.getForm(),
@@ -415,7 +413,7 @@ Heat.project.EmployeeGrid = Ext.extend(Ext.grid.GridPanel, {
             frame: true,
             loadMask: true,
             collapsible: false,
-            width: 486,
+            width: 586,
             height: 300
         });
     },
@@ -449,7 +447,7 @@ Heat.project.EmployeeWin = Ext.extend(Ext.Window, {
             },
 
             title: '修改记录',
-            width: 500,
+            width: 600,
             buttonAlign: 'center',
             closeAction: 'hide',
             modal: true,
