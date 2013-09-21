@@ -154,7 +154,7 @@ Heat.quxian.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.quxianWin = new Heat.quxian.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/quxian/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/quxian/getlist"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

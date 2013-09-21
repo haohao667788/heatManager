@@ -216,15 +216,14 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.courseWin = new Heat.course.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/course/list'+debug}),
+            proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/course/getlist'+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
                 fields: [
                     {name: 'crsid', type: 'int'},
-                    {name: 'crsnum', type: 'string'},
                     {name: 'crsname', type: 'string'},
-                    {name: 'dealname', type: 'string'},
+                    {name: 'chgyear', type: 'string'},
                     {name: 'desp', type: 'string'}
                 ]
             })
@@ -233,8 +232,8 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
             store: store,
 
             columns: [{
-                header: "科目代码",
-                dataIndex: 'crsnum',
+                header: "科目编码",
+                dataIndex: 'crsid',
                 width: 1
             }, {
                 header: "科目名称",
@@ -242,7 +241,7 @@ Heat.course.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 width: 2
             }, {
                 header: "收费年度",
-                dataIndex: 'dealname',
+                dataIndex: 'chgyear',
                 width: 1
             }, {
                 header: "备注",

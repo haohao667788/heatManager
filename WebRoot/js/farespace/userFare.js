@@ -28,6 +28,12 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
                 xtype: 'hidden',
                 name: 'ids'
             }, {
+                xtype: 'hidden',
+                name: 'dues'
+            }, {
+                xtype: 'hidden',
+                name: 'charges'
+            }, {
                 layout: 'column',
                 items: [{
                     columnWidth: .5,
@@ -158,6 +164,23 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
 
     //提交表单数据
     formSubmit: function() {
+        var money = this.getForm().findField("money").getValue(),
+            dues = this.getForm().findField("dues").getValue();
+        if (money == "") {
+            Ext.Msg.alert("系统提示", "请先填写缴费金额");
+            return;
+        } else {
+            var dueArr = dues.split(","), charges = [];
+            for (var i = 0; i < dueArr.length; i++) {
+                if (money <= 0) {
+                    charges.push(0);
+                } else {
+                    charges.push(Math.min(dueArr[i], money));
+                    money = money-dueArr[i];
+                }
+            }
+            this.getForm().findField("charges").setValue(charges.join(","));
+        }
         this.getForm().submit({
             clientValidation: true,
             waitMsg:'数据保存中...',
@@ -182,11 +205,12 @@ Heat.userFare.FareForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().reset();
     },
 
-    setValues: function(usrid, dealname, ids, fare) {
+    setValues: function(usrid, dealname, ids, fare, dues) {
         this.getForm().findField("usrid").setValue(usrid);
         this.getForm().findField("dealname").setValue(dealname);
         this.getForm().findField("ids").setValue(ids);
         this.getForm().findField("dueFare").setValue(fare);
+        this.getForm().findField("dues").setValue(dues);
     },
 
     submitcomplete: function(form, action) {
@@ -236,7 +260,7 @@ Heat.userFare.FareWin = Ext.extend(Ext.Window, {
             listeners: {
                 show: function(win) {
                     win.form.accountFare = win.accountFare;
-                    win.form.setValues(win.usrid, win.dealname, win.ids, win.fare);
+                    win.form.setValues(win.usrid, win.dealname, win.ids, win.fare, win.dues);
                 },
                 hide: {
                     fn: this.onResetClick,
@@ -843,7 +867,7 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
     refresh: function() {
         var self = this;
         Ext.Ajax.request({
-            url: '/heatManager/data/farespace/fareConfirm/queryDue'+debug,
+            url: '/heatManager/data/farespace/userFare/queryDue'+debug,
             params: {usrid: self.usrid},
             success: function(res) {
                 var response = res.responseText,
@@ -1125,14 +1149,18 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
         try {
             var records = this.recordGrid.getSelected(),
                 sum = 0,
-                ids = [];
+                ids = [],
+                dues = [];
             for (var i = 0, l = records.length; i < l; i++) {
-                var record = records[i];
-                sum += record.get('charge');
+                var record = records[i],
+                    due = record.get('charge')-record.get('money');
+                sum += due;
                 ids.push(record.get('chgid'));
+                dues.push(due);
             }
             this.fareWin.fare = sum;
             this.fareWin.ids = ids.join(',');
+            this.fareWin.dues = dues.join(',');
             this.fareWin.usrid = this.accountGrid.getUserId();
             this.fareWin.dealname = this.accountGrid.getDealname();
             this.fareWin.accountFare = this.accountGrid.getAccountFare();
@@ -1152,7 +1180,7 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
     refresh: function() {
         this.fareWin.hide();
         this.preWin.hide();
-        //this.accountGrid.refresh();
+        this.accountGrid.refresh();
         this.fareflowGrid.refresh();
         this.recordGrid.refresh();
     }

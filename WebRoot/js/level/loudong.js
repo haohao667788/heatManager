@@ -41,7 +41,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/getShequMapping"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -83,7 +83,7 @@ Heat.loudong.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryMch"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/getMchMapping"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -304,7 +304,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         this.loudongWin = new Heat.loudong.BasicWin();
         this.picWin = new Heat.loudong.PicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/getlist"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -391,7 +391,7 @@ Heat.loudong.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/queryShequ"+debug+"?query=true"}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/loudong/getShequMapping"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}

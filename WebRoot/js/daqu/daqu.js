@@ -151,7 +151,7 @@ Heat.daqu.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.daquWin = new Heat.daqu.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/daqu/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/daqu/daqu/getlist"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

@@ -201,7 +201,7 @@ Heat.shequ.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         this.shequWin = new Heat.shequ.BasicWin();
         this.picWin = new Heat.shequ.PicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/shequ/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/shequ/getlist"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

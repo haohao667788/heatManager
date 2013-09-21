@@ -48,7 +48,7 @@ Heat.bank.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/queryCrs'+debug}),
+                    proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/getCrsMapping'+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -218,7 +218,7 @@ Heat.bank.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.bankWin = new Heat.bank.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/list'+debug}),
+            proxy: new Ext.data.HttpProxy({url: '/heatManager/data/financespace/bank/getlist'+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

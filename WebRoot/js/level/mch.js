@@ -36,7 +36,7 @@ Heat.mch.BasicForm = Ext.extend(Ext.form.FormPanel, {
                 editable: false,
                 store: new Ext.data.Store({
                     autoLoad: true,
-                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/mch/querySrc"+debug}),
+                    proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/mch/getSrc"+debug}),
                     reader: new Ext.data.ArrayReader({}, [
                         {name: 'value'},
                         {name: 'text'}
@@ -213,7 +213,7 @@ Heat.mch.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.mchWin = new Heat.mch.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/mch/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/mch/getlist"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

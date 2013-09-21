@@ -20,7 +20,17 @@
         "area": 24.1,
         "rate": 0.5,
         "charge": 290,
-        "money": 2000,
+        "money": 200,
+        "lastchgtime": "2013-08-11"
+    }, {
+        "chgid": 2,
+        "usrid": 7348784,
+        "dealname": "2013",
+        "chgtype": "当期应缴",
+        "area": 24.1,
+        "rate": 0.5,
+        "charge": 290,
+        "money": 0,
         "lastchgtime": "2013-08-11"
     }]
 }
