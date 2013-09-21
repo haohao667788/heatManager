@@ -320,7 +320,7 @@ Heat.userDetail.FareFlowGrid = Ext.extend(Ext.grid.GridPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/listFlow"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareconfirm/getchargerecord"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -418,7 +418,7 @@ Heat.userDetail.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareconfirm/getduecharge"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',

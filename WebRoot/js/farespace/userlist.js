@@ -599,6 +599,7 @@ Heat.userlist.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                                 newGrid = new Heat.userFare.BasicGrid();
 
                             newGrid.usrid = usrid;
+                            newGrid.record = record;
                             var tab = Heat.tabs.add({
                                 title: "用户收费",
                                 //iconCls: 'fwxtabpanelicon',

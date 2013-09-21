@@ -307,7 +307,6 @@ Heat.project.QueryForm = Ext.extend(Ext.form.FormPanel, {
                                 ])
                             })
                         }), {
-                            layout:
                             xtype: 'button',
                             text: "点击添加",
                             handler: function(btn) {

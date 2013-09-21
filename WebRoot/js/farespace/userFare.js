@@ -346,7 +346,7 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
                     margin: '10px 0'
                 }
             }, new Ext.form.ComboBox({
-                hiddenName: 'fareMethod',
+                hiddenName: 'chgtype',
                 mode: 'local',
                 width: 120,
                 fieldLabel: '缴费方式',
@@ -379,7 +379,7 @@ Heat.userFare.PreForm = Ext.extend(Ext.form.FormPanel, {
             }), {
                 xtype: 'textfield',
                 fieldLabel: '对应号码',
-                name: 'accountnum',
+                name: 'checknum',
                 width: 120,
                 disabled: true
             }
@@ -809,11 +809,7 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                         }]
                     }]
                 }]
-            }],
-
-            listeners: {
-                render: this.refresh
-            }
+            }]
         });
     },
 
@@ -859,6 +855,10 @@ Heat.userFare.AccountGrid = Ext.extend(Ext.form.FormPanel, {
                 Ext.Msg.alert('系统提示', '服务器通信失败');
             }
         });
+    },
+
+    setValues: function(record) {
+        this.getForm().loadRecord(record);
     }
 });
 
@@ -868,7 +868,7 @@ Heat.userFare.FareFlowGrid = Ext.extend(Ext.grid.GridPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/listFlow"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareconfirm/getchargerecord"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -967,7 +967,7 @@ Heat.userFare.RecordGrid = Ext.extend(Ext.grid.GridPanel, {
         cfg = cfg || {};
         Ext.apply(this, cfg);
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareConfirm/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/farespace/fareconfirm/getduecharge"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
@@ -1105,7 +1105,13 @@ Heat.userFare.BasicGrid = Ext.extend(Ext.Panel, {
                 this.accountGrid,
                 this.fareflowGrid,
                 this.recordGrid
-            ]
+            ],
+
+            listeners: {
+                render: function() {
+                    this.accountGrid.setValues(this.record);
+                }
+            }
         });
 
         this.fareWin.on('submitcomplete', this.refresh, this);

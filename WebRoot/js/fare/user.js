@@ -792,7 +792,7 @@ Heat.user.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
                     var menu = new Ext.menu.Menu([{
                         text: "显示用户详细信息",
                         handler: function() {
-                            var newGrid = new Heat.userDetail.BasicGrid;
+                            var newGrid = new Heat.userDetail.BasicGrid();
                             newGrid.record = record;
                             var tab = Heat.tabs.add({
                                     title: "用户详情",

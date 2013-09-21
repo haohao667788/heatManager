@@ -231,7 +231,7 @@ Heat.src.BasicGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, cfg);
         this.srcWin = new Heat.src.BasicWin();
         var store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/heat/list"+debug}),
+            proxy: new Ext.data.HttpProxy({url: "/heatManager/data/level/heat/getlist"+debug}),
             reader: new Ext.data.JsonReader({
                 totalProperty: 'totalProperty',
                 root: 'data',
